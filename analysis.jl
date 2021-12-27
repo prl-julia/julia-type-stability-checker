@@ -2,6 +2,10 @@
 # Exhaustive enumeration of types for static type stability checking
 #
 
+# Debug print:
+# ENV["JULIA_DEBUG"] = Main    # turn on
+# ENV["JULIA_DEBUG"] = Nothing # turn off
+
 is_stable_function(f::Function) =
     all(is_stable_method, methods(f).ms)
 
@@ -10,12 +14,11 @@ is_stable_method(m::Method) = begin
     f = m.sig.parameters[1].instance
     ss = all_concrete_subtypes(Vector{Any}([m.sig.parameters[2:end]...]))
 
+    res = true
     for s in ss
-        if ! is_stable_call(f, s)
-            return false
-        end
+        res &= is_stable_call(f, s)
     end
-    return true
+    return res
 end
 
 is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begin
@@ -142,7 +145,7 @@ end
 
 # Ex. (add1)
 # |
-# --- a) using `one` -- stable
+# --- a) using `one` -- should be stable but alas, the Rational{Bool} instance screws it
 add1(x :: Number) = x + one(x)
 # |
 # --- b) using `1` -- surpricingly stable (coercion)
