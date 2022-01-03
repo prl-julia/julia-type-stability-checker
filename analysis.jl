@@ -28,33 +28,39 @@ is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begi
     end
     (code, res_type) = ct[1] # we ought to have just one method body, I think
     res = is_concrete_type(res_type)
+    print_stable_check(f,ts,res_type,res)
+    res
+end
+
+print_stable_check(f,ts,res_type,res) = begin
     print(lpad("is stable call " * string(f), 20) * " | " * rpad(string(ts), 35) * " | " * rpad(res_type, 30) * " |")
     println(res)
-    res
 end
 
 # Used to instantiate functions for concrete argument types.
 # Input: "tuple" of types from the function signature (in the form of Vector, not Tuple).
 # Output: vector of "tuples" that subtype input
-all_concrete_subtypes(ts::Vector) = begin
+all_subtypes(ts::Vector; concrete_only=true, skip_unionalls=false) = begin
     @debug "all_concrete_subtypes: $ts"
     sigtypes = Set{Vector{Any}}([ts])
-    concrete = []
+    result = []
     while !isempty(sigtypes)
         tv = pop!(sigtypes)
-        @debug "all_concrete_subtypes loop: $tv"
-        if all(is_concrete_type, tv)
-            push!(concrete, tv)
+        @debug "all_subtypes loop: $tv"
+        isconc = all(is_concrete_type, tv)
+        if isconc
+            push!(result, tv)
         else
-            dss = direct_subtypes(tv)
+            !concrete_only && push!(result, tv)
+            dss = direct_subtypes(tv, skip_unionalls)
             union!(sigtypes, dss)
         end
     end
-    concrete
+    result
 end
 
 # Auxilliary function: immediate subtypes of a tuple of types `ts`
-direct_subtypes(ts::Vector) = begin
+direct_subtypes(ts::Vector, skip_unionalls::Bool) = begin
     if isempty(ts)
         return []
     end
@@ -66,7 +72,9 @@ direct_subtypes(ts::Vector) = begin
         end
     end
     if isempty(ts)
-        return map(s -> Vector{Any}([s]), ss_last)
+        return (Vector{Any}([s])
+                    for s=ss_last
+                    if !(skip_unionalls && typeof(s) == UnionAll))
     end
 
     res = []
@@ -80,8 +88,8 @@ direct_subtypes(ts::Vector) = begin
 end
 
 # If type variable has non-Any upper bound, enumerate
-# all concrete (TODO: should be all?) possibilities,
-# otherwise take Any and Int.
+# all possibilities for it except unionalls (and their instances) -- to avoid looping, --
+# otherwise take Any and Int (TODO is it a good choice? it's very arbitrary).
 # Note: ignore lower bounds for simplicity.
 subtype_unionall(u :: UnionAll) = begin
     @debug "subtype_unionall of $u"
@@ -89,9 +97,16 @@ subtype_unionall(u :: UnionAll) = begin
     sample_types = if ub == Any
         [Int64, Any]
     else
-        map(tup -> tup[1], all_concrete_subtypes([ub]))
+        ss = all_subtypes([ub]; concrete_only=false, skip_unionalls=true)
+        @debug "var instantiations: $ss"
+        map(tup -> tup[1], ss)
+        # (tup[1] for tup=all_subtypes([ub]; concrete_only=false, skip_unionalls=true))
     end
-    [u{t} for t in sample_types]
+    if isempty(sample_types)
+        []
+    else
+        [u{t} for t in sample_types]
+    end
 end
 
 # Follows definition used in @code_warntype (cf. `warntype_type_printer` in:
