@@ -41,8 +41,8 @@ end
 # Input: "tuple" of types from the function signature (in the form of Vector, not Tuple).
 # Output: vector of "tuples" that subtype input
 all_subtypes(ts::Vector; concrete_only=true, skip_unionalls=false) = begin
-    @debug "all_concrete_subtypes: $ts"
-    sigtypes = Set{Vector{Any}}([ts])
+    @debug "all_subtypes: $ts"
+    sigtypes = Set{Vector{Any}}([ts]) # worklist
     result = []
     while !isempty(sigtypes)
         tv = pop!(sigtypes)
@@ -60,10 +60,11 @@ all_subtypes(ts::Vector; concrete_only=true, skip_unionalls=false) = begin
 end
 
 # Auxilliary function: immediate subtypes of a tuple of types `ts`
-direct_subtypes(ts::Vector, skip_unionalls::Bool) = begin
-    if isempty(ts)
+direct_subtypes(ts1::Vector, skip_unionalls::Bool) = begin
+    if isempty(ts1)
         return []
     end
+    ts = copy(ts1)
     t = pop!(ts)
     ss_last = subtypes(t)
     if isempty(ss_last)
