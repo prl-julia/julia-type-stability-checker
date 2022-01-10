@@ -6,19 +6,55 @@
 # ENV["JULIA_DEBUG"] = Main    # turn on
 # ENV["JULIA_DEBUG"] = Nothing # turn off
 
-is_stable_function(f::Function) =
-    all(is_stable_method, methods(f).ms)
+abstract type StCheck end
+struct Stb <: StCheck end
+struct Uns <: StCheck
+    fails :: Vector{Vector{Any}}
+end
+
+is_stable_function(f::Function) = begin
+    tests = map(m -> (m, is_stable_method(m)), methods(f).ms)
+    fails = filter(metAndCheck -> isa(metAndCheck[2], Uns), tests)
+    if isempty(fails)
+        return true
+    else
+        println("Some methods failed stability test")
+        print_fails(fails)
+        return false
+    end
+end
+
+print_fails(fs :: Vector{Tuple{Method,Uns}}) = begin
+    for (m,uns) in fs
+        print("The following method:\n\t")
+        println(m)
+        println("is not stable for the following types of inputs")
+        for ts in uns.fails
+            println("\t"* string(ts))
+        end
+    end
+end
+
 
 is_stable_method(m::Method) = begin
     @debug "is_stable_method: $m"
     f = m.sig.parameters[1].instance
-    ss = all_concrete_subtypes(Vector{Any}([m.sig.parameters[2:end]...]))
+    ss = all_subtypes(Vector{Any}([m.sig.parameters[2:end]...]))
 
+    fails = Vector{Any}([])
     res = true
     for s in ss
-        res &= is_stable_call(f, s)
+        if ! is_stable_call(f, s)
+            push!(fails, s)
+            res = false
+        end
     end
-    return res
+
+    return if res
+        Stb()
+    else
+        Uns(fails)
+    end
 end
 
 is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begin
@@ -28,7 +64,7 @@ is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begi
     end
     (code, res_type) = ct[1] # we ought to have just one method body, I think
     res = is_concrete_type(res_type)
-    print_stable_check(f,ts,res_type,res)
+    #print_stable_check(f,ts,res_type,res)
     res
 end
 
@@ -191,3 +227,7 @@ end
 
 # test call:
 #is_stable_function(add1uns)
+# TODO: add1ss (used to be stable) fails now because of parametric types
+#       instantiated with abstract types (e.g. Complex{Real}), which we didn't
+#       condider before. This is unexpected, needs invesetigation.
+# TODO: fails on `plus` (likely, due to >1 args)
