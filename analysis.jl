@@ -198,10 +198,10 @@ end
 # Ex. (add1)
 # |
 # --- a) using `one` -- should be stable but alas, the Rational{Bool} instance screws it
-add1(x :: Number) = x + one(x)
+add1i(x :: Integer) = x + one(x)
 # |
 # --- b) using `1` -- surpricingly stable (coercion)
-add1ss(x :: Number) = x + 1
+add1iss(x :: Integer) = x + 1
 # |
 # --- c) with type inspection -- still stable! (constant folding)
 add1uns(x :: Number) =
@@ -212,6 +212,11 @@ add1uns(x :: Number) =
     else
         x + one(x)
     end
+# |
+# -- d) Number-input: lots of subtypes. Would be stable if skip Rational{Bool} and
+#       abstract arguments to parametric types (e.g. Complex{Integer}).
+#       Currently unstable.
+add1n(x :: Number) = x + one(x)
 
 trivial_unstable(x::Int) = x > 0 ? 0 : "0"
 
@@ -227,7 +232,4 @@ end
 
 # test call:
 #is_stable_function(add1uns)
-# TODO: add1ss (used to be stable) fails now because of parametric types
-#       instantiated with abstract types (e.g. Complex{Real}), which we didn't
-#       condider before. This is unexpected, needs invesetigation.
 # TODO: fails on `plus` (likely, due to >1 args)
