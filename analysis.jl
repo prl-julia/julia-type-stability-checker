@@ -6,10 +6,28 @@
 # ENV["JULIA_DEBUG"] = Main    # turn on
 # ENV["JULIA_DEBUG"] = Nothing # turn off
 
+using MacroTools
+
 abstract type StCheck end
 struct Stb <: StCheck end
 struct Uns <: StCheck
     fails :: Vector{Vector{Any}}
+end
+
+# Input: method definition
+# Output: same definition and a warning if the method is unstable
+#         according to is_stable_method
+macro stable(def)
+    defparse = splitdef(def)
+    fname    = defparse[:name]
+    argtypes = map(a-> eval(splitarg(a)[2]), defparse[:args]) # [2] is arg type
+
+    quote
+	    $(esc(def))
+        m=which($fname, $argtypes)
+        is_stable_method(m) == Stb() || println("Unstable method")
+        m
+    end
 end
 
 is_stable_function(f::Function) = begin
