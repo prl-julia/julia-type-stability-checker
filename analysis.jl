@@ -24,8 +24,13 @@ macro stable(def)
 
     quote
 	    $(esc(def))
-        m=which($fname, $argtypes)
-        is_stable_method(m) == Stb() || println("Unstable method")
+        m = which($fname, $argtypes)
+        mst = is_stable_method(m)
+
+        if isa(mst, Uns)
+            @warn "Method unstable on the following inputs"
+            print_fails(mst)
+        end
         m
     end
 end
@@ -37,19 +42,23 @@ is_stable_function(f::Function) = begin
         return true
     else
         println("Some methods failed stability test")
-        print_fails(fails)
+        print_unsmethods(fails)
         return false
     end
 end
 
-print_fails(fs :: Vector{Tuple{Method,Uns}}) = begin
+print_fails(uns :: Uns) = begin
+    for ts in uns.fails
+        println("\t" * string(ts))
+    end
+end
+
+print_unsmethods(fs :: Vector{Tuple{Method,Uns}}) = begin
     for (m,uns) in fs
         print("The following method:\n\t")
         println(m)
         println("is not stable for the following types of inputs")
-        for ts in uns.fails
-            println("\t"* string(ts))
-        end
+        print_fails(uns.fails)
     end
 end
 
