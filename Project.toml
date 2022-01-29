@@ -1,2 +1,7 @@
+name = "StabilityCheck"
+uuid = "c534620d-ab18-4f85-8056-64f13255e7e6"
+authors = ["Artem Pelenitsyn <a.pelenitsyn@gmail.com>"]
+version = "0.1.0"
+
 [deps]
 MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"

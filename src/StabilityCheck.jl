@@ -1,6 +1,10 @@
+module StabilityCheck
+
 #
 # Exhaustive enumeration of types for static type stability checking
 #
+
+export @stable, is_stable_method, is_stable_function
 
 # Debug print:
 # ENV["JULIA_DEBUG"] = Main    # turn on
@@ -24,7 +28,7 @@ macro stable(def)
 
     quote
 	    $(esc(def))
-        m = which($fname, $argtypes)
+        m = which($(esc(fname)), $argtypes)
         mst = is_stable_method(m)
 
         if isa(mst, Uns)
@@ -260,3 +264,5 @@ end
 # test call:
 #is_stable_function(add1uns)
 # TODO: fails on `plus` (likely, due to >1 args)
+
+end # module
