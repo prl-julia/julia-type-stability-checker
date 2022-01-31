@@ -14,11 +14,21 @@ export @stable, is_stable_method, is_stable_function,
 using InteractiveUtils
 using MacroTools
 
+
+#
+# Data structures to represent answers to stability check requests
+#
+
 abstract type StCheck end
 struct Stb <: StCheck end
 struct Uns <: StCheck
     fails :: Vector{Vector{Any}}
 end
+
+
+#
+#       Main interface utilities
+#
 
 # Input: method definition
 # Output: same definition and a warning if the method is unstable
@@ -41,6 +51,8 @@ macro stable(def)
     end
 end
 
+# Convenience tool to iterate over all known methods of a function
+# Usually we use `is_stable_method` directly instead
 is_stable_function(f::Function) = begin
     tests = map(m -> (m, is_stable_method(m)), methods(f).ms)
     fails = filter(metAndCheck -> isa(metAndCheck[2], Uns), tests)
@@ -53,22 +65,8 @@ is_stable_function(f::Function) = begin
     end
 end
 
-print_fails(uns :: Uns) = begin
-    for ts in uns.fails
-        println("\t" * string(ts))
-    end
-end
-
-print_unsmethods(fs :: Vector{Tuple{Method,Uns}}) = begin
-    for (m,uns) in fs
-        print("The following method:\n\t")
-        println(m)
-        println("is not stable for the following types of inputs")
-        print_fails(uns.fails)
-    end
-end
-
-
+# Main interface utility: check if method is stable by enumerating
+# all possible instantiations of its signature
 is_stable_method(m::Method) = begin
     @debug "is_stable_method: $m"
     f = m.sig.parameters[1].instance
@@ -90,6 +88,37 @@ is_stable_method(m::Method) = begin
     end
 end
 
+
+#
+#     Print utilities of various sorts
+#
+
+print_fails(uns :: Uns) = begin
+    for ts in uns.fails
+        println("\t" * string(ts))
+    end
+end
+
+print_unsmethods(fs :: Vector{Tuple{Method,Uns}}) = begin
+    for (m,uns) in fs
+        print("The following method:\n\t")
+        println(m)
+        println("is not stable for the following types of inputs")
+        print_fails(uns.fails)
+    end
+end
+
+print_stable_check(f,ts,res_type,res) = begin
+    print(lpad("is stable call " * string(f), 20) * " | " *
+        rpad(string(ts), 35) * " | " * rpad(res_type, 30) * " |")
+    println(res)
+end
+
+
+#
+#      Aux utilities
+#
+
 is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begin
     ct = code_typed(f, (ts...,), optimize=false)
     if length(ct) == 0
@@ -99,11 +128,6 @@ is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begi
     res = is_concrete_type(res_type)
     #print_stable_check(f,ts,res_type,res)
     res
-end
-
-print_stable_check(f,ts,res_type,res) = begin
-    print(lpad("is stable call " * string(f), 20) * " | " * rpad(string(ts), 35) * " | " * rpad(res_type, 30) * " |")
-    println(res)
 end
 
 # Used to instantiate functions for concrete argument types.
