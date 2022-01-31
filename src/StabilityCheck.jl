@@ -14,17 +14,34 @@ export @stable, is_stable_method, is_stable_function,
 using InteractiveUtils
 using MacroTools
 
-
 #
 # Data structures to represent answers to stability check requests
+#   and search configuration
 #
 
 abstract type StCheck end
-struct Stb <: StCheck end
-struct Uns <: StCheck
+struct Stb <: StCheck end # hoodary, we're stable
+struct Uns <: StCheck     # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
 end
 
+Base.@kwdef struct SearchCfg
+    concrete_only  :: Bool = true
+#   ^ -- enumerate concrete types ONLY;
+#        Usually start in this mode, but can switch if we see a UnionAll and decide
+#        to try abstract instantiations (whether we decide to do that or not, see
+#        `abstract_args` below)
+
+    skip_unionalls :: Bool = false
+#   ^ -- don't try to instantiate UnionAll's / existential types, just forget about them
+#        -- be default we do instantiate, but can loop if don't turn off on recursive call;
+
+    abstract_args  :: Bool = false
+#   ^ -- instantiate type variables with only concrete arguments or abstract arguments too;
+#        if the latter, may quickly become unstable, so a reasonable default is be `false`
+end
+
+default_scfg = SearchCfg()
 
 #
 #       Main interface utilities
@@ -67,10 +84,10 @@ end
 
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature
-is_stable_method(m::Method) = begin
+is_stable_method(m::Method; scfg :: SearchCfg = default_scfg) = begin
     @debug "is_stable_method: $m"
     f = m.sig.parameters[1].instance
-    ss = all_subtypes(Vector{Any}([m.sig.parameters[2:end]...]))
+    ss = all_subtypes(Vector{Any}([m.sig.parameters[2:end]...]), scfg)
 
     fails = Vector{Any}([])
     res = true
@@ -131,9 +148,11 @@ is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begi
 end
 
 # Used to instantiate functions for concrete argument types.
-# Input: "tuple" of types from the function signature (in the form of Vector, not Tuple).
+# Input:
+#   - "tuple" of types from the function signature (in the form of Vector, not Tuple);
+#   - search configuration
 # Output: vector of "tuples" that subtype input
-all_subtypes(ts::Vector; concrete_only=true, skip_unionalls=false) = begin
+all_subtypes(ts::Vector, scfg :: SearchCfg) = begin
     @debug "all_subtypes: $ts"
     sigtypes = Set{Vector{Any}}([ts]) # worklist
     result = []
@@ -144,8 +163,8 @@ all_subtypes(ts::Vector; concrete_only=true, skip_unionalls=false) = begin
         if isconc
             push!(result, tv)
         else
-            !concrete_only && push!(result, tv)
-            dss = direct_subtypes(tv, skip_unionalls)
+            !scfg.concrete_only && push!(result, tv)
+            dss = direct_subtypes(tv, scfg)
             union!(sigtypes, dss)
         end
     end
@@ -153,7 +172,7 @@ all_subtypes(ts::Vector; concrete_only=true, skip_unionalls=false) = begin
 end
 
 # Auxilliary function: immediate subtypes of a tuple of types `ts`
-direct_subtypes(ts1::Vector, skip_unionalls::Bool) = begin
+direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     if isempty(ts1)
         return []
     end
@@ -162,17 +181,17 @@ direct_subtypes(ts1::Vector, skip_unionalls::Bool) = begin
     ss_last = subtypes(t)
     if isempty(ss_last)
         if typeof(t) == UnionAll
-            ss_last = subtype_unionall(t)
+            ss_last = subtype_unionall(t, scfg)
         end
     end
     if isempty(ts)
         return (Vector{Any}([s])
                     for s=ss_last
-                    if !(skip_unionalls && typeof(s) == UnionAll))
+                    if !(scfg.skip_unionalls && typeof(s) == UnionAll))
     end
 
     res = []
-    ss_rest = direct_subtypes(ts)
+    ss_rest = direct_subtypes(ts, scfg)
     for t_last in ss_last
         for t_rest in ss_rest
             push!(res, push!(Vector(t_rest), t_last))
@@ -185,13 +204,16 @@ end
 # all possibilities for it except unionalls (and their instances) -- to avoid looping, --
 # otherwise take Any and Int (TODO is it a good choice? it's very arbitrary).
 # Note: ignore lower bounds for simplicity.
-subtype_unionall(u :: UnionAll) = begin
+subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     @debug "subtype_unionall of $u"
     ub = u.var.ub
     sample_types = if ub == Any
         [Int64, Any]
     else
-        ss = all_subtypes([ub]; concrete_only=false, skip_unionalls=true)
+        ss = all_subtypes([ub],
+                          SearchCfg(concrete_only  = scfg.abstract_args,
+                                    skip_unionalls = true,
+                                    abstract_args  = scfg.abstract_args))
         @debug "var instantiations: $ss"
         map(tup -> tup[1], ss)
         # (tup[1] for tup=all_subtypes([ub]; concrete_only=false, skip_unionalls=true))
