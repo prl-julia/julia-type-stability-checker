@@ -254,4 +254,8 @@ is_concrete_type(@nospecialize(ty)) = begin
     #         harmless"
 end
 
+import Base.convert
+convert(::Type{Bool}, x::Stb) = true
+convert(::Type{Bool}, x::Uns) = false
+
 end # module
