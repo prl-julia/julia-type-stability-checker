@@ -43,6 +43,9 @@ end
 
 default_scfg = SearchCfg()
 
+# How many counterexamples to print by default
+MAX_PRINT_UNSTABLE = 5
+
 #
 #       Main interface utilities
 #
@@ -111,8 +114,14 @@ end
 #
 
 print_fails(uns :: Uns) = begin
+    local i = 0
     for ts in uns.fails
         println("\t" * string(ts))
+        i += 1
+        if i == MAX_PRINT_UNSTABLE
+            println("and $(length(uns.fails) - i) more... (adjust MAX_PRINT_UNSTABLE to see more)")
+            return
+        end
     end
 end
 
@@ -121,7 +130,7 @@ print_unsmethods(fs :: Vector{Tuple{Method,Uns}}) = begin
         print("The following method:\n\t")
         println(m)
         println("is not stable for the following types of inputs")
-        print_fails(uns.fails)
+        print_fails(uns)
     end
 end
 

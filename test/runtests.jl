@@ -67,8 +67,7 @@ sum_top(v, t) = begin
 end
 
 # test call:
-#is_stable_function(add1uns)
-# TODO: fails on `plus` (likely, due to >1 args)
+#is_stable_function(add1i)
 
 #
 # Tests
