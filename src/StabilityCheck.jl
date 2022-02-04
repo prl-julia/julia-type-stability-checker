@@ -62,8 +62,9 @@ macro stable(def)
         m = which($(esc(fname)), $argtypes)
         mst = is_stable_method(m)
 
-        print_uns(mst)
-        m
+        print_uns(m, mst)
+        (f,_) = split_method(m)
+        f
     end
 end
 
@@ -77,7 +78,7 @@ macro stable_nop(def)
         m = which($(fname), $argtypes)
         mst = is_stable_method(m)
 
-        print_uns(mst)
+        print_uns(m, mst)
     end
 end
 
@@ -133,9 +134,9 @@ print_fails(uns :: Uns) = begin
     end
 end
 
-print_uns(::Stb) = ()
-print_uns(mst::Uns) = begin
-    @warn "Method unstable on the following inputs"
+print_uns(::Method, ::Stb) = ()
+print_uns(m::Method, mst::Uns) = begin
+    @warn "Method $(m.name) unstable on the following inputs"
     print_fails(mst)
 end
 
