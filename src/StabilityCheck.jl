@@ -6,7 +6,8 @@ module StabilityCheck
 
 export @stable, @stable_nop,
     is_stable_method, is_stable_function,
-    Stb, Uns
+    Stb, Uns,
+    SearchCfg
 
 # Debug print:
 # ENV["JULIA_DEBUG"] = Main    # turn on
@@ -66,6 +67,9 @@ macro stable(def)
     end
 end
 
+# Variant of @stable that doesn't splice the provided function definition
+# into the global namespace. Mostly for testing purposes. Relies on Julia's
+# hygiene support.
 macro stable_nop(def)
     (fname, argtypes) = split_def(def)
     quote
@@ -93,21 +97,19 @@ end
 
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature
-is_stable_method(m::Method; scfg :: SearchCfg = default_scfg) = begin
+is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) = begin
     @debug "is_stable_method: $m"
-    f = m.sig.parameters[1].instance
-    ss = all_subtypes(Vector{Any}([m.sig.parameters[2:end]...]), scfg)
+    (func, sig_types) = split_method(m)
+    sig_subtypes = all_subtypes(sig_types, scfg)
 
     fails = Vector{Any}([])
-    res = true
-    for s in ss
-        if ! is_stable_call(f, s)
-            push!(fails, s)
-            res = false
+    for ts in sig_subtypes
+        if ! is_stable_call(func, ts)
+            push!(fails, ts)
         end
     end
 
-    return if res
+    return if isempty(fails)
         Stb()
     else
         Uns(fails)
@@ -116,7 +118,7 @@ end
 
 
 #
-#     Print utilities of various sorts
+#      Printing utilities
 #
 
 print_fails(uns :: Uns) = begin
@@ -158,6 +160,9 @@ end
 #      Aux utilities
 #
 
+# The heart of stability checking using Julia's built-in facilities:
+# 1) compile the given function for the given argument types down to a typed IR
+# 2) check the return type for concreteness
 is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begin
     ct = code_typed(f, (ts...,), optimize=false)
     if length(ct) == 0
@@ -267,15 +272,27 @@ is_concrete_type(@nospecialize(ty)) = begin
     #         harmless"
 end
 
+# In case we need to convert to Bool...
 import Base.convert
 convert(::Type{Bool}, x::Stb) = true
 convert(::Type{Bool}, x::Uns) = false
 
+# Split method definition expression into name and argument types
 split_def(def::Expr) = begin
     defparse = splitdef(def)
     fname    = defparse[:name]
     argtypes = map(a-> eval(splitarg(a)[2]), defparse[:args]) # [2] is arg type
     (fname, argtypes)
 end
+
+# Split method object into the corresponding function object and type signature
+# of the method
+split_method(m::Method) = begin
+    msig = Base.unwrap_unionall(m.sig) # unwrap is critical for generic methods
+    func = msig.parameters[1].instance
+    sig_types = Vector{Any}([msig.parameters[2:end]...])
+    (func, sig_types)
+end
+
 
 end # module

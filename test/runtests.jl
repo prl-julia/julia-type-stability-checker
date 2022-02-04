@@ -67,6 +67,8 @@ sum_top(v, t) = begin
     res
 end
 
+rational_plusi(a::Rational{T}, b::Rational{T}) where T <: Integer = a + b
+
 # test call:
 #is_stable_function(add1i)
 
@@ -78,10 +80,15 @@ end
     @test is_stable_method(@which add1i(1))    == Stb()
     @test is_stable_method(@which add1iss(1))  == Stb()
     @test is_stable_method(@which plus2i(1,1)) == Stb()
+
+    @test is_stable_method(@which rational_plusi(1//1,1//1)) == Stb()
 end
 
 @testset "Simple unstable" begin
     @test isa(is_stable_method(@which add1uns(1)),    Uns)
     @test isa(is_stable_method(@which add1n(1)),      Uns)
     @test isa(is_stable_method(@which plus2n(1,1)),   Uns)
+
+    # this fails when abstract instantiations are ON (compare to the similar test in the "stable" examples)
+    @test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
 end
