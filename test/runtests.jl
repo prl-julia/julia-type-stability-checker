@@ -56,7 +56,8 @@ add1n(x :: Number) = x + one(x)
 
 trivial_unstable(x::Int) = x > 0 ? 0 : "0"
 
-plus(x :: Number, y :: Number) = x + y
+plus2i(x :: Integer, y :: Integer) = x + y
+plus2n(x :: Number, y :: Number) = x + y
 
 sum_top(v, t) = begin
     res = 0 # zero(eltype(v))
@@ -74,11 +75,13 @@ end
 #
 
 @testset "Simple stable" begin
-    @test is_stable_method(@which add1i(1))   == Stb()
-    @test is_stable_method(@which add1iss(1)) == Stb()
+    @test is_stable_method(@which add1i(1))    == Stb()
+    @test is_stable_method(@which add1iss(1))  == Stb()
+    @test is_stable_method(@which plus2i(1,1)) == Stb()
 end
 
 @testset "Simple unstable" begin
-    @test isa(is_stable_method(@which add1uns(1)), Uns)
-    @test isa(is_stable_method(@which add1n(1)),   Uns)
+    @test isa(is_stable_method(@which add1uns(1)),    Uns)
+    @test isa(is_stable_method(@which add1n(1)),      Uns)
+    @test isa(is_stable_method(@which plus2n(1,1)),   Uns)
 end
