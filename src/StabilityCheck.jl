@@ -4,7 +4,8 @@ module StabilityCheck
 # Exhaustive enumeration of types for static type stability checking
 #
 
-export @stable, is_stable_method, is_stable_function,
+export @stable, @stable_nop,
+    is_stable_method, is_stable_function,
     Stb, Uns
 
 # Debug print:
@@ -20,7 +21,7 @@ using MacroTools
 #
 
 abstract type StCheck end
-struct Stb <: StCheck end # hoodary, we're stable
+struct Stb <: StCheck end # hooary, we're stable
 struct Uns <: StCheck     # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
 end
@@ -54,20 +55,25 @@ MAX_PRINT_UNSTABLE = 5
 # Output: same definition and a warning if the method is unstable
 #         according to is_stable_method
 macro stable(def)
-    defparse = splitdef(def)
-    fname    = defparse[:name]
-    argtypes = map(a-> eval(splitarg(a)[2]), defparse[:args]) # [2] is arg type
-
+    (fname, argtypes) = split_def(def)
     quote
 	    $(esc(def))
         m = which($(esc(fname)), $argtypes)
         mst = is_stable_method(m)
 
-        if isa(mst, Uns)
-            @warn "Method unstable on the following inputs"
-            print_fails(mst)
-        end
+        print_uns(mst)
         m
+    end
+end
+
+macro stable_nop(def)
+    (fname, argtypes) = split_def(def)
+    quote
+	    $(def)
+        m = which($(fname), $argtypes)
+        mst = is_stable_method(m)
+
+        print_uns(mst)
     end
 end
 
@@ -124,6 +130,13 @@ print_fails(uns :: Uns) = begin
         end
     end
 end
+
+print_uns(::Stb) = ()
+print_uns(mst::Uns) = begin
+    @warn "Method unstable on the following inputs"
+    print_fails(mst)
+end
+
 
 print_unsmethods(fs :: Vector{Tuple{Method,Uns}}) = begin
     for (m,uns) in fs
@@ -257,5 +270,12 @@ end
 import Base.convert
 convert(::Type{Bool}, x::Stb) = true
 convert(::Type{Bool}, x::Uns) = false
+
+split_def(def::Expr) = begin
+    defparse = splitdef(def)
+    fname    = defparse[:name]
+    argtypes = map(a-> eval(splitarg(a)[2]), defparse[:args]) # [2] is arg type
+    (fname, argtypes)
+end
 
 end # module
