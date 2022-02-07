@@ -8,3 +8,5 @@ using StabilityCheck
 @stable f() = g()
 
 @stable g() = if rand()>0.5; 1; else "" end
+
+check_all_stable()
