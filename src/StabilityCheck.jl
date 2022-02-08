@@ -5,7 +5,7 @@ module StabilityCheck
 #
 
 export @stable, @stable!, @stable!_nop,
-    is_stable_method, is_stable_function,
+    is_stable_method, is_stable_function, is_stable_module,
     check_all_stable,
     Stb, Uns,
     SearchCfg
@@ -42,6 +42,10 @@ Base.@kwdef struct SearchCfg
     abstract_args  :: Bool = false
 #   ^ -- instantiate type variables with only concrete arguments or abstract arguments too;
 #        if the latter, may quickly become unstable, so a reasonable default is be `false`
+
+    exported_names_only :: Bool = true
+#   ^ -- when doing stability check on the whole module at once: whether to check only
+#        only exported functions
 end
 
 default_scfg = SearchCfg()
@@ -94,7 +98,6 @@ clean_checklist() = begin
     global checklist = [];
 end
 
-
 # Variant of @stable! that doesn't splice the provided function definition
 # into the global namespace. Mostly for testing purposes. Relies on Julia's
 # hygiene support.
@@ -109,11 +112,29 @@ macro stable!_nop(def)
     end
 end
 
-# Convenience tool to iterate over all known methods of a function
-# Usually we use `is_stable_method` directly instead
-is_stable_function(f::Function) = begin
-    tests = map(m -> (m, is_stable_method(m)), methods(f).ms)
-    fails = filter(metAndCheck -> isa(metAndCheck[2], Uns), tests)
+# Check all(*) function definitions in the module fir stability
+# Relies on `is_stable_function`.
+# (*) By "all" we mean all exported by default, but this can be switched
+# to literally all using `SearchCfg`'s  `exported_names_only`.
+is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) = begin
+    @debug "is_stable_module: $mod"
+    for sym in names(mod; all=!scfg.exported_names_only)
+        @debug "is_stable_module: check symbol $sym"
+        evsym = Core.eval(mod, sym)
+        isa(evsym, Function) || continue # not interested in non-functional symbols
+        (sym == :include || sym == :eval) && continue # not interested in special functions
+        is_stable_function(evsym, scfg)
+    end
+end
+
+# is_stable_function : Function, SearchCfg -> IO Bool
+# Convenience tool to iterate over all known methods of a function.
+# Usually, direct use of `is_stable_method` is preferrable, but, for instance,
+# `is_stable_module` has to rely on this one.
+is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) = begin
+    @debug "is_stable_function: $f"
+    tests = map(m -> (m, is_stable_method(m, scfg)), methods(f).ms)
+    fails = filter(methAndCheck -> isa(methAndCheck[2], Uns), tests)
     if isempty(fails)
         return true
     else
@@ -123,9 +144,10 @@ is_stable_function(f::Function) = begin
     end
 end
 
+# is_stable_method : Method, SearchCfg -> StCheck
 # Main interface utility: check if method is stable by enumerating
-# all possible instantiations of its signature
-is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) = begin
+# all possible instantiations of its signature.
+is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
     (func, sig_types) = split_method(m)
     sig_subtypes = all_subtypes(sig_types, scfg)
