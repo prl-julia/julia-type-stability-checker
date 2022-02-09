@@ -92,3 +92,15 @@ end
     # this fails when abstract instantiations are ON (compare to the similar test in the "stable" examples)
     @test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
 end
+
+# Stable Modules
+module M
+export a, b, c;
+a()=1; b()=2; c=3;
+d()=if rand()>0.5; 1; else ""; end
+end
+
+@testset "is_stable_module" begin
+    @test is_stable_module(M)
+    @test ! is_stable_module(M, SearchCfg(exported_names_only=false))
+end

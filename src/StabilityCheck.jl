@@ -112,26 +112,28 @@ macro stable!_nop(def)
     end
 end
 
+# is_stable_module : Module, SearchCfg -> IO Bool
 # Check all(*) function definitions in the module fir stability
 # Relies on `is_stable_function`.
 # (*) By "all" we mean all exported by default, but this can be switched
 # to literally all using `SearchCfg`'s  `exported_names_only`.
-is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) = begin
+is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool = begin
     @debug "is_stable_module: $mod"
     for sym in names(mod; all=!scfg.exported_names_only)
         @debug "is_stable_module: check symbol $sym"
         evsym = Core.eval(mod, sym)
         isa(evsym, Function) || continue # not interested in non-functional symbols
         (sym == :include || sym == :eval) && continue # not interested in special functions
-        is_stable_function(evsym, scfg)
+        is_stable_function(evsym, scfg) || return false
     end
+    return true
 end
 
 # is_stable_function : Function, SearchCfg -> IO Bool
 # Convenience tool to iterate over all known methods of a function.
 # Usually, direct use of `is_stable_method` is preferrable, but, for instance,
 # `is_stable_module` has to rely on this one.
-is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) = begin
+is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: Bool = begin
     @debug "is_stable_function: $f"
     tests = map(m -> (m, is_stable_method(m, scfg)), methods(f).ms)
     fails = filter(methAndCheck -> isa(methAndCheck[2], Uns), tests)
