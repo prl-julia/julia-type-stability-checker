@@ -9,4 +9,8 @@ using StabilityCheck
 
 @stable g() = if rand()>0.5; 1; else "" end
 
+@stable f1() = g1()
+
+@stable g1() = 1
+
 check_all_stable()
