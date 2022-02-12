@@ -101,6 +101,6 @@ d()=if rand()>0.5; 1; else ""; end
 end
 
 @testset "is_stable_module" begin
-    @test is_stable_module(M)
-    @test ! is_stable_module(M, SearchCfg(exported_names_only=false))
+    @test is_stable_moduleb(M)
+    @test ! is_stable_moduleb(M, SearchCfg(exported_names_only=false))
 end

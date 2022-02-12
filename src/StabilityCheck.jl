@@ -5,8 +5,9 @@ module StabilityCheck
 #
 
 export @stable, @stable!, @stable!_nop,
-    is_stable_method, is_stable_function, is_stable_module,
+    is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
     check_all_stable,
+    convert,
     Stb, Uns,
     SearchCfg
 
@@ -26,6 +27,11 @@ abstract type StCheck end
 struct Stb <: StCheck end # hooary, we're stable
 struct Uns <: StCheck     # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
+end
+
+struct MethStCheck
+    method :: Method
+    check  :: StCheck
 end
 
 Base.@kwdef struct SearchCfg
@@ -112,38 +118,45 @@ macro stable!_nop(def)
     end
 end
 
-# is_stable_module : Module, SearchCfg -> IO Bool
-# Check all(*) function definitions in the module fir stability
+# is_stable_module : Module, SearchCfg -> IO Vector{MethStCheck}
+# Check all(*) function definitions in the module for stability.
 # Relies on `is_stable_function`.
-# (*) By "all" we mean all exported by default, but this can be switched
+# (*) By "all" we mean all exported, by default, but this can be switched
 # to literally all using `SearchCfg`'s  `exported_names_only`.
-is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool = begin
+is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: Vector{MethStCheck} = begin
     @debug "is_stable_module: $mod"
+    res = []
     for sym in names(mod; all=!scfg.exported_names_only)
         @debug "is_stable_module: check symbol $sym"
         evsym = Core.eval(mod, sym)
         isa(evsym, Function) || continue # not interested in non-functional symbols
         (sym == :include || sym == :eval) && continue # not interested in special functions
-        is_stable_function(evsym, scfg) || return false
+        res = vcat(res, is_stable_function(evsym, scfg))
     end
-    return true
+    return res
 end
 
-# is_stable_function : Function, SearchCfg -> IO Bool
+# bool-returning version of the above
+is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
+    convert(Bool, is_stable_module(mod, scfg))
+
+# is_stable_function : Function, SearchCfg -> IO Vector{MethStCheck}
 # Convenience tool to iterate over all known methods of a function.
 # Usually, direct use of `is_stable_method` is preferrable, but, for instance,
 # `is_stable_module` has to rely on this one.
-is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: Bool = begin
+is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: Vector{MethStCheck} = begin
     @debug "is_stable_function: $f"
-    tests = map(m -> (m, is_stable_method(m, scfg)), methods(f).ms)
-    fails = filter(methAndCheck -> isa(methAndCheck[2], Uns), tests)
-    if isempty(fails)
-        return true
-    else
+    res = []
+    checks = map(m -> MethStCheck(m, is_stable_method(m, scfg)), methods(f).ms)
+
+    # TODO: make the function pure and move code below somewhere in the UI level
+    fails = filter(methAndCheck -> isa(methAndCheck.check, Uns), checks)
+    if !isempty(fails)
         println("Some methods failed stability test")
         print_unsmethods(fails)
-        return false
     end
+
+    return checks
 end
 
 # is_stable_method : Method, SearchCfg -> StCheck
@@ -191,13 +204,12 @@ print_uns(m::Method, mst::Uns) = begin
     print_fails(mst)
 end
 
-
-print_unsmethods(fs :: Vector{Tuple{Method,Uns}}) = begin
-    for (m,uns) in fs
+print_unsmethods(fs :: Vector{MethStCheck}) = begin
+    for mck in fs
         print("The following method:\n\t")
-        println(m)
+        println(mck.method)
         println("is not stable for the following types of inputs")
-        print_fails(uns)
+        print_fails(mck.check)
     end
 end
 
@@ -328,6 +340,8 @@ end
 import Base.convert
 convert(::Type{Bool}, x::Stb) = true
 convert(::Type{Bool}, x::Uns) = false
+
+convert(::Type{Bool}, x::Vector{MethStCheck}) = all(mc -> isa(mc.check, Stb), x)
 
 # Split method definition expression into name and argument types
 split_def(def::Expr) = begin
