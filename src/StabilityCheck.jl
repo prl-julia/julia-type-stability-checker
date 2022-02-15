@@ -146,7 +146,6 @@ is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
 # `is_stable_module` has to rely on this one.
 is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: Vector{MethStCheck} = begin
     @debug "is_stable_function: $f"
-    res = []
     checks = map(m -> MethStCheck(m, is_stable_method(m, scfg)), methods(f).ms)
 
     # TODO: make the function pure and move code below somewhere in the UI level
@@ -230,9 +229,9 @@ end
 is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begin
     ct = code_typed(f, (ts...,), optimize=false)
     if length(ct) == 0
-        throw(DomainError("$f, $s")) # type inference failed
+        throw(DomainError("$f, $ts")) # type inference failed
     end
-    (code, res_type) = ct[1] # we ought to have just one method body, I think
+    (_ #=code=#, res_type) = ct[1] # we ought to have just one method body, I think
     res = is_concrete_type(res_type)
     #print_stable_check(f,ts,res_type,res)
     res
