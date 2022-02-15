@@ -261,6 +261,8 @@ all_subtypes(ts::Vector, scfg :: SearchCfg) = begin
     result
 end
 
+blocklist = [Function]
+
 # Auxilliary function: immediate subtypes of a tuple of types `ts`
 direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     if isempty(ts1)
@@ -268,7 +270,10 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     end
     ts = copy(ts1)
     t = pop!(ts)
-    ss_last = subtypes(t)
+    ss_last = if t ∈ blocklist
+        []
+        else subtypes(t)
+    end
     if isempty(ss_last)
         if typeof(t) == UnionAll
             ss_last = subtype_unionall(t, scfg)
