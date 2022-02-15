@@ -8,7 +8,7 @@ export @stable, @stable!, @stable!_nop,
     is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
     check_all_stable,
     convert,
-    Stb, Uns,
+    Stb, Uns, AnyParam,
     SearchCfg
 
 # Debug print:
@@ -28,6 +28,7 @@ struct Stb <: StCheck end # hooary, we're stable
 struct Uns <: StCheck     # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
 end
+struct AnyParam <: StCheck end # give up on Any-params in methods
 
 struct MethStCheck
     method :: Method
@@ -161,9 +162,11 @@ end
 # is_stable_method : Method, SearchCfg -> StCheck
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature.
+# If signature has Any at any place, yeild AnyParam immediately.
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
     (func, sig_types) = split_method(m)
+    Any ∈ sig_types && return AnyParam()
     sig_subtypes = all_subtypes(sig_types, scfg)
 
     fails = Vector{Any}([])

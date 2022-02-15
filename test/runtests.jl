@@ -93,6 +93,11 @@ end
     @test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
 end
 
+@testset "Any-param" begin
+    f(x)=1
+    @test is_stable_method(@which f(2)) == AnyParam()
+end
+
 # Stable Modules
 module M
 export a, b, c;
