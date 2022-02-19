@@ -8,12 +8,15 @@ export @stable, @stable!, @stable!_nop,
     is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
     check_all_stable,
     convert,
-    Stb, Uns, AnyParam,
+    MethStCheck,
+    Stb, Uns, AnyParam, VarargParam,
     SearchCfg
 
 # Debug print:
 # ENV["JULIA_DEBUG"] = StabilityCheck  # turn on
 # ENV["JULIA_DEBUG"] = Nothing         # turn off
+
+include("equality.jl")
 
 using InteractiveUtils
 using MacroTools
@@ -23,18 +26,31 @@ using MacroTools
 #   and search configuration
 #
 
+# Hieararchy of possible answers to a stability check querry
 abstract type StCheck end
 struct Stb <: StCheck end # hooary, we're stable
 struct Uns <: StCheck     # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
 end
-struct AnyParam <: StCheck end # give up on Any-params in methods
+struct AnyParam    <: StCheck # give up on Any-params in methods; can't tell if it's stable
+    sig :: Vector{Any}
+end
+struct VarargParam <: StCheck # give up on VA-params  in methods; can't tell if it's stable
+    sig :: Vector{Any}
+end
 
+Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
+
+# Result of a check along with the method under the check (for reporting purposes)
 struct MethStCheck
     method :: Method
     check  :: StCheck
 end
 
+# Result of many checks (convinience alias)
+StCheckResults = Vector{MethStCheck}
+
+# Subtype enumeration procedure parameters
 Base.@kwdef struct SearchCfg
     concrete_only  :: Bool = true
 #   ^ -- enumerate concrete types ONLY;
@@ -50,7 +66,7 @@ Base.@kwdef struct SearchCfg
 #   ^ -- instantiate type variables with only concrete arguments or abstract arguments too;
 #        if the latter, may quickly become unstable, so a reasonable default is be `false`
 
-    exported_names_only :: Bool = true
+    exported_names_only :: Bool = false
 #   ^ -- when doing stability check on the whole module at once: whether to check only
 #        only exported functions
 end
@@ -119,12 +135,11 @@ macro stable!_nop(def)
     end
 end
 
-# is_stable_module : Module, SearchCfg -> IO Vector{MethStCheck}
+# is_stable_module : Module, SearchCfg -> IO StCheckResults
 # Check all(*) function definitions in the module for stability.
 # Relies on `is_stable_function`.
-# (*) By "all" we mean all exported, by default, but this can be switched
-# to literally all using `SearchCfg`'s  `exported_names_only`.
-is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: Vector{MethStCheck} = begin
+# (*) "all" can mean all or exported; cf. `SearchCfg`'s  `exported_names_only`.
+is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_module: $mod"
     res = []
     for sym in names(mod; all=!scfg.exported_names_only)
@@ -141,22 +156,13 @@ end
 is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
     convert(Bool, is_stable_module(mod, scfg))
 
-# is_stable_function : Function, SearchCfg -> IO Vector{MethStCheck}
+# is_stable_function : Function, SearchCfg -> IO StCheckResults
 # Convenience tool to iterate over all known methods of a function.
 # Usually, direct use of `is_stable_method` is preferrable, but, for instance,
 # `is_stable_module` has to rely on this one.
-is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: Vector{MethStCheck} = begin
+is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_function: $f"
-    checks = map(m -> MethStCheck(m, is_stable_method(m, scfg)), methods(f).ms)
-
-    # TODO: make the function pure and move code below somewhere in the UI level
-    fails = filter(methAndCheck -> isa(methAndCheck.check, Uns), checks)
-    if !isempty(fails)
-        println("Some methods failed stability test")
-        print_unsmethods(fails)
-    end
-
-    return checks
+    map(m -> MethStCheck(m, is_stable_method(m, scfg)), methods(f).ms)
 end
 
 # is_stable_method : Method, SearchCfg -> StCheck
@@ -166,9 +172,13 @@ end
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
     (func, sig_types) = split_method(m)
-    Any ∈ sig_types && return AnyParam()
-    sig_subtypes = all_subtypes(sig_types, scfg)
 
+    # corner cases where we give up
+    Any ∈ sig_types && return AnyParam(sig_types)
+    any(t -> is_vararg(t), sig_types) && return VarargParam(sig_types)
+
+    # loop over all instantiations of the signature
+    sig_subtypes = all_subtypes(sig_types, scfg)
     fails = Vector{Any}([])
     for ts in sig_subtypes
         if ! is_stable_call(func, ts)
@@ -206,7 +216,15 @@ print_uns(m::Method, mst::Uns) = begin
     print_fails(mst)
 end
 
-print_unsmethods(fs :: Vector{MethStCheck}) = begin
+print_check_results(checks :: Vector{MethStCheck}) = begin
+    fails = filter(methAndCheck -> isa(methAndCheck.check, Uns), checks)
+    if !isempty(fails)
+        println("Some methods failed stability test")
+        print_unsmethods(fails)
+    end
+end
+
+print_unsmethods(fs :: StCheckResults) = begin
     for mck in fs
         print("The following method:\n\t")
         println(mck.method)
@@ -265,15 +283,17 @@ all_subtypes(ts::Vector, scfg :: SearchCfg) = begin
 end
 
 blocklist = [Function]
+is_vararg(t) = isa(t, Core.TypeofVararg)
 
 # Auxilliary function: immediate subtypes of a tuple of types `ts`
 direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     if isempty(ts1)
         return []
     end
+    @debug "direct_subtypes: $ts1"
     ts = copy(ts1)
     t = pop!(ts)
-    ss_last = if t ∈ blocklist
+    ss_last = if is_vararg(t) || any(b -> t <: b, blocklist)
         []
         else subtypes(t)
     end

@@ -93,9 +93,11 @@ end
     @test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
 end
 
-@testset "Any-param" begin
+@testset "Any-param & Varargs" begin
     f(x)=1
-    @test is_stable_method(@which f(2)) == AnyParam()
+    @test is_stable_method(@which f(2)) == AnyParam(Any[Any])
+    g(x...)=2
+    @test is_stable_method(@which g(2)) == VarargParam(Any[Vararg{Any}])
 end
 
 # Stable Modules
@@ -106,6 +108,6 @@ d()=if rand()>0.5; 1; else ""; end
 end
 
 @testset "is_stable_module" begin
-    @test is_stable_moduleb(M)
-    @test ! is_stable_moduleb(M, SearchCfg(exported_names_only=false))
+    @test is_stable_moduleb(M, SearchCfg(exported_names_only=true))
+    @test ! is_stable_moduleb(M)
 end
