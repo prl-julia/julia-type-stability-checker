@@ -8,6 +8,11 @@ export @stable, @stable!, @stable!_nop,
     is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
     check_all_stable,
     convert,
+
+    # CSV-aware tools
+    checkModule, prepCsv,
+
+    # Types
     MethStCheck,
     Stb, Uns, AnyParam, VarargParam,
     SearchCfg
@@ -20,6 +25,9 @@ include("equality.jl")
 
 using InteractiveUtils
 using MacroTools
+using CSV
+
+import Base.convert
 
 #
 # Data structures to represent answers to stability check requests
@@ -195,6 +203,57 @@ end
 
 
 #
+#      Data analysis utilities
+#
+
+
+# Conversion to CSV
+
+abstract type            StCheckCsv end
+struct StbCsv         <: StCheckCsv end
+struct UnsCsv         <: StCheckCsv end
+struct AnyParamCsv    <: StCheckCsv end
+struct VarargParamCsv <: StCheckCsv end
+
+Base.:(==)(x::StCheckCsv, y::StCheckCsv) = structEqual(x,y)
+
+struct MethStCheckCsv
+    check :: String
+    sig   :: String
+    mod   :: String
+    file  :: String
+    line  :: Int
+end
+
+StCheckResultsCsv = Vector{MethStCheckCsv}
+
+stCheckToCsv(::StCheck) :: StCheckCsv = error("unknown check")
+stCheckToCsv(::Stb)         = StbCsv()
+stCheckToCsv(::Uns)         = UnsCsv()
+stCheckToCsv(::AnyParam)    = AnyParamCsv()
+stCheckToCsv(::VarargParam) = VarargParamCsv()
+
+convert(::Type{String}, ::StbCsv)           = "stable"
+convert(::Type{String}, ::UnsCsv)           = "unstable"
+convert(::Type{String}, ::AnyParamCsv)      = "Any"
+convert(::Type{String}, ::VarargParamCsv)   = "vararg"
+
+prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
+    MethStCheckCsv(
+        stCheckToCsv(mc.check),
+        "$(mc.method.sig)",
+        "$(mc.method.module)",
+        "$(mc.method.file)",
+        mc.method.line,
+    )
+
+prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
+
+storeCsv(name::String, mcs::StCheckResults) = CSV.write(name, prepCsv(mcs))
+
+checkModule(m::Module)=storeCsv("$m.csv", is_stable_module(m))
+
+#
 #      Printing utilities
 #
 
@@ -364,7 +423,6 @@ is_concrete_type(@nospecialize(ty)) = begin
 end
 
 # In case we need to convert to Bool...
-import Base.convert
 convert(::Type{Bool}, x::Stb) = true
 convert(::Type{Bool}, x::Uns) = false
 
