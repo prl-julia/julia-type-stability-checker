@@ -13,5 +13,12 @@ Process a module (check stability of all of its methods):
 checkModule(MyModule)
 ```
 
-Assumes: `MyModule` is loaded. Effect: creates a `MyModule.csv` in the current
-directory with results of analysis.
+- Assumes: `MyModule` is loaded.
+- Effects: in the current directory creates:
+  - `MyModule.csv` with raw results of analysis;
+  - `MyModule-agg.txt` with aggregate stats (possibly, for further analysis).
+
+A (possibly empty) set of `agg`-files can be turned into a single CSV via calling
+`scripts/aggregate.sh`. For just one file, it only adds the heading. The result
+is written in `aggregate.csv`.
+

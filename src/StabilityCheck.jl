@@ -9,6 +9,9 @@ export @stable, @stable!, @stable!_nop,
     check_all_stable,
     convert,
 
+    # Stats
+    AgStats,
+    aggregateStats,
     # CSV-aware tools
     checkModule, prepCsv,
 
@@ -249,13 +252,43 @@ prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
 
 prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 
+struct AgStats
+    methCnt :: Int64
+    stblCnt :: Int64
+    unsCnt :: Int64
+    anyCnt  :: Int64
+    vaCnt   :: Int64
+end
+
+showAgStats(m::Module, ags::AgStats) :: String =
+    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt)"
+
+aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
+    length(mcs),
+    count(mc -> isa(mc.check, Stb), mcs),
+    count(mc -> isa(mc.check, Uns), mcs),
+    count(mc -> isa(mc.check, AnyParam), mcs),
+    count(mc -> isa(mc.check, VarargParam), mcs)
+)
+
 storeCsv(name::String, mcs::StCheckResults) = CSV.write(name, prepCsv(mcs))
 
-checkModule(m::Module)=storeCsv("$m.csv", is_stable_module(m))
+# checkModule :: Module -> IO ()
+# Effects:
+#   1. Module.csv with raw results
+#   2. Module-agg.txt with aggregate results
+checkModule(m::Module)= begin
+    checkRes = is_stable_module(m)
+    storeCsv("$m.csv", checkRes)
+    write("$m-agg.txt", showAgStats(m, aggregateStats(checkRes)))
+    return ()
+end
+
 
 #
 #      Printing utilities
 #
+
 
 print_fails(uns :: Uns) = begin
     local i = 0

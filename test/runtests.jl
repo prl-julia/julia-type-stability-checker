@@ -100,14 +100,29 @@ end
     @test is_stable_method(@which g(2)) == VarargParam(Any[Vararg{Any}])
 end
 
-# Stable Modules
+# (Un)Stable Modules
 module M
 export a, b, c;
-a()=1; b()=2; c=3;
+a()=1; b()=2
+c=3; # not a function!
 d()=if rand()>0.5; 1; else ""; end
 end
 
 @testset "is_stable_module" begin
     @test is_stable_moduleb(M, SearchCfg(exported_names_only=true))
     @test ! is_stable_moduleb(M)
+end
+
+# Stats
+
+module N
+export a, b;
+a()=1; b()=2
+g(x...)=2
+f(x)=1
+d()=if rand()>0.5; 1; else ""; end
+end
+
+@testset "Collecting stats" begin
+    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1)
 end
