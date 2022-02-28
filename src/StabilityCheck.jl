@@ -273,14 +273,15 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 
 storeCsv(name::String, mcs::StCheckResults) = CSV.write(name, prepCsv(mcs))
 
-# checkModule :: Module -> IO ()
+# checkModule :: Module, Path -> IO ()
+# Check stability in the given module, store results under the given path
 # Effects:
 #   1. Module.csv with raw results
 #   2. Module-agg.txt with aggregate results
-checkModule(m::Module)= begin
+checkModule(m::Module, out::String=".")= begin
     checkRes = is_stable_module(m)
-    storeCsv("$m.csv", checkRes)
-    write("$m-agg.txt", showAgStats(m, aggregateStats(checkRes)))
+    storeCsv(joinpath(out,"$m.csv"), checkRes)
+    write(joinpath(out, "$m-agg.txt"), showAgStats(m, aggregateStats(checkRes)))
     return ()
 end
 
