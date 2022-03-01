@@ -49,6 +49,9 @@ end
 struct VarargParam <: StCheck # give up on VA-params  in methods; can't tell if it's stable
     sig :: Vector{Any}
 end
+struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear reason
+    sig :: Vector{Any}
+end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
 
@@ -180,6 +183,7 @@ end
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature.
 # If signature has Any at any place, yeild AnyParam immediately.
+# If signature has Vararg at any place, yeild VarargParam immediately.
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
     (func, sig_types) = split_method(m)
@@ -192,8 +196,12 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     sig_subtypes = all_subtypes(sig_types, scfg)
     fails = Vector{Any}([])
     for ts in sig_subtypes
-        if ! is_stable_call(func, ts)
-            push!(fails, ts)
+        try
+            if ! is_stable_call(func, ts)
+                push!(fails, ts)
+            end
+        catch
+            return TcFail(ts)
         end
     end
 
