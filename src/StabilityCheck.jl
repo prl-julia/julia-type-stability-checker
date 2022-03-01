@@ -432,11 +432,18 @@ subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     if isempty(sample_types)
         []
     else
-        [u{t} for t in sample_types]
+        try
+            res = [u{t} for t in sample_types]
+            res
+        catch
+            []
+        end
     end
 end
 
-# Follows definition used in @code_warntype (cf. `warntype_type_printer` in:
+# is_concrete_type: Type -> Bool
+#
+# Note: Follows definition used in @code_warntype (cf. `warntype_type_printer` in:
 # julia/stdlib/InteractiveUtils/src/codeview.jl)
 is_concrete_type(@nospecialize(ty)) = begin
     if ty isa Type && (!Base.isdispatchelem(ty) || ty == Core.Box)
