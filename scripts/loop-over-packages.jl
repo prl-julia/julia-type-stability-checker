@@ -8,15 +8,16 @@ out_dir  = joinpath(sts_path, "scratch", "bulk")
 
 pkgs = split("""
 Flux
-Gadfly
-Gen
-Genie
-IJulia
-JuMP
-Knet
-Plots
-Pluto
 """)
+
+# Gadfly
+# Gen
+# Genie
+# IJulia
+# JuMP
+# Knet
+# Plots
+# Pluto
 
 using Pkg
 
@@ -31,7 +32,7 @@ Pkg.activate(".")
 
 
 # Add StabilityCheck
-Pkg.add(path=sts_path)
+Pkg.develop(path=sts_path)
 using StabilityCheck
 
 #
@@ -47,7 +48,10 @@ for p in pkgs
     ev("using $p")
 end
 
+@info "Finished `using` modules of interest, start processing..."
+
 # Run analysis on the packages
 for p in pkgs
     checkModule(ev("$p"), out_dir)
+    @info "Module $p processed."
 end
