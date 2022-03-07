@@ -193,9 +193,11 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     any(t -> is_vararg(t), sig_types) && return VarargParam(sig_types)
 
     # loop over all instantiations of the signature
-    sig_subtypes = all_subtypes(sig_types, scfg)
     fails = Vector{Any}([])
-    for ts in sig_subtypes
+    for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
+        if ts == "done"
+            break
+        end
         try
             if ! is_stable_call(func, ts)
                 push!(fails, ts)
@@ -363,24 +365,24 @@ end
 # Input:
 #   - "tuple" of types from the function signature (in the form of Vector, not Tuple);
 #   - search configuration
+#   - results channel to be consumed in asyncronous manner
 # Output: vector of "tuples" that subtype input
-all_subtypes(ts::Vector, scfg :: SearchCfg) = begin
+all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
     @debug "all_subtypes: $ts"
     sigtypes = Set{Vector{Any}}([ts]) # worklist
-    result = []
     while !isempty(sigtypes)
         tv = pop!(sigtypes)
         @debug "all_subtypes loop: $tv"
         isconc = all(is_concrete_type, tv)
         if isconc
-            push!(result, tv)
+            put!(result, tv)
         else
-            !scfg.concrete_only && push!(result, tv)
+            !scfg.concrete_only && put!(result, tv)
             dss = direct_subtypes(tv, scfg)
             union!(sigtypes, dss)
         end
     end
-    result
+    "done"
 end
 
 blocklist = [Function]
@@ -429,13 +431,15 @@ subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     sample_types = if ub == Any
         [Int64, Any]
     else
-        ss = all_subtypes([ub],
-                          SearchCfg(concrete_only  = scfg.abstract_args,
+        ss = collect(Channel(ch ->
+                    all_subtypes(
+                        [ub],
+                        SearchCfg(concrete_only  = scfg.abstract_args,
                                     skip_unionalls = true,
-                                    abstract_args  = scfg.abstract_args))
+                                    abstract_args  = scfg.abstract_args),
+                        ch)))
         @debug "var instantiations: $ss"
         map(tup -> tup[1], ss)
-        # (tup[1] for tup=all_subtypes([ub]; concrete_only=false, skip_unionalls=true))
     end
     if isempty(sample_types)
         []
