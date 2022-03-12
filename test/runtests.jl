@@ -100,6 +100,15 @@ end
     @test is_stable_method(@which g(2)) == VarargParam(Any[Vararg{Any}])
 end
 
+@testset "Fuel" begin
+    f()=1
+    @test is_stable_method(@which f()) == Stb()
+    g(x::Int)=2
+    @test is_stable_method((@which g(2)), SearchCfg(fuel=1)) == Stb()
+    h(x::Integer)=3
+    @test is_stable_method((@which h(2)), SearchCfg(fuel=1)) == OutOfFuel()
+end
+
 # (Un)Stable Modules
 module M
 export a, b, c;
@@ -124,5 +133,5 @@ d()=if rand()>0.5; 1; else ""; end
 end
 
 @testset "Collecting stats" begin
-    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1)
+    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1, 0, 0)
 end

@@ -17,7 +17,7 @@ export @stable, @stable!, @stable!_nop,
 
     # Types
     MethStCheck,
-    Stb, Uns, AnyParam, VarargParam,
+    Stb, Uns, AnyParam, VarargParam, TcFail, OutOfFuel,
     SearchCfg
 
 # Debug print:
@@ -52,6 +52,7 @@ end
 struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear reason
     sig :: Vector{Any}
 end
+struct OutOfFuel  <: StCheck end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
 
@@ -83,6 +84,9 @@ Base.@kwdef struct SearchCfg
     exported_names_only :: Bool = false
 #   ^ -- when doing stability check on the whole module at once: whether to check only
 #        only exported functions
+
+    fuel :: Int = typemax(Int)
+#   ^ -- search fuel, i.e. how many types we want to enumerate before give up
 end
 
 default_scfg = SearchCfg()
@@ -194,6 +198,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
 
     # loop over all instantiations of the signature
     fails = Vector{Any}([])
+    steps = 0
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         if ts == "done"
             break
@@ -204,6 +209,10 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
             end
         catch
             return TcFail(ts)
+        end
+        steps += 1
+        if steps > scfg.fuel
+            return OutOfFuel()
         end
     end
 
@@ -227,6 +236,8 @@ struct StbCsv         <: StCheckCsv end
 struct UnsCsv         <: StCheckCsv end
 struct AnyParamCsv    <: StCheckCsv end
 struct VarargParamCsv <: StCheckCsv end
+struct TcFailCsv <: StCheckCsv end
+struct OutOfFuelCsv   <: StCheckCsv end
 
 Base.:(==)(x::StCheckCsv, y::StCheckCsv) = structEqual(x,y)
 
@@ -245,11 +256,15 @@ stCheckToCsv(::Stb)         = StbCsv()
 stCheckToCsv(::Uns)         = UnsCsv()
 stCheckToCsv(::AnyParam)    = AnyParamCsv()
 stCheckToCsv(::VarargParam) = VarargParamCsv()
+stCheckToCsv(::TcFail)      = TcFailCsv()
+stCheckToCsv(::OutOfFuel)   = OutOfFuelCsv()
 
 convert(::Type{String}, ::StbCsv)           = "stable"
 convert(::Type{String}, ::UnsCsv)           = "unstable"
 convert(::Type{String}, ::AnyParamCsv)      = "Any"
 convert(::Type{String}, ::VarargParamCsv)   = "vararg"
+convert(::Type{String}, ::TcFailCsv)        = "tc-fail"
+convert(::Type{String}, ::OutOfFuelCsv)     = "nofuel"
 
 prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     MethStCheckCsv(
@@ -265,20 +280,24 @@ prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 struct AgStats
     methCnt :: Int64
     stblCnt :: Int64
-    unsCnt :: Int64
+    unsCnt  :: Int64
     anyCnt  :: Int64
     vaCnt   :: Int64
+    tcfCnt  :: Int64
+    nofCnt  :: Int64
 end
 
 showAgStats(m::Module, ags::AgStats) :: String =
-    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt)"
+    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.tcfCnt),$(ags.nofCnt)"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     length(mcs),
     count(mc -> isa(mc.check, Stb), mcs),
     count(mc -> isa(mc.check, Uns), mcs),
     count(mc -> isa(mc.check, AnyParam), mcs),
-    count(mc -> isa(mc.check, VarargParam), mcs)
+    count(mc -> isa(mc.check, VarargParam), mcs),
+    count(mc -> isa(mc.check, TcFail), mcs),
+    count(mc -> isa(mc.check, OutOfFuel), mcs),
 )
 
 storeCsv(name::String, mcs::StCheckResults) = CSV.write(name, prepCsv(mcs))
@@ -313,7 +332,10 @@ print_fails(uns :: Uns) = begin
     end
 end
 
-print_uns(::Method, ::Stb) = ()
+print_uns(::Method, ::StCheck) = ()
+print_uns(m::Method, mst::Union{AnyParam, TcFail, VarargParam, OutOfFuel}) = begin
+    @warn "Method $(m.name) failed stabilty check with: $mst"
+end
 print_uns(m::Method, mst::Uns) = begin
     @warn "Method $(m.name) unstable on the following inputs"
     print_fails(mst)
@@ -375,6 +397,7 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         @debug "all_subtypes loop: $tv"
         isconc = all(is_concrete_type, tv)
         if isconc
+            @debug "all_subtypes: concrete!"
             put!(result, tv)
         else
             !scfg.concrete_only && put!(result, tv)
