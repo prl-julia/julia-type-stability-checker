@@ -234,18 +234,9 @@ end
 
 # Conversion to CSV
 
-abstract type            StCheckCsv end
-struct StbCsv         <: StCheckCsv end
-struct UnsCsv         <: StCheckCsv end
-struct AnyParamCsv    <: StCheckCsv end
-struct VarargParamCsv <: StCheckCsv end
-struct TcFailCsv <: StCheckCsv end
-struct OutOfFuelCsv   <: StCheckCsv end
-
-Base.:(==)(x::StCheckCsv, y::StCheckCsv) = structEqual(x,y)
-
 struct MethStCheckCsv
     check :: String
+    extra :: String
     sig   :: String
     mod   :: String
     file  :: String
@@ -255,23 +246,25 @@ end
 StCheckResultsCsv = Vector{MethStCheckCsv}
 
 stCheckToCsv(::StCheck) :: StCheckCsv = error("unknown check")
-stCheckToCsv(::Stb)         = StbCsv()
-stCheckToCsv(::Uns)         = UnsCsv()
-stCheckToCsv(::AnyParam)    = AnyParamCsv()
-stCheckToCsv(::VarargParam) = VarargParamCsv()
-stCheckToCsv(::TcFail)      = TcFailCsv()
-stCheckToCsv(::OutOfFuel)   = OutOfFuelCsv()
+stCheckToCsv(::Stb)         = "stable"
+stCheckToCsv(::Uns)         = "unstable"
+stCheckToCsv(::AnyParam)    = "Any"
+stCheckToCsv(::VarargParam) = "vararg"
+stCheckToCsv(::TcFail)      = "tc-fail"
+stCheckToCsv(::OutOfFuel)   = "nofuel"
 
-convert(::Type{String}, ::StbCsv)           = "stable"
-convert(::Type{String}, ::UnsCsv)           = "unstable"
-convert(::Type{String}, ::AnyParamCsv)      = "Any"
-convert(::Type{String}, ::VarargParamCsv)   = "vararg"
-convert(::Type{String}, ::TcFailCsv)        = "tc-fail"
-convert(::Type{String}, ::OutOfFuelCsv)     = "nofuel"
+stCheckToExtraCsv(::StCheck) :: StCheckCsv = error("unknown check")
+stCheckToExtraCsv(s::Stb)        = "$(s.steps)"
+stCheckToExtraCsv(::Uns)         = ""
+stCheckToExtraCsv(::AnyParam)    = ""
+stCheckToExtraCsv(::VarargParam) = ""
+stCheckToExtraCsv(f::TcFail)     = "$(f.sig)"
+stCheckToExtraCsv(::OutOfFuel)   = ""
 
 prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     MethStCheckCsv(
         stCheckToCsv(mc.check),
+        stCheckToExtraCsv(mc.check),
         "$(mc.method.sig)",
         "$(mc.method.module)",
         "$(mc.method.file)",
