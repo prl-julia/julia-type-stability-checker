@@ -77,11 +77,11 @@ rational_plusi(a::Rational{T}, b::Rational{T}) where T <: Integer = a + b
 #
 
 @testset "Simple stable" begin
-    @test is_stable_method(@which add1i(1))    == Stb()
-    @test is_stable_method(@which add1iss(1))  == Stb()
-    @test is_stable_method(@which plus2i(1,1)) == Stb()
+    @test isa(is_stable_method(@which add1i(1))    , Stb)
+    @test isa(is_stable_method(@which add1iss(1))  , Stb)
+    @test isa(is_stable_method(@which plus2i(1,1)) , Stb)
 
-    @test is_stable_method(@which rational_plusi(1//1,1//1)) == Stb()
+    @test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
 end
 
 @testset "Simple unstable" begin
@@ -102,9 +102,9 @@ end
 
 @testset "Fuel" begin
     f()=1
-    @test is_stable_method(@which f()) == Stb()
+    @test isa(is_stable_method(@which f()) , Stb)
     g(x::Int)=2
-    @test is_stable_method((@which g(2)), SearchCfg(fuel=1)) == Stb()
+    @test isa(is_stable_method((@which g(2)), SearchCfg(fuel=1)) , Stb)
     h(x::Integer)=3
     @test is_stable_method((@which h(2)), SearchCfg(fuel=1)) == OutOfFuel()
 end

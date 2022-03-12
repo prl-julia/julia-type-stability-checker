@@ -39,8 +39,10 @@ import Base.convert
 
 # Hieararchy of possible answers to a stability check querry
 abstract type StCheck end
-struct Stb <: StCheck end # hooary, we're stable
-struct Uns <: StCheck     # no luck, record types that break stability
+struct Stb <: StCheck         # hooary, we're stable
+    steps :: Int64
+end
+struct Uns <: StCheck         # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
 end
 struct AnyParam    <: StCheck # give up on Any-params in methods; can't tell if it's stable
@@ -52,7 +54,8 @@ end
 struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear reason
     sig :: Vector{Any}
 end
-struct OutOfFuel  <: StCheck end
+struct OutOfFuel  <: StCheck  # fuel exhausted
+end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
 
@@ -217,7 +220,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     end
 
     return if isempty(fails)
-        Stb()
+        Stb(steps)
     else
         Uns(fails)
     end
