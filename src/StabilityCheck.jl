@@ -76,7 +76,7 @@ Base.@kwdef struct SearchCfg
 #        to try abstract instantiations (whether we decide to do that or not, see
 #        `abstract_args` below)
 
-    skip_unionalls :: Bool = false
+    skip_unionalls :: Bool = true
 #   ^ -- don't try to instantiate UnionAll's / existential types, just forget about them
 #        -- be default we do instantiate, but can loop if don't turn off on recursive call;
 
@@ -90,6 +90,10 @@ Base.@kwdef struct SearchCfg
 
     fuel :: Int = typemax(Int)
 #   ^ -- search fuel, i.e. how many types we want to enumerate before give up
+
+    max_lattice_steps:: Int = typemax(Int)
+#   ^ -- how many steps to perform max to get from the signature to a concrete type;
+#        for some signatures we struggle to get to a leat type
 end
 
 default_scfg = SearchCfg()
@@ -163,7 +167,9 @@ end
 is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_module: $mod"
     res = []
-    for sym in names(mod; all=!scfg.exported_names_only)
+    ns = names(mod; all=!scfg.exported_names_only)
+    @info "number of methods in $mod: $(length(ns))"
+    for sym in ns
         @debug "is_stable_module: check symbol $sym"
         evsym = Core.eval(mod, sym)
         isa(evsym, Function) || continue # not interested in non-functional symbols
@@ -245,7 +251,7 @@ end
 
 StCheckResultsCsv = Vector{MethStCheckCsv}
 
-stCheckToCsv(::StCheck) :: StCheckCsv = error("unknown check")
+stCheckToCsv(::StCheck) :: String = error("unknown check")
 stCheckToCsv(::Stb)         = "stable"
 stCheckToCsv(::Uns)         = "unstable"
 stCheckToCsv(::AnyParam)    = "Any"
@@ -253,7 +259,7 @@ stCheckToCsv(::VarargParam) = "vararg"
 stCheckToCsv(::TcFail)      = "tc-fail"
 stCheckToCsv(::OutOfFuel)   = "nofuel"
 
-stCheckToExtraCsv(::StCheck) :: StCheckCsv = error("unknown check")
+stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
 stCheckToExtraCsv(s::Stb)        = "$(s.steps)"
 stCheckToExtraCsv(::Uns)         = ""
 stCheckToExtraCsv(::AnyParam)    = ""
@@ -388,6 +394,7 @@ end
 all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
     @debug "all_subtypes: $ts"
     sigtypes = Set{Vector{Any}}([ts]) # worklist
+    steps = 0
     while !isempty(sigtypes)
         tv = pop!(sigtypes)
         @debug "all_subtypes loop: $tv"
@@ -396,12 +403,17 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             @debug "all_subtypes: concrete!"
             put!(result, tv)
         else
+            @debug "all_subtypes: abstract!"
             !scfg.concrete_only && put!(result, tv)
             dss = direct_subtypes(tv, scfg)
             union!(sigtypes, dss)
         end
+        steps += 1
+        if steps == scfg.max_lattice_steps
+            break
+        end
     end
-    "done"
+    put!(result, "done")
 end
 
 blocklist = [Function]
@@ -415,24 +427,32 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     @debug "direct_subtypes: $ts1"
     ts = copy(ts1)
     t = pop!(ts)
-    ss_last = if is_vararg(t) || any(b -> t <: b, blocklist)
+
+    # subtypes of t -- first component in ts
+    @debug "direct_subtypes: $t"
+    ss_first = if is_vararg(t) || any(b -> t <: b, blocklist)
         []
         else subtypes(t)
     end
-    if isempty(ss_last)
-        if typeof(t) == UnionAll
-            ss_last = subtype_unionall(t, scfg)
+
+    # no subtypes may mean it's a UnionAll requiring special handling
+    if isempty(ss_first)
+        if typeof(t) == UnionAll && ! scfg.skip_unionalls
+            ss_first = subtype_unionall(t, scfg)
         end
     end
+
+    # if rest of ts is empty, wrap individual subtypes in a singleton list
+    # (required by the contract of the funciton)
     if isempty(ts)
         return (Vector{Any}([s])
-                    for s=ss_last
+                    for s=ss_first
                     if !(scfg.skip_unionalls && typeof(s) == UnionAll))
     end
 
     res = []
     ss_rest = direct_subtypes(ts, scfg)
-    for t_last in ss_last
+    for t_last in ss_first
         for t_rest in ss_rest
             push!(res, push!(Vector(t_rest), t_last))
         end
