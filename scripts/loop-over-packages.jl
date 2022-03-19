@@ -1,3 +1,9 @@
+#
+# Goal: proces a bulk of Julia package (test for stability, store in CSV)
+#
+# Usage: Run from any place with `julia loop-over-packages.jl`
+# Effect: results are stored in `<repo>/scratch/bulk` (subject to change)
+#
 
 #
 # Constants
@@ -34,6 +40,7 @@ Pkg.activate(".")
 # Add StabilityCheck
 Pkg.develop(path=sts_path)
 using StabilityCheck
+ENV["JULIA_DEBUG"] = StabilityCheck  # turn on debug
 
 #
 # Assumption: a package named X contains a ("main") module named X,
