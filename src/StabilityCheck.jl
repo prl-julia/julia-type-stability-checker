@@ -37,6 +37,9 @@ import Base.convert
 #   and search configuration
 #
 
+JlType = Any
+JlSignature = Vector{JlType}
+
 # Hieararchy of possible answers to a stability check querry
 abstract type StCheck end
 struct Stb <: StCheck         # hooary, we're stable
@@ -55,6 +58,9 @@ struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear re
     sig :: Vector{Any}
 end
 struct OutOfFuel  <: StCheck  # fuel exhausted
+end
+struct UnboundExist <: StCheck  # we hit unbounded existentials, which we can't enumerate
+                                # (same as Any, but maybe interesting to analyze separately)
 end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
@@ -101,6 +107,13 @@ default_scfg = SearchCfg()
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5
 
+# UnionAll's require care. Below is a hierarchy of cases that we support today.
+abstract type UnionAllCheck end
+struct NotUnionAll end
+struct UnboundedUnionAll end
+struct BoundedUnionAll
+    instantiatiations :: Vector{JlType} # TODO: change to Channel
+end
 
 #
 #       Main interface utilities
@@ -258,6 +271,7 @@ stCheckToCsv(::AnyParam)    = "Any"
 stCheckToCsv(::VarargParam) = "vararg"
 stCheckToCsv(::TcFail)      = "tc-fail"
 stCheckToCsv(::OutOfFuel)   = "nofuel"
+stCheckToCsv(::UnboundExist)= "unboundexist"
 
 stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
 stCheckToExtraCsv(s::Stb)        = "$(s.steps)"
@@ -266,6 +280,7 @@ stCheckToExtraCsv(::AnyParam)    = ""
 stCheckToExtraCsv(::VarargParam) = ""
 stCheckToExtraCsv(f::TcFail)     = "$(f.sig)"
 stCheckToExtraCsv(::OutOfFuel)   = ""
+stCheckToExtraCsv(::UnboundExist)   = ""
 
 prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     MethStCheckCsv(
@@ -287,10 +302,11 @@ struct AgStats
     vaCnt   :: Int64
     tcfCnt  :: Int64
     nofCnt  :: Int64
+    unbeCnt :: Int64
 end
 
 showAgStats(m::Module, ags::AgStats) :: String =
-    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.tcfCnt),$(ags.nofCnt)"
+    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.tcfCnt),$(ags.nofCnt),$(ags.unbeCnt)"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     length(mcs),
@@ -300,6 +316,7 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     count(mc -> isa(mc.check, VarargParam), mcs),
     count(mc -> isa(mc.check, TcFail), mcs),
     count(mc -> isa(mc.check, OutOfFuel), mcs),
+    count(mc -> isa(mc.check, UnboundExist), mcs),
 )
 
 storeCsv(name::String, mcs::StCheckResults) = CSV.write(name, prepCsv(mcs))
@@ -460,37 +477,54 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     res
 end
 
-# If type variable has non-Any upper bound, enumerate
-# all possibilities for it except unionalls (and their instances) -- to avoid looping, --
-# otherwise take Any and Int (TODO is it a good choice? it's very arbitrary).
+# instantiations: UnionAll, SearchCfg -> Vector{JlType}
+# all possible instantiations of the top variable of a UnionAll,
+# except unionalls (and their instances) -- to avoid looping.
+# TODO: return the channel, so we can process result lazily, but don't forget
+#       to unwrap the contents (tup -> tup[1])
+instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
+    ss = collect(Channel(ch ->
+                all_subtypes(
+                    [u.var.ub],
+                    SearchCfg(concrete_only  = scfg.abstract_args,
+                                skip_unionalls = true,
+                                abstract_args  = scfg.abstract_args),
+                    ch)))
+    map(tup -> tup[1], ss)
+end
+
+# subtype_unionall: UnionAll, SearchCfg -> Either Exception [JlTypes]
+# For non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
+#
+# Exceptions: can happen with unsond bound (cf. #8)
+#
 # Note: ignore lower bounds for simplicity.
+#
+# Note (history): for unbounded (Any-bounded) unionalls we used to instantiate the variable
+# with Any and Int.
+#
 subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     @debug "subtype_unionall of $u"
     ub = u.var.ub
-    sample_types = if ub == Any
-        [Int64, Any]
-    else
-        ss = collect(Channel(ch ->
-                    all_subtypes(
-                        [ub],
-                        SearchCfg(concrete_only  = scfg.abstract_args,
-                                    skip_unionalls = true,
-                                    abstract_args  = scfg.abstract_args),
-                        ch)))
-        @debug "var instantiations: $ss"
-        map(tup -> tup[1], ss)
-    end
-    if isempty(sample_types)
+    @assert ub != Any
+    sample_types = instantiations(u, scfg)
+    try
+        [u{t} for t in sample_types]
+    catch
         []
-    else
-        try
-            res = [u{t} for t in sample_types]
-            res
-        catch
-            []
-        end
     end
 end
+
+function check_unionall(t, scfg :: SearchCfg) :: UnionAllCheck
+    print(t, scfg)
+end
+check_unionall(::Any, ::SearchCfg) = NotUnionAll()
+check_unionall(u::UnionAll, scfg :: SearchCfg) =
+    if u.var.ub == Any
+        UnboundedUnionAll()
+    else
+        BoundedUnionAll(subtype_unionall(u, scfg))
+    end
 
 # is_concrete_type: Type -> Bool
 #
