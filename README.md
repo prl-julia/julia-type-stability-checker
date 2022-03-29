@@ -5,7 +5,7 @@ instantions of method signature to determine its [type stability][st-def].
 
 [st-def]: https://docs.julialang.org/en/v1/manual/faq/#man-type-stability
 
-## Getting Started
+## Whole-Module Checking
 
 Process a module (check stability of all of its methods):
 
@@ -22,3 +22,6 @@ A (possibly empty) set of `agg`-files can be turned into a single CSV via callin
 `scripts/aggregate.sh`. For just one file, it only adds the heading. The result
 is written in `aggregate.csv`.
 
+## Per-method Checking
+
+See examples in the `tests` directory.
