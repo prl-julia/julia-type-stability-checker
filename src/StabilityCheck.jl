@@ -44,6 +44,7 @@ JlSignature = Vector{JlType}
 abstract type StCheck end
 struct Stb <: StCheck         # hooary, we're stable
     steps :: Int64
+    skipexist :: Vector{JlType}
 end
 struct Uns <: StCheck         # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
@@ -60,7 +61,9 @@ end
 struct OutOfFuel  <: StCheck  # fuel exhausted
 end
 struct UnboundExist <: StCheck  # we hit unbounded existentials, which we can't enumerate
-                                # (same as Any, but maybe interesting to analyze separately)
+    t :: JlType                 # (same as Any, but maybe interesting to analyze separately)
+                                # TODO: this is not accounted for yet, as we don't distinguish
+                                #       between various cases under SkippedUnionAlls
 end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
@@ -82,7 +85,7 @@ Base.@kwdef struct SearchCfg
 #        to try abstract instantiations (whether we decide to do that or not, see
 #        `abstract_args` below)
 
-    skip_unionalls :: Bool = true
+    skip_unionalls :: Bool = false
 #   ^ -- don't try to instantiate UnionAll's / existential types, just forget about them
 #        -- be default we do instantiate, but can loop if don't turn off on recursive call;
 
@@ -97,7 +100,7 @@ Base.@kwdef struct SearchCfg
     fuel :: Int = typemax(Int)
 #   ^ -- search fuel, i.e. how many types we want to enumerate before give up
 
-    max_lattice_steps:: Int = typemax(Int)
+    max_lattice_steps :: Int = typemax(Int)
 #   ^ -- how many steps to perform max to get from the signature to a concrete type;
 #        for some signatures we struggle to get to a leat type
 end
@@ -107,13 +110,10 @@ default_scfg = SearchCfg()
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5
 
-# UnionAll's require care. Below is a hierarchy of cases that we support today.
-abstract type UnionAllCheck end
-struct NotUnionAll end
-struct UnboundedUnionAll end
-struct BoundedUnionAll
-    instantiatiations :: Vector{JlType} # TODO: change to Channel
+struct SkippedUnionAlls
+    ts :: Vector{JlType}
 end
+
 
 #
 #       Main interface utilities
@@ -221,9 +221,14 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     # loop over all instantiations of the signature
     fails = Vector{Any}([])
     steps = 0
+    skipexists = []
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         if ts == "done"
             break
+        end
+        if ts isa SkippedUnionAlls
+            skipexists = vcat(skipexists, ts.ts)
+            continue
         end
         try
             if ! is_stable_call(func, ts)
@@ -239,7 +244,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     end
 
     return if isempty(fails)
-        Stb(steps)
+        Stb(steps, skipexists)
     else
         Uns(fails)
     end
@@ -274,7 +279,7 @@ stCheckToCsv(::OutOfFuel)   = "nofuel"
 stCheckToCsv(::UnboundExist)= "unboundexist"
 
 stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
-stCheckToExtraCsv(s::Stb)        = "$(s.steps)"
+stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (s.skipexist == [] ? "" : ";" * string(s.skipexist))
 stCheckToExtraCsv(::Uns)         = ""
 stCheckToExtraCsv(::AnyParam)    = ""
 stCheckToExtraCsv(::VarargParam) = ""
@@ -402,25 +407,48 @@ is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begi
     res
 end
 
-# Used to instantiate functions for concrete argument types.
+# all_subtypes: JlSignature, SearchCfg, Channel -> ()
+# Instantiate method signature for concrete argument types.
 # Input:
 #   - "tuple" of types from the function signature (in the form of Vector, not Tuple);
 #   - search configuration
 #   - results channel to be consumed in asyncronous manner
-# Output: vector of "tuples" that subtype input
+# Output: ()
+# Effects:
+#   - subtypes of the input signature are sent to the channel
 all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
     @debug "all_subtypes: $ts"
-    sigtypes = Set{Vector{Any}}([ts]) # worklist
+    sigtypes = Set{Any}([ts]) # worklist
     steps = 0
     while !isempty(sigtypes)
         tv = pop!(sigtypes)
         @debug "all_subtypes loop: $tv"
+        if tv isa SkippedUnionAlls
+            push!(result, tv)
+            continue
+        end
         isconc = all(is_concrete_type, tv)
         if isconc
-            @debug "all_subtypes: concrete!"
+            @debug "all_subtypes: concrete"
             put!(result, tv)
         else
-            @debug "all_subtypes: abstract!"
+            @debug "all_subtypes: abstract"
+
+            # Special case: unbounded unionalls and forcedly-skipped ones (due to scfg)
+            # if scfg.skipexist, skip it!
+            unionalls = filter(t -> typeof(t) == UnionAll, tv)
+            if scfg.skip_unionalls && !isempty(unionalls)
+                put!(result, SkippedUnionAlls(unionalls))
+                continue
+            end
+            # if unbounded unionall is around, bail out
+            unb = filter(u -> u.var.ub == Any, unionalls)
+            if !isempty(unb)
+                put!(result, SkippedUnionAlls(unionalls))
+                continue
+            end
+
+            # Normal case
             !scfg.concrete_only && put!(result, tv)
             dss = direct_subtypes(tv, scfg)
             union!(sigtypes, dss)
@@ -436,95 +464,92 @@ end
 blocklist = [Function]
 is_vararg(t) = isa(t, Core.TypeofVararg)
 
-# Auxilliary function: immediate subtypes of a tuple of types `ts`
+# direct_subtypes: JlSignature, SearchCfg -> [Union{JlSignature, SkippedUnionAlls}]
+# Auxilliary function: immediate subtypes of a tuple of types `ts1`
+# Precondition: no unbounded existentials in ts1
 direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
-    if isempty(ts1)
-        return []
-    end
     @debug "direct_subtypes: $ts1"
+    isempty(ts1) && return [[]]
+
     ts = copy(ts1)
     t = pop!(ts)
 
     # subtypes of t -- first component in ts
-    @debug "direct_subtypes: $t"
     ss_first = if is_vararg(t) || any(b -> t <: b, blocklist)
         []
         else subtypes(t)
     end
 
+    @debug "direct_subtypes of head: $(ss_first)"
     # no subtypes may mean it's a UnionAll requiring special handling
     if isempty(ss_first)
-        if typeof(t) == UnionAll && ! scfg.skip_unionalls
+        if typeof(t) == UnionAll
             ss_first = subtype_unionall(t, scfg)
         end
     end
 
-    # if rest of ts is empty, wrap individual subtypes in a singleton list
-    # (required by the contract of the funciton)
-    if isempty(ts)
-        return (Vector{Any}([s])
-                    for s=ss_first
-                    if !(scfg.skip_unionalls && typeof(s) == UnionAll))
-    end
-
     res = []
     ss_rest = direct_subtypes(ts, scfg)
-    for t_last in ss_first
-        for t_rest in ss_rest
-            push!(res, push!(Vector(t_rest), t_last))
+    for s_first in ss_first
+        if s_first isa SkippedUnionAlls
+            push!(res, s_first)
+        else
+            for s_rest in ss_rest
+                if s_rest isa SkippedUnionAlls
+                    push!(res, s_rest)
+                else
+                    push!(res, push!(Vector(s_rest), s_first))
+                end
+            end
         end
     end
     res
 end
 
-# instantiations: UnionAll, SearchCfg -> Vector{JlType}
+# instantiations: UnionAll, SearchCfg -> Channel{JlType}
 # all possible instantiations of the top variable of a UnionAll,
 # except unionalls (and their instances) -- to avoid looping.
-# TODO: return the channel, so we can process result lazily, but don't forget
-#       to unwrap the contents (tup -> tup[1])
-instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
-    ss = collect(Channel(ch ->
+# NOTE: don't forget to unwrap the contents of the results (tup -> tup[1]);
+#       the reason this is needed: we expect insantiations to be a JlType,
+#       but `all_subtypes` works with JlSignatures
+instantiations(u :: UnionAll, scfg :: SearchCfg) =
+    Channel(ch ->
                 all_subtypes(
                     [u.var.ub],
                     SearchCfg(concrete_only  = scfg.abstract_args,
                                 skip_unionalls = true,
                                 abstract_args  = scfg.abstract_args),
-                    ch)))
-    map(tup -> tup[1], ss)
-end
+                    ch))
 
-# subtype_unionall: UnionAll, SearchCfg -> Either Exception [JlTypes]
-# For non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
-#
-# Exceptions: can happen with unsond bound (cf. #8)
+# subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]
+# For a non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
 #
 # Note: ignore lower bounds for simplicity.
 #
 # Note (history): for unbounded (Any-bounded) unionalls we used to instantiate the variable
 # with Any and Int.
 #
+# TODO: make result Channel-based
+#
 subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     @debug "subtype_unionall of $u"
-    ub = u.var.ub
-    @assert ub != Any
-    sample_types = instantiations(u, scfg)
-    try
-        [u{t} for t in sample_types]
-    catch
-        []
-    end
-end
 
-function check_unionall(t, scfg :: SearchCfg) :: UnionAllCheck
-    print(t, scfg)
-end
-check_unionall(::Any, ::SearchCfg) = NotUnionAll()
-check_unionall(u::UnionAll, scfg :: SearchCfg) =
-    if u.var.ub == Any
-        UnboundedUnionAll()
-    else
-        BoundedUnionAll(subtype_unionall(u, scfg))
+    @assert u.var.ub != Any
+
+    res = []
+    for t in instantiations(u, scfg)
+        if t isa SkippedUnionAlls
+            push!(res, t)
+        else
+            try # can fail due to unsond bounds (cf. #8)
+                push!(res, u{t[1]})
+            catch
+                # skip failed instatiations
+            end
+        end
     end
+    res
+end
 
 # is_concrete_type: Type -> Bool
 #

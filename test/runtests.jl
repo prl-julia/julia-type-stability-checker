@@ -133,5 +133,5 @@ d()=if rand()>0.5; 1; else ""; end
 end
 
 @testset "Collecting stats" begin
-    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1, 0, 0)
+    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1, 0, 0, 0)
 end
