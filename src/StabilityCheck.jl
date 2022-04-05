@@ -106,6 +106,7 @@ Base.@kwdef struct SearchCfg
 end
 
 default_scfg = SearchCfg()
+fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100)
 
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5
@@ -181,7 +182,7 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
     @debug "is_stable_module: $mod"
     res = []
     ns = names(mod; all=!scfg.exported_names_only)
-    @info "number of methods in $mod: $(length(ns))"
+    @debug "number of methods in $mod: $(length(ns))"
     for sym in ns
         @debug "is_stable_module: check symbol $sym"
         evsym = Core.eval(mod, sym)
@@ -225,6 +226,9 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         if ts == "done"
             break
+        end
+        if ts isa OutOfFuel
+            return ts
         end
         if ts isa SkippedUnionAlls
             skipexists = vcat(skipexists, ts.ts)
@@ -455,7 +459,8 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         end
         steps += 1
         if steps == scfg.max_lattice_steps
-            break
+            put!(result, OutOfFuel())
+            return
         end
     end
     put!(result, "done")
@@ -530,6 +535,7 @@ instantiations(u :: UnionAll, scfg :: SearchCfg) =
 # with Any and Int.
 #
 # TODO: make result Channel-based
+# TODO: add limit to the number of instantiations
 #
 subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     @debug "subtype_unionall of $u"
