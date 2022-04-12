@@ -35,13 +35,13 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             # if scfg.skipexist, skip it!
             unionalls = filter(t -> typeof(t) == UnionAll, tv)
             if scfg.skip_unionalls && !isempty(unionalls)
-                put!(result, SkippedUnionAlls(unionalls))
+                put!(result, SkipMandatory(unionalls))
                 continue
             end
             # if unbounded unionall is around, bail out
             unb = filter(u -> u.var.ub == Any, unionalls)
             if !isempty(unb)
-                put!(result, SkippedUnionAlls(unionalls))
+                put!(result, UnboundedUnionAlls(unionalls))
                 continue
             end
 

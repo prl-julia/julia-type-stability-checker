@@ -33,7 +33,7 @@ end
 
 # Ex. (add1)
 # |
-# --- a) using `one` -- should be stable but alas, the Rational{Bool} instance screws it
+# --- a) using `one`
 add1i(x :: Integer) = x + one(x)
 # |
 # --- b) using `1` -- surpricingly stable (coercion)
@@ -82,8 +82,16 @@ end
 #
 
 @testset "Simple stable                  " begin
-    @test isa(is_stable_method(@which add1i(1))    , Stb)
+    t1 = is_stable_method(@which add1i(1))
+    @test isa(t1, Stb)
+    @test length(t1.skipexist) == 1 &&
+            contains("$t1.skipexist", "SentinelArrays.ChainedVectorIndex")
+    # SentinelArrays.ChainedVectorIndex comes from CSV, which we depend upon for
+    # reporting. Would be nice to factor out reporting
+
     @test isa(is_stable_method(@which add1iss(1))  , Stb)
+    # this is same as above
+
     @test isa(is_stable_method(@which plus2i(1,1)) , Stb)
     @test isa(is_stable_method(@which add1typcase(1)),      Stb)
 

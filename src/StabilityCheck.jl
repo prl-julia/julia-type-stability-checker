@@ -17,6 +17,7 @@ export @stable, @stable!, @stable!_nop,
 
     # Types
     MethStCheck,
+    SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory,
     Stb, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
     SearchCfg
 
@@ -144,7 +145,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     # loop over all instantiations of the signature
     fails = Vector{Any}([])
     steps = 0
-    skipexists = []
+    skipexists = Vector{SkippedUnionAlls}([])
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         if ts == "done"
             break
@@ -153,7 +154,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
             return ts
         end
         if ts isa SkippedUnionAlls
-            skipexists = vcat(skipexists, ts.ts)
+            push!(skipexists, ts)
             continue
         end
         try

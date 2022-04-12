@@ -6,11 +6,22 @@
 JlType = Any
 JlSignature = Vector{JlType}
 
-# Hieararchy of possible answers to a stability check querry
+# UnionAll's require care. Below is a hierarchy of cases that we support today.
+abstract type SkippedUnionAlls end
+struct UnboundedUnionAlls <: SkippedUnionAlls
+    ts :: Vector{JlType}
+end
+struct SkipMandatory      <: SkippedUnionAlls
+    ts :: Vector{JlType}
+end
+
+#
+#       Core Hierarchy: possible answers to a stability check querry
+#
 abstract type StCheck end
 struct Stb <: StCheck         # hooary, we're stable
     steps :: Int64
-    skipexist :: Vector{JlType}
+    skipexist :: Vector{SkippedUnionAlls}
 end
 struct Uns <: StCheck         # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
@@ -25,11 +36,6 @@ struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear re
     sig :: Vector{Any}
 end
 struct OutOfFuel  <: StCheck  # fuel exhausted
-end
-struct UnboundExist <: StCheck  # we hit unbounded existentials, which we can't enumerate
-    t :: JlType                 # (same as Any, but maybe interesting to analyze separately)
-                                # TODO: this is not accounted for yet, as we don't distinguish
-                                #       between various cases under SkippedUnionAlls
 end
 struct GenericMethod <: StCheck # TODO: we could handle them analogous existentials in types
                                 #       so it doesn't have to be a special case, but for now it's
@@ -50,7 +56,7 @@ StCheckResults = Vector{MethStCheck}
 Base.@kwdef struct SearchCfg
     concrete_only  :: Bool = true
 #   ^ -- enumerate concrete types ONLY;
-#        Usually start in this mode, but can switch if we see a UnionAll and decide
+#        Usually start in `true` mode, but can switch if we see a UnionAll and decide
 #        to try abstract instantiations (whether we decide to do that or not, see
 #        `abstract_args` below)
 
@@ -61,8 +67,6 @@ Base.@kwdef struct SearchCfg
     abstract_args  :: Bool = true
 #   ^ -- instantiate type variables with only concrete arguments (`false`) or
 #        abstract arguments too (`true`);
-#        if the latter, may quickly become unstable, so a reasonable default is `false`
-#        TODO: this introduces approximation that should be acknowledged somewhere!
 
     exported_names_only :: Bool = false
 #   ^ -- when doing stability check on the whole module at once: whether to check only
@@ -82,6 +86,3 @@ fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100)
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5
 
-struct SkippedUnionAlls
-    ts :: Vector{JlType}
-end

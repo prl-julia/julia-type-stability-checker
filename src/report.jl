@@ -23,7 +23,6 @@ stCheckToCsv(::AnyParam)    = "Any"
 stCheckToCsv(::VarargParam) = "vararg"
 stCheckToCsv(::TcFail)      = "tc-fail"
 stCheckToCsv(::OutOfFuel)   = "nofuel"
-stCheckToCsv(::UnboundExist)= "unboundexist"
 
 stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
 stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (s.skipexist == [] ? "" : ";" * string(s.skipexist))
@@ -32,7 +31,6 @@ stCheckToExtraCsv(::AnyParam)    = ""
 stCheckToExtraCsv(::VarargParam) = ""
 stCheckToExtraCsv(f::TcFail)     = "$(f.sig)"
 stCheckToExtraCsv(::OutOfFuel)   = ""
-stCheckToExtraCsv(::UnboundExist)   = ""
 
 prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     MethStCheckCsv(
@@ -58,7 +56,7 @@ struct AgStats
 end
 
 showAgStats(m::Module, ags::AgStats) :: String =
-    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.tcfCnt),$(ags.nofCnt),$(ags.unbeCnt)"
+    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.tcfCnt),$(ags.nofCnt)"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     length(mcs),
@@ -68,7 +66,6 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     count(mc -> isa(mc.check, VarargParam), mcs),
     count(mc -> isa(mc.check, TcFail), mcs),
     count(mc -> isa(mc.check, OutOfFuel), mcs),
-    count(mc -> isa(mc.check, UnboundExist), mcs),
 )
 
 storeCsv(name::String, mcs::StCheckResults) = CSV.write(name, prepCsv(mcs))
