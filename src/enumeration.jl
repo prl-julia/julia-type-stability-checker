@@ -114,9 +114,13 @@ instantiations(u :: UnionAll, scfg :: SearchCfg) =
     Channel(ch ->
                 all_subtypes(
                     [u.var.ub],
-                    SearchCfg(concrete_only  = scfg.abstract_args,
-                                skip_unionalls = true,
-                                abstract_args  = scfg.abstract_args),
+                    SearchCfg(concrete_only    = scfg.abstract_args,
+                                skip_unionalls = true, # don't recurse
+                                # ^ TODO: approximation needs documenting
+                                #
+                                # abstract_args  = scfg.abstract_args
+                                # ^ doesn't matter as we don't do recursive inst., see above
+                              ),
                     ch))
 
 # subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]

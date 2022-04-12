@@ -31,6 +31,9 @@ struct UnboundExist <: StCheck  # we hit unbounded existentials, which we can't 
                                 # TODO: this is not accounted for yet, as we don't distinguish
                                 #       between various cases under SkippedUnionAlls
 end
+struct GenericMethod <: StCheck # TODO: we could handle them analogous existentials in types
+                                #       so it doesn't have to be a special case, but for now it's
+end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
 
@@ -55,9 +58,11 @@ Base.@kwdef struct SearchCfg
 #   ^ -- don't try to instantiate UnionAll's / existential types, just forget about them
 #        -- be default we do instantiate, but can loop if don't turn off on recursive call;
 
-    abstract_args  :: Bool = false
-#   ^ -- instantiate type variables with only concrete arguments or abstract arguments too;
-#        if the latter, may quickly become unstable, so a reasonable default is be `false`
+    abstract_args  :: Bool = true
+#   ^ -- instantiate type variables with only concrete arguments (`false`) or
+#        abstract arguments too (`true`);
+#        if the latter, may quickly become unstable, so a reasonable default is `false`
+#        TODO: this introduces approximation that should be acknowledged somewhere!
 
     exported_names_only :: Bool = false
 #   ^ -- when doing stability check on the whole module at once: whether to check only

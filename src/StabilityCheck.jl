@@ -17,7 +17,7 @@ export @stable, @stable!, @stable!_nop,
 
     # Types
     MethStCheck,
-    Stb, Uns, AnyParam, VarargParam, TcFail, OutOfFuel,
+    Stb, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
     SearchCfg
 
 # Debug print:
@@ -133,7 +133,9 @@ end
 # If signature has Vararg at any place, yeild VarargParam immediately.
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
-    (func, sig_types) = split_method(m)
+    sm = split_method(m)
+    sm isa GenericMethod && return sm
+    (func, sig_types) = sm
 
     # corner cases where we give up
     Any ∈ sig_types && return AnyParam(sig_types)
