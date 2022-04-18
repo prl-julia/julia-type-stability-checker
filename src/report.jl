@@ -23,6 +23,7 @@ stCheckToCsv(::AnyParam)    = "Any"
 stCheckToCsv(::VarargParam) = "vararg"
 stCheckToCsv(::TcFail)      = "tc-fail"
 stCheckToCsv(::OutOfFuel)   = "nofuel"
+stCheckToCsv(::GenericMethod) = "generic"
 
 stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
 stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (s.skipexist == [] ? "" : ";" * string(s.skipexist))
@@ -31,6 +32,7 @@ stCheckToExtraCsv(::AnyParam)    = ""
 stCheckToExtraCsv(::VarargParam) = ""
 stCheckToExtraCsv(f::TcFail)     = "$(f.sig)"
 stCheckToExtraCsv(::OutOfFuel)   = ""
+stCheckToExtraCsv(::GenericMethod) = ""
 
 prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     MethStCheckCsv(
@@ -50,12 +52,13 @@ struct AgStats
     unsCnt  :: Int64
     anyCnt  :: Int64
     vaCnt   :: Int64
+    gen     :: Int64
     tcfCnt  :: Int64
     nofCnt  :: Int64
 end
 
 showAgStats(m::Module, ags::AgStats) :: String =
-    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.tcfCnt),$(ags.nofCnt)"
+    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     length(mcs),
@@ -63,6 +66,7 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     count(mc -> isa(mc.check, Uns), mcs),
     count(mc -> isa(mc.check, AnyParam), mcs),
     count(mc -> isa(mc.check, VarargParam), mcs),
+    count(mc -> isa(mc.check, GenericMethod), mcs),
     count(mc -> isa(mc.check, TcFail), mcs),
     count(mc -> isa(mc.check, OutOfFuel), mcs),
 )
