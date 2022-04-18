@@ -17,7 +17,7 @@ export @stable, @stable!, @stable!_nop,
 
     # Types
     MethStCheck,
-    SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory,
+    SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory, TooManyInst,
     Stb, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
     SearchCfg
 
@@ -30,6 +30,7 @@ include("equality.jl")
 using InteractiveUtils
 using MacroTools
 using CSV
+using Setfield
 
 include("types.jl")
 include("report.jl")
@@ -145,7 +146,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     # loop over all instantiations of the signature
     fails = Vector{Any}([])
     steps = 0
-    skipexists = Vector{SkippedUnionAlls}([])
+    skipexists = Set{SkippedUnionAlls}([])
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         if ts == "done"
             break

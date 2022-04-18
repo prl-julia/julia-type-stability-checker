@@ -52,7 +52,6 @@ struct AgStats
     vaCnt   :: Int64
     tcfCnt  :: Int64
     nofCnt  :: Int64
-    unbeCnt :: Int64
 end
 
 showAgStats(m::Module, ags::AgStats) :: String =

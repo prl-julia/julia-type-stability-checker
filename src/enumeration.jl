@@ -35,13 +35,13 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             # if scfg.skipexist, skip it!
             unionalls = filter(t -> typeof(t) == UnionAll, tv)
             if scfg.skip_unionalls && !isempty(unionalls)
-                put!(result, SkipMandatory(unionalls))
+                put!(result, SkipMandatory(Tuple(unionalls)))
                 continue
             end
             # if unbounded unionall is around, bail out
             unb = filter(u -> u.var.ub == Any, unionalls)
             if !isempty(unb)
-                put!(result, UnboundedUnionAlls(unionalls))
+                put!(result, UnboundedUnionAlls(Tuple(unb)))
                 continue
             end
 
@@ -105,23 +105,22 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
 end
 
 # instantiations: UnionAll, SearchCfg -> Channel{JlType}
+#
 # all possible instantiations of the top variable of a UnionAll,
 # except unionalls (and their instances) -- to avoid looping.
 # NOTE: don't forget to unwrap the contents of the results (tup -> tup[1]);
 #       the reason this is needed: we expect insantiations to be a JlType,
 #       but `all_subtypes` works with JlSignatures
-instantiations(u :: UnionAll, scfg :: SearchCfg) =
+instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
+    scfg1 = @set scfg.concrete_only = scfg.abstract_args
+    scfg1 = @set scfg1.skip_unionalls = true # don't recurse
+            # ^ TODO: approximation needs documenting
     Channel(ch ->
                 all_subtypes(
                     [u.var.ub],
-                    SearchCfg(concrete_only    = scfg.abstract_args,
-                                skip_unionalls = true, # don't recurse
-                                # ^ TODO: approximation needs documenting
-                                #
-                                # abstract_args  = scfg.abstract_args
-                                # ^ doesn't matter as we don't do recursive inst., see above
-                              ),
+                    scfg1,
                     ch))
+end
 
 # subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]
 # For a non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
@@ -140,14 +139,19 @@ subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     @assert u.var.ub != Any
 
     res = []
+    instcnt = 0
     for t in instantiations(u, scfg)
         if t isa SkippedUnionAlls
             push!(res, t)
         else
-            try # can fail due to unsond bounds (cf. #8)
+            try # u{t} can fail due to unsond bounds (cf. #8)
                 push!(res, u{t[1]})
             catch
                 # skip failed instatiations
+            end
+            instcnt += 1
+            if instcnt >= scfg.max_instantiations
+                push!(res, TooManyInst((u,)))
             end
         end
     end

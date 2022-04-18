@@ -96,7 +96,7 @@ end
     @test isa(is_stable_method(@which add1typcase(1)),      Stb)
 
     # cf. Note: generic methods
-    #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb) 
+    #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
 
     @test isa(is_stable_method(@which add1r(1.0 + 1.0im)) , Stb)
 end
@@ -123,14 +123,19 @@ end
 end
 
 @testset "Fuel                           " begin
-    f()=1
-    @test isa(is_stable_method(@which f()) , Stb)
-
     g(x::Int)=2
     @test isa(is_stable_method((@which g(2)), SearchCfg(fuel=1)) , Stb)
 
     h(x::Integer)=3
     @test is_stable_method((@which h(2)), SearchCfg(fuel=1)) == OutOfFuel()
+
+    # Instantiations fuel
+    k(x::Complex{T} where T<:Integer)=3
+    t3 = is_stable_method((@which k(1+1im)), SearchCfg(max_instantiations=1))
+    @test t3 isa Stb &&
+        length(t3.skipexist) == 2 && # one for TooManyInst and
+                                     # one for the dreaded SentinelArrays.ChainedVectorIndex <: Integer
+        contains("$t3.skipexist", "TooManyInst")
 end
 
 # (Un)Stable Modules
@@ -157,6 +162,6 @@ d()=if rand()>0.5; 1; else ""; end
 end
 
 @testset "Collecting stats               " begin
-    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1, 0, 0, 0)
+    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 1, 1, 1, 0, 0)
 end
 

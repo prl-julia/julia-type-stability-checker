@@ -9,10 +9,13 @@ JlSignature = Vector{JlType}
 # UnionAll's require care. Below is a hierarchy of cases that we support today.
 abstract type SkippedUnionAlls end
 struct UnboundedUnionAlls <: SkippedUnionAlls
-    ts :: Vector{JlType}
+    ts :: Tuple
 end
 struct SkipMandatory      <: SkippedUnionAlls
-    ts :: Vector{JlType}
+    ts :: Tuple
+end
+struct TooManyInst      <: SkippedUnionAlls
+    ts :: Tuple
 end
 
 #
@@ -21,7 +24,7 @@ end
 abstract type StCheck end
 struct Stb <: StCheck         # hooary, we're stable
     steps :: Int64
-    skipexist :: Vector{SkippedUnionAlls}
+    skipexist :: Set{SkippedUnionAlls}
 end
 struct Uns <: StCheck         # no luck, record types that break stability
     fails :: Vector{Vector{Any}}
@@ -42,6 +45,7 @@ struct GenericMethod <: StCheck # TODO: we could handle them analogous existenti
 end
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
+Base.:(==)(x::TooManyInst, y::TooManyInst) = structEqual(x,y)
 
 # Result of a check along with the method under the check (for reporting purposes)
 struct MethStCheck
@@ -77,7 +81,10 @@ Base.@kwdef struct SearchCfg
 
     max_lattice_steps :: Int = typemax(Int)
 #   ^ -- how many steps to perform max to get from the signature to a concrete type;
-#        for some signatures we struggle to get to a leat type
+#        for some signatures we struggle to get to a leaf type
+
+    max_instantiations :: Int = typemax(Int)
+#   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
 end
 
 default_scfg = SearchCfg()
