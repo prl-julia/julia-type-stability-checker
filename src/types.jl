@@ -40,7 +40,7 @@ struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear re
 end
 struct OutOfFuel  <: StCheck  # fuel exhausted
 end
-struct GenericMethod <: StCheck # TODO: we could handle them analogous existentials in types
+struct GenericMethod <: StCheck # TODO: we could handle them analogous to existentials in types
                                 #       so it doesn't have to be a special case, but for now it's
 end
 
