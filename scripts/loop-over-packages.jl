@@ -38,9 +38,9 @@ Pkg.activate(".")
 
 
 # Add StabilityCheck
-Pkg.develop(path=sts_path)
+haskey(Pkg.project().dependencies, "StabilityCheck") || Pkg.develop(path=sts_path)
 using StabilityCheck
-ENV["JULIA_DEBUG"] = StabilityCheck  # turn on debug
+# ENV["JULIA_DEBUG"] = StabilityCheck  # turn on debug
 
 #
 # Assumption: a package named X contains a ("main") module named X,
@@ -50,8 +50,8 @@ ENV["JULIA_DEBUG"] = StabilityCheck  # turn on debug
 
 # Add all packages of interest and make Julia `using` them
 ev(s)=eval(Meta.parse.(s))
-Pkg.add(pkgs)
 for p in pkgs
+    haskey(Pkg.project().dependencies, p) || Pkg.add(p)
     ev("using $p")
 end
 

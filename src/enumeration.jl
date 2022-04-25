@@ -123,15 +123,15 @@ instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
 end
 
 # subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]
+#
 # For a non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
 #
 # Note: ignore lower bounds for simplicity.
 #
 # Note (history): for unbounded (Any-bounded) unionalls we used to instantiate the variable
-# with Any and Int.
+# with Any and Int. This felt too arbitrary.
 #
 # TODO: make result Channel-based
-# TODO: add limit to the number of instantiations
 #
 subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
     @debug "subtype_unionall of $u"
