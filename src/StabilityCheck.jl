@@ -107,10 +107,19 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
     @debug "number of methods in $mod: $(length(ns))"
     for sym in ns
         @debug "is_stable_module: check symbol $sym"
-        evsym = Core.eval(mod, sym)
-        isa(evsym, Function) || continue # not interested in non-functional symbols
-        (sym == :include || sym == :eval) && continue # not interested in special functions
-        res = vcat(res, is_stable_function(evsym, scfg))
+        try
+            evsym = Core.eval(mod, sym)
+            isa(evsym, Function) || continue # not interested in non-functional symbols
+            (sym == :include || sym == :eval) && continue # not interested in special functions
+            res = vcat(res, is_stable_function(evsym, scfg))
+        catch e
+            if e isa UndefVarError
+                @warn "Module $mod exports symbol $sym but it's undefined"
+                # not our problem, so proceed as usual
+            else
+                throw(e)
+            end
+        end
     end
     return res
 end
