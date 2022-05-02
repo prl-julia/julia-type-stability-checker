@@ -76,14 +76,14 @@ Base.@kwdef struct SearchCfg
 #   ^ -- when doing stability check on the whole module at once: whether to check only
 #        only exported functions
 
-    fuel :: Int = typemax(Int)
+    fuel :: Int = 1000 #typemax(Int)
 #   ^ -- search fuel, i.e. how many types we want to enumerate before give up
 
-    max_lattice_steps :: Int = typemax(Int)
+    max_lattice_steps :: Int = 1000 #typemax(Int)
 #   ^ -- how many steps to perform max to get from the signature to a concrete type;
 #        for some signatures we struggle to get to a leaf type
 
-    max_instantiations :: Int = typemax(Int)
+    max_instantiations :: Int = 1000 #typemax(Int)
 #   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
 end
 
