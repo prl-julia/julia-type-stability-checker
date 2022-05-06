@@ -11,12 +11,6 @@ Pluto'
 # Flux
 # Gadfly
 # Genie
-# Gen
-# IJulia
-# JuMP
-# Knet
-# Plots
-# Pluto
 
 #echo "$pkgs"
 

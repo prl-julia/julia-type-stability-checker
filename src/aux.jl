@@ -62,7 +62,11 @@ end
 split_method(m::Method) = begin
     m.sig isa UnionAll && return GenericMethod()
     msig = Base.unwrap_unionall(m.sig) # unwrap is critical for generic methods
-    func = msig.parameters[1].instance
-    sig_types = Vector{Any}([msig.parameters[2:end]...])
-    (func, sig_types)
+    try
+        func = msig.parameters[1].instance
+        sig_types = Vector{Any}([msig.parameters[2:end]...])
+        (func, sig_types)
+    catch err
+        throw(ErrorException("An error with $msig\nOriginal error:\n$err"))
+    end
 end

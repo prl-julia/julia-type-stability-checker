@@ -108,7 +108,7 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
     for sym in ns
         @debug "is_stable_module: check symbol $sym"
         try
-            evsym = Core.eval(mod, sym)
+            evsym = getproperty(mod, sym)
             isa(evsym, Function) || continue # not interested in non-functional symbols
             (sym == :include || sym == :eval) && continue # not interested in special functions
             res = vcat(res, is_stable_function(evsym, scfg))
