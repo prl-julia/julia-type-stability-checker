@@ -106,7 +106,7 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
     ns = names(mod; all=!scfg.exported_names_only)
     @debug "number of methods in $mod: $(length(ns))"
     for sym in ns
-        @debug "is_stable_module: check symbol $sym"
+        @debug "is_stable_module($mod): check symbol $sym"
         try
             evsym = getproperty(mod, sym)
             isa(evsym, Function) || continue # not interested in non-functional symbols
@@ -115,6 +115,7 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
         catch e
             if e isa UndefVarError
                 @warn "Module $mod exports symbol $sym but it's undefined"
+                # showerror(stdout, e)
                 # not our problem, so proceed as usual
             else
                 throw(e)
@@ -134,7 +135,20 @@ is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
 # `is_stable_module` has to rely on this one.
 is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_function: $f"
-    map(m -> MethStCheck(m, is_stable_method(m, scfg)), methods(f).ms)
+    res = []
+    for m in methods(f).ms
+        try
+            push!(res, MethStCheck(m, is_stable_method(m, scfg)))
+        catch err
+            if err isa CantSplitMethod
+                @warn "Can't process method with no canonical instance:\n$m"
+                # cf. comment on `split_method`
+            else
+                throw(err)
+            end
+        end
+    end
+    res
 end
 
 # is_stable_method : Method, SearchCfg -> StCheck

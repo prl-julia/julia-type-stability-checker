@@ -67,6 +67,12 @@ split_method(m::Method) = begin
         sig_types = Vector{Any}([msig.parameters[2:end]...])
         (func, sig_types)
     catch err
-        throw(ErrorException("An error with $msig\nOriginal error:\n$err"))
+        if ! hasproperty(msig.parameters[1], :instance)
+            throw(CantSplitMethod(m)) # this happens for overloaded `()`
+            # e.g. in https://github.com/JuliaLang/julia/blob/v1.7.2/base/operators.jl#L1085
+            # (c::ComposedFunction)(x...; kw...) = ...
+        else
+            throw(err) # unknown failure
+        end
     end
 end

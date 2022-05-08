@@ -93,3 +93,8 @@ fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100, max_instantiations=100)
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5
 
+# Types of failures
+
+struct CantSplitMethod
+    m :: Method
+end
