@@ -142,7 +142,7 @@ is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: StCheckResu
         catch err
             if err isa CantSplitMethod
                 @warn "Can't process method with no canonical instance:\n$m"
-                # cf. comment on `split_method`
+                # cf. comment in `split_method`
             else
                 throw(err)
             end
