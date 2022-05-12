@@ -57,8 +57,9 @@ struct AgStats
     nofCnt  :: Int64
 end
 
-showAgStats(m::Module, ags::AgStats) :: String =
-    "$m,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt),$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
+showAgStats(pkg::String, ags::AgStats) :: String =
+    "$pkg,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt)," *
+        "$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     length(mcs),
@@ -76,17 +77,17 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 # Effects:
 #   1. Module.csv with detailed, user-friendly results
 #   2. Module-agg.txt with aggregate results
-checkModule(m::Module, out::String=".")= begin
+checkModule(m::Module, out::String="."; pkg::String=m.name)= begin
     checkRes = is_stable_module(m)
 
     # raw, to allow load it back up for debugging purposes
     # CSV.write(joinpath(out, "$m-raw.csv"), checkRes)
 
     # detailed
-    CSV.write(joinpath(out,"$m.csv"), prepCsv(checkRes))
+    CSV.write(joinpath(out,"$pkg.csv"), prepCsv(checkRes))
 
     # aggregate
-    write(joinpath(out, "$m-agg.txt"), showAgStats(m, aggregateStats(checkRes)))
+    write(joinpath(out, "$pkg-agg.txt"), showAgStats(pkg, aggregateStats(checkRes)))
     return ()
 end
 

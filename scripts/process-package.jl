@@ -17,6 +17,16 @@ isempty(strip(pkg)) && (println("ERROR: empty package name"); exit(1))
 
 using Pkg
 
+# Map package name onto a module name for a "most representative" module
+# in the package. Usually it's the `id` function. Currently known and relevant
+# exception is DifferentialEquations
+module_name(pkg::String) =
+    if pkg == "DifferentialEquations"
+        "DiffEqBase"
+    else
+        pkg
+    end
+
 #
 # Script
 #
@@ -26,7 +36,7 @@ wd = out_dir #mktempdir()
 cd(wd)
 Pkg.activate(".")
 
-@info "Start with module $pkg."
+@info "Start with package $pkg."
 
 # Add StabilityCheck
 haskey(Pkg.project().dependencies, "StabilityCheck") || Pkg.develop(path=sts_path)
@@ -47,5 +57,5 @@ ev("using $pkg")
 #
 
 # Run analysis on the packages
-checkModule(ev("$pkg"), out_dir)
+checkModule(ev(module_name("$pkg")), out_dir, pkg=pkg)
 @info "Module $pkg processed."
