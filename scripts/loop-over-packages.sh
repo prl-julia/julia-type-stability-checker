@@ -3,14 +3,14 @@
 # IJulia, JuMP -- LOOP need to limit fuel?..
 #
 pkgs='Gen
+Flux
+Gadfly
+Genie
 IJulia
 JuMP
 Knet
 Plots
 Pluto'
-# Flux
-# Gadfly
-# Genie
 
 #echo "$pkgs"
 
