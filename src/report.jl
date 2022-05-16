@@ -105,8 +105,7 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 # Effects:
 #   1. Module.csv with detailed, user-friendly results
 #   2. Module-agg.txt with aggregate results
-checkModule(m::Module, out::String="."; pkg::String=m.name)= begin
-    @info "Checking stability of $m"
+checkModule(m::Module, out::String="."; pkg::String="$m")= begin
     checkRes = is_stable_module(m)
 
     # raw, to allow load it back up for debugging purposes
