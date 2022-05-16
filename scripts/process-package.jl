@@ -1,8 +1,8 @@
 #
 # Goal: proces one Julia package (test for stability, store in CSV)
 #
-# Usage: Run from any place with `julia loop-over-packages.jl`
-# Effect: results are stored in `<repo>/scratch/bulk` (subject to change)
+# Usage: Run from any place with `julia process_package.jl my-package`
+# Effect: results are stored in the current directory
 #
 
 #
@@ -10,7 +10,7 @@
 #
 
 sts_path = dirname(dirname(@__FILE__))
-out_dir  = joinpath(sts_path, "scratch", "bulk")
+out_dir  = "." #joinpath(sts_path, "scratch", "bulk")
 pkg = ARGS[1]
 #println("pkg param: \"$pkg\"")
 isempty(strip(pkg)) && (println("ERROR: empty package name"); exit(1))
