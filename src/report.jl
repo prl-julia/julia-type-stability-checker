@@ -26,7 +26,7 @@ stCheckToCsv(::OutOfFuel)   = "nofuel"
 stCheckToCsv(::GenericMethod) = "generic"
 
 stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
-stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (s.skipexist == [] ? "" : ";" * string(s.skipexist))
+stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (isempty(s.skipexist) ? "" : ";" * string(s.skipexist))
 stCheckToExtraCsv(::Uns)         = ""
 stCheckToExtraCsv(::AnyParam)    = ""
 stCheckToExtraCsv(::VarargParam) = ""
