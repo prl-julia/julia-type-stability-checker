@@ -1,8 +1,8 @@
 #
-# Goal: proces one Julia package (test for stability, store in CSV)
+# Goal: proces one Julia package (test for stability, store results in CSV)
 #
-# Usage: Run from any place with `julia loop-over-packages.jl`
-# Effect: results are stored in `<repo>/scratch/bulk` (subject to change)
+# Usage: Run from any place with `julia <path/to/julia-sts>/scripts/loop-over-packages.jl`
+# Effect: results are stored in the CWD
 #
 
 #
@@ -10,16 +10,18 @@
 #
 
 sts_path = dirname(dirname(@__FILE__))
-out_dir  = joinpath(sts_path, "scratch", "bulk")
+out_dir  = "." # joinpath(sts_path, "scratch", "bulk")
 pkg = ARGS[1]
-#println("pkg param: \"$pkg\"")
 isempty(strip(pkg)) && (println("ERROR: empty package name"); exit(1))
 
 using Pkg
 
+# module_name: (pkg: String) -> (mod: String)
 # Map package name onto a module name for a "most representative" module
-# in the package. Usually it's the `id` function. Currently known and relevant
-# exception is DifferentialEquations
+# in the package. Usually it's the `id` function (main module's name is the
+# same as package name).
+# Currently known and relevant exception is DifferentialEquations.
+# TODO: support several modules per package
 module_name(pkg::String) =
     if pkg == "DifferentialEquations"
         "DiffEqBase"
@@ -49,12 +51,6 @@ haskey(Pkg.project().dependencies, pkg) || Pkg.add(pkg)
 ev("using $pkg")
 
 @info "Finished `using` modules of interest, start processing..."
-
-#
-# Assumption: a package named X contains a ("main") module named X,
-#             which we are going to process
-# The assumption is known to break for some noteable packages, e.g. `DifferentialEquations`
-#
 
 # Run analysis on the packages
 checkModule(ev(module_name("$pkg")), out_dir, pkg=pkg)
