@@ -1,43 +1,40 @@
 #
-#      Data analysis utilities
+#                    Data analysis and presentation utilities
 #
 
+#
+#                      Convert to CSV: Raw Data
+#
 
-# Conversion to CSV
-
-struct MethStCheckCsv
+# One line of CSV with a single stability check of a method; holds:
+# - method check result
+# - method signature
+# - method's module name
+# - source file
+# - line in the source file where the method is defined
+struct MethCheckCsv
     check :: String
-    extra :: String
     sig   :: String
     mod   :: String
     file  :: String
     line  :: Int
 end
 
-StCheckResultsCsv = Vector{MethStCheckCsv}
+StCheckResultsCsv = Vector{MethCheckCsv}
 
-stCheckToCsv(::StCheck) :: String = error("unknown check")
-stCheckToCsv(::Stb)         = "stable"
-stCheckToCsv(::Uns)         = "unstable"
-stCheckToCsv(::AnyParam)    = "Any"
-stCheckToCsv(::VarargParam) = "vararg"
-stCheckToCsv(::TcFail)      = "tc-fail"
-stCheckToCsv(::OutOfFuel)   = "nofuel"
-stCheckToCsv(::GenericMethod) = "generic"
+stCheckType(::StCheck) :: String = error("unknown check")
+stCheckType(::Stb)         = "stable"
+stCheckType(::Uns)         = "unstable"
+stCheckType(::AnyParam)    = "Any"
+stCheckType(::VarargParam) = "vararg"
+stCheckType(::TcFail)      = "tc-fail"
+stCheckType(::OutOfFuel)   = "nofuel"
+stCheckType(::GenericMethod) = "generic"
 
-stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
-stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (isempty(s.skipexist) ? "" : ";" * string(s.skipexist))
-stCheckToExtraCsv(::Uns)         = ""
-stCheckToExtraCsv(::AnyParam)    = ""
-stCheckToExtraCsv(::VarargParam) = ""
-stCheckToExtraCsv(f::TcFail)     = "$(f.sig)"
-stCheckToExtraCsv(::OutOfFuel)   = ""
-stCheckToExtraCsv(::GenericMethod) = ""
-
-prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
-    MethStCheckCsv(
-        stCheckToCsv(mc.check),
-        stCheckToExtraCsv(mc.check),
+# Create MethCheckCsv from MethStCheck
+prepCsvCheck(mc::MethStCheck) :: MethCheckCsv =
+    MethCheckCsv(
+        stCheckType(mc.check),
         "$(mc.method.sig)",
         "$(mc.method.module)",
         "$(mc.method.file)",
@@ -45,6 +42,43 @@ prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     )
 
 prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
+
+#
+#                        Convert to CSV: Details About Stable Methods
+#
+
+struct StableMethodCsv
+    sig    :: String
+    steps  :: Int
+    skipExistCount :: Int
+    skipExist      :: String
+    mod    :: String
+    file   :: String
+    line   :: Int
+end
+
+StableMethodResultsCsv = Vector{StableMethodCsv}
+
+prepCsvStableMethod(mc::MethStCheck) :: StableMethodCsv = begin
+    @assert(mc.check isa StCheck)
+    s = mc.check
+    StableMethodCsv(
+        "$(mc.method.sig)",
+        s.steps,
+        length(s.skipexist),
+        "$(s.skipexist)",
+        "$(mc.method.module)",
+        "$(mc.method.file)",
+        mc.method.line,
+    )
+end
+
+prepCsvStable(mcs::StCheckResults) :: StableMethodResultsCsv  =
+    map(prepCsvStableMethod, filter(mc -> mc.check isa Stb, mcs))
+
+#
+#                          Aggregate Stats
+#
 
 struct AgStats
     methCnt :: Int64
@@ -72,28 +106,38 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     count(mc -> isa(mc.check, OutOfFuel), mcs),
 )
 
+#
+#                          Interface
+#
+
 # checkModule :: Module, Path -> IO ()
 # Check stability in the given module, store results under the given path
 # Effects:
-#   1. Module.csv with detailed, user-friendly results
-#   2. Module-agg.txt with aggregate results
+#   1. Module.csv with complete, raw results
+#   2. Module-stable.csv with more detailed info about stable methods
+#   3. Module-agg.txt with aggregate results
 checkModule(m::Module, out::String="."; pkg::String="$m")= begin
     checkRes = is_stable_module(m)
 
     # raw, to allow load it back up for debugging purposes
     # CSV.write(joinpath(out, "$m-raw.csv"), checkRes)
 
-    # detailed
+    # complete
     CSV.write(joinpath(out,"$pkg.csv"), prepCsv(checkRes))
+
+    # stable detailed
+    CSV.write(joinpath(out,"$pkg-stable.csv"), prepCsvStable(checkRes))
 
     # aggregate
     write(joinpath(out, "$pkg-agg.txt"), showAgStats(pkg, aggregateStats(checkRes)))
     return ()
 end
 
+# End of persistent (CSV) error reports
 
+###########################################################################################
 #
-#      Printing utilities
+#                      Printing utilities
 #
 
 
