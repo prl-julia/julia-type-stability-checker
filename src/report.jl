@@ -64,9 +64,11 @@ prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 # ----------------------------------------
 
 # Record of aggregated results. One Julia module turns into one instance of it.
+# Note: If you change it, you probably need to update scripts/aggregate.sh
 struct AgStats
     methCnt :: Int64
     stblCnt :: Int64
+    skipStblCnt :: Int64
     unsCnt  :: Int64
     anyCnt  :: Int64
     vaCnt   :: Int64
@@ -80,8 +82,10 @@ showAgStats(pkg::String, ags::AgStats) :: String =
         "$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
+    # TODO: this is a lot of passes over mcs; should rewrite into one loop
     length(mcs),
-    count(mc -> isa(mc.check, Stb), mcs),
+    count(mc -> isa(mc.check, Stb) && isempty(mc.check.skipexist), mcs),
+    count(mc -> isa(mc.check, Stb) && ! isempty(mc.check.skipexist), mcs),
     count(mc -> isa(mc.check, Uns), mcs),
     count(mc -> isa(mc.check, AnyParam), mcs),
     count(mc -> isa(mc.check, VarargParam), mcs),
