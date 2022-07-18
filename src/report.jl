@@ -1,10 +1,19 @@
+
+#########################################
 #
 #      Data analysis utilities
 #
+#########################################
 
 
-# Conversion to CSV
+# ----------------------------------------
+#
+#    Conversion to CSV: Detailed Report
+#
+# ----------------------------------------
 
+
+# Record of csv-ready checking results
 struct MethStCheckCsv
     check :: String
     extra :: String
@@ -44,8 +53,17 @@ prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
         mc.method.line,
     )
 
+#  Main pure interface to detailed report: csv'ize stability checking results
 prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 
+
+# ----------------------------------------
+#
+#    Conversion to CSV: Aggregated Report
+#
+# ----------------------------------------
+
+# Record of aggregated results. One Julia module turns into one instance of it.
 struct AgStats
     methCnt :: Int64
     stblCnt :: Int64
@@ -72,29 +90,42 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     count(mc -> isa(mc.check, OutOfFuel), mcs),
 )
 
+# ----------------------------------------
+#
+#    Reporting Driver
+#
+# ----------------------------------------
+
 # checkModule :: Module, Path -> IO ()
 # Check stability in the given module, store results under the given path
 # Effects:
 #   1. Module.csv with detailed, user-friendly results
 #   2. Module-agg.txt with aggregate results
 checkModule(m::Module, out::String="."; pkg::String=m.name)= begin
+    @info "Checking stability of $m"
     checkRes = is_stable_module(m)
 
     # raw, to allow load it back up for debugging purposes
     # CSV.write(joinpath(out, "$m-raw.csv"), checkRes)
 
     # detailed
-    CSV.write(joinpath(out,"$pkg.csv"), prepCsv(checkRes))
+    repname = joinpath(out,"$pkg.csv")
+    @info "Generating and writing out detailed report to $repname"
+    CSV.write(repname, prepCsv(checkRes))
 
     # aggregate
-    write(joinpath(out, "$pkg-agg.txt"), showAgStats(pkg, aggregateStats(checkRes)))
+    aggrepname = joinpath(out, "$pkg-agg.txt")
+    @info "Generating and writing out aggregated report to $aggrepname"
+    write(aggrepname, showAgStats(pkg, aggregateStats(checkRes)))
     return ()
 end
 
 
+# ----------------------------------------
 #
-#      Printing utilities
+#   Printing utilities
 #
+# ----------------------------------------
 
 
 print_fails(uns :: Uns) = begin
