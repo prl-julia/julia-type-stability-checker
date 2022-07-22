@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-ADD_HEAD='1i Module,Methods,Stable,SkipStable,Unstable,Any,Vararg,Generic,TcFail,NoFuel'
+ADD_HEAD='1i Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel'
 
 find . -maxdepth 1 -name "*-agg.txt" -exec cat {} + | sort | sed "$ADD_HEAD" > aggregate.csv

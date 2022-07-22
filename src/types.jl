@@ -24,9 +24,13 @@ end
 abstract type StCheck end
 struct Stb <: StCheck         # hooary, we're stable
     steps :: Int64
+end
+struct Par <: StCheck         # Partial -- we're stable modulo some UnionAlls
+    steps :: Int64
     skipexist :: Set{SkippedUnionAlls}
 end
-struct Uns <: StCheck         # no luck, record types that break stability
+struct Uns <: StCheck         # no luck; holds types that break stability
+    steps :: Int64
     fails :: Vector{Vector{Any}}
 end
 struct AnyParam    <: StCheck # give up on Any-params in methods; can't tell if it's stable

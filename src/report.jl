@@ -16,6 +16,7 @@
 # Record of csv-ready checking results
 struct MethStCheckCsv
     check :: String
+    steps :: Union{Int, Missing}
     extra :: String
     sig   :: String
     mod   :: String
@@ -27,6 +28,7 @@ StCheckResultsCsv = Vector{MethStCheckCsv}
 
 stCheckToCsv(::StCheck) :: String = error("unknown check")
 stCheckToCsv(::Stb)         = "stable"
+stCheckToCsv(::Par)         = "partial"
 stCheckToCsv(::Uns)         = "unstable"
 stCheckToCsv(::AnyParam)    = "Any"
 stCheckToCsv(::VarargParam) = "vararg"
@@ -34,8 +36,12 @@ stCheckToCsv(::TcFail)      = "tc-fail"
 stCheckToCsv(::OutOfFuel)   = "nofuel"
 stCheckToCsv(::GenericMethod) = "generic"
 
+steps(s::Union{Stb,Par,Uns}) = s.steps
+steps(::StCheck) = missing
+
 stCheckToExtraCsv(::StCheck) :: String = error("unknown check")
-stCheckToExtraCsv(s::Stb)        = "$(s.steps)" * (isempty(s.skipexist) ? "" : ";" * string(s.skipexist))
+stCheckToExtraCsv(::Stb)        = ""
+stCheckToExtraCsv(p::Par)        = "$(p.skipexist)"
 stCheckToExtraCsv(::Uns)         = ""
 stCheckToExtraCsv(::AnyParam)    = ""
 stCheckToExtraCsv(::VarargParam) = ""
@@ -46,6 +52,7 @@ stCheckToExtraCsv(::GenericMethod) = ""
 prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
     MethStCheckCsv(
         stCheckToCsv(mc.check),
+        steps(mc.check),
         stCheckToExtraCsv(mc.check),
         "$(mc.method.sig)",
         "$(mc.method.module)",
@@ -63,12 +70,23 @@ prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 #
 # ----------------------------------------
 
+
+#
+# Note: Aggregated v Detailed
+#
+# What makes life easier with two types of reports is that they're largerly
+# independent. One may think that aggregated is computed based on the detailed
+# but that's actually NOT the case. Both are computed based on the raw structured
+# data we get from the analysis.
+#
+
+
 # Record of aggregated results. One Julia module turns into one instance of it.
 # Note: If you change it, you probably need to update scripts/aggregate.sh
 struct AgStats
     methCnt :: Int64
-    stblCnt :: Int64
-    skipStblCnt :: Int64
+    stbCnt :: Int64
+    parCnt :: Int64
     unsCnt  :: Int64
     anyCnt  :: Int64
     vaCnt   :: Int64
@@ -78,14 +96,14 @@ struct AgStats
 end
 
 showAgStats(pkg::String, ags::AgStats) :: String =
-    "$pkg,$(ags.methCnt),$(ags.stblCnt),$(ags.unsCnt),$(ags.anyCnt)," *
+    "$pkg,$(ags.methCnt),$(ags.stbCnt),$(ags.parCnt),$(ags.unsCnt),$(ags.anyCnt)," *
         "$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     # TODO: this is a lot of passes over mcs; should rewrite into one loop
     length(mcs),
-    count(mc -> isa(mc.check, Stb) && isempty(mc.check.skipexist), mcs),
-    count(mc -> isa(mc.check, Stb) && ! isempty(mc.check.skipexist), mcs),
+    count(mc -> isa(mc.check, Stb), mcs),
+    count(mc -> isa(mc.check, Par), mcs),
     count(mc -> isa(mc.check, Uns), mcs),
     count(mc -> isa(mc.check, AnyParam), mcs),
     count(mc -> isa(mc.check, VarargParam), mcs),

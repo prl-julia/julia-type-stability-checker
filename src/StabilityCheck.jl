@@ -195,9 +195,13 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     end
 
     return if isempty(fails)
-        Stb(steps, skipexists)
+        if isempty(skipexists)
+            Stb(steps)
+        else
+            Par(steps, skipexists)
+        end
     else
-        Uns(fails)
+        Uns(steps, fails)
     end
 end
 
