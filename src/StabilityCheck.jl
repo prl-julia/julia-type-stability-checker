@@ -34,7 +34,7 @@ using Setfield
 
 include("types.jl")
 include("report.jl")
-include("aux.jl")
+include("utils.jl")
 include("enumeration.jl")
 
 
