@@ -36,11 +36,11 @@ packages) available.
 Preferably in a fresh directory, run this:
 
 ``` shellsession
-❯ julia $JULIA-STS/scripts/process-package.jl
+❯ julia "$JULIA_STS/scripts/process-package.jl" Multisets
 ...
 ❯ ls *.csv *.txt
 Multisets-agg.txt  Multisets.csv
-❯ $JULIA-STS/scripts/aggregate.sh
+❯ $JULIA_STS/scripts/aggregate.sh
 ...
 ❯ ls *.csv
 aggregate.csv  Multisets.csv

@@ -11,7 +11,7 @@
 
 sts_path = dirname(dirname(@__FILE__))
 out_dir  = "." # joinpath(sts_path, "scratch", "bulk")
-pkg = ARGS[1]
+pkg = length(ARGS) > 0 ? ARGS[1] : error("Requires one argument: name of the package to process")
 isempty(strip(pkg)) && (println("ERROR: empty package name"); exit(1))
 
 using Pkg
