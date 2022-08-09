@@ -5,6 +5,14 @@
 
 import Base.convert
 
+is_expected_union =
+    if isdefined(Base, :is_expected_union) # Julia 1.7
+        getproperty(Base, :is_expected_union)
+    else
+        getproperty(InteractiveUtils, :is_expected_union) # Julia Nightly
+    end
+
+
 
 # The heart of stability checking using Julia's built-in facilities:
 # 1) compile the given function for the given argument types down to a typed IR
@@ -26,7 +34,7 @@ end
 # julia/stdlib/InteractiveUtils/src/codeview.jl)
 is_concrete_type(@nospecialize(ty)) = begin
     if ty isa Type && (!Base.isdispatchelem(ty) || ty == Core.Box)
-        if ty isa Union && Base.is_expected_union(ty)
+        if ty isa Union && is_expected_union(ty)
             true # this is a "mild" problem, so we round up to "stable"
         else
             false
