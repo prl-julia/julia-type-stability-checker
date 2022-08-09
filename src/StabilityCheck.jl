@@ -18,7 +18,7 @@ export @stable, @stable!, @stable!_nop,
     # Types
     MethStCheck,
     SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory, TooManyInst,
-    Stb, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
+    Stb, Par, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
     SearchCfg
 
 # Debug print:

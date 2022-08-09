@@ -83,17 +83,20 @@ end
 
 @testset "Simple stable                  " begin
     t1 = is_stable_method(@which add1i(1))
-    @test isa(t1, Stb)
+    @test isa(t1, Par)
     @test length(t1.skipexist) == 1 &&
             contains("$t1.skipexist", "SentinelArrays.ChainedVectorIndex")
     # SentinelArrays.ChainedVectorIndex comes from CSV, which we depend upon for
     # reporting. Would be nice to factor out reporting
 
-    @test isa(is_stable_method(@which add1iss(1))  , Stb)
+    t2 = is_stable_method(@which add1i(1))
+    @test isa(t2, Par)
+    @test length(t2.skipexist) == 1 &&
+            contains("$t2.skipexist", "SentinelArrays.ChainedVectorIndex")
     # this is same as above
 
-    @test isa(is_stable_method(@which plus2i(1,1)) , Stb)
-    @test isa(is_stable_method(@which add1typcase(1)),      Stb)
+    @test isa(is_stable_method(@which plus2i(1,1)) , Par)
+    @test isa(is_stable_method(@which add1typcase(1)), Par)
 
     # cf. Note: generic methods
     #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
@@ -132,7 +135,7 @@ end
     # Instantiations fuel
     k(x::Complex{T} where T<:Integer)=3
     t3 = is_stable_method((@which k(1+1im)), SearchCfg(max_instantiations=1))
-    @test t3 isa Stb &&
+    @test t3 isa Par &&
         length(t3.skipexist) == 2 && # one for TooManyInst and
                                      # one for the dreaded SentinelArrays.ChainedVectorIndex <: Integer
         contains("$t3.skipexist", "TooManyInst")
