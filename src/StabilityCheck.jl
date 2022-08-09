@@ -167,7 +167,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     any(t -> is_vararg(t), sig_types) && return VarargParam(sig_types)
 
     # loop over all instantiations of the signature
-    fails = Vector{Any}([])
+    unst = Vector{Any}([])
     steps = 0
     skipexists = Set{SkippedUnionAlls}([])
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
@@ -183,9 +183,9 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         end
         try
             if ! is_stable_call(func, ts)
-                push!(fails, ts)
+                push!(unst, ts)
             end
-        catch
+        catch e
             return TcFail(ts)
         end
         steps += 1
@@ -194,14 +194,14 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         end
     end
 
-    return if isempty(fails)
+    return if isempty(unst)
         if isempty(skipexists)
             Stb(steps)
         else
             Par(steps, skipexists)
         end
     else
-        Uns(steps, fails)
+        Uns(steps, unst)
     end
 end
 
