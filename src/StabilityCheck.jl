@@ -186,7 +186,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
                 push!(unst, ts)
             end
         catch e
-            return TcFail(ts)
+            return TcFail(ts, e)
         end
         steps += 1
         if steps > scfg.fuel

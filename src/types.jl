@@ -41,6 +41,7 @@ struct VarargParam <: StCheck # give up on VA-params  in methods; can't tell if 
 end
 struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear reason
     sig :: Vector{Any}
+    err :: Any
 end
 struct OutOfFuel  <: StCheck  # fuel exhausted
 end
