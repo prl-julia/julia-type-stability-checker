@@ -5,14 +5,31 @@
 
 import Base.convert
 
-is_expected_union =
-    if isdefined(Base, :is_expected_union) # Julia 1.7
-        getproperty(Base, :is_expected_union)
-    else
-        getproperty(InteractiveUtils, :is_expected_union) # Julia Nightly
+
+# is_expected_union: Union -> Bool
+#
+# In Julia 1.8 the definition of expected union will change drastically allowing
+# small unions of concrete types, see discussion in
+# https://github.com/ulysses4ever/julia-sts/wiki/concrete_type_def-2022-08-15
+# I'm not sure we want to follow. At the same time, they fix an actual bug in the
+# old def (where `Union{Missing, Vector}` was considered "expected"). So, for the
+# time being copy the fix.
+#
+function is_expected_union(u::Union)
+    has_non_missing = false
+    for x in Base.uniontypes(u)
+        if (x != Missing) && (x != Nothing)
+            if has_non_missing
+                return false
+            elseif !Base.isdispatchelem(x) || x == Core.Box
+                return false
+            else
+                has_non_missing = true
+            end
+        end
     end
-
-
+    return true
+end
 
 # The heart of stability checking using Julia's built-in facilities:
 # 1) compile the given function for the given argument types down to a typed IR
