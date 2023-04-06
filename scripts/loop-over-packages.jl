@@ -1,5 +1,5 @@
 #
-# Goal: proces a bulk of Julia package (test for stability, store in CSV)
+# Goal: proces a bulk of Julia packages (test for stability, store in CSV)
 #
 # Usage: Run from any place with `julia loop-over-packages.jl`
 # Effect: results are stored in `<repo>/scratch/bulk` (subject to change)
