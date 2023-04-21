@@ -1,0 +1,2 @@
+Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel
+6dc86e92,"Julia 1.6 CUDA 3.x compat wip","2021-07-22 16:14:23 +0300",1.4.7,Knet,160,13,26,2,66,24,29,0,0

@@ -1,0 +1,525 @@
+Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel
+3cdb4055,"Merge pull request #2003 from coroa/moi09","2019-08-18 17:55:38 +0200",0.19.2,JuMP,584,177,112,22,141,25,100,2,5
+a1c4f978,"Merge pull request #1974 from raphaelsaavedra/master","2019-08-20 11:44:44 +0200",0.19.2,JuMP,585,177,112,22,142,25,100,2,5
+b0f71897,"Merge pull request #1949 from rtwalker/rw/raw_status","2019-08-20 11:50:12 +0200",0.19.2,JuMP,586,177,112,23,142,25,100,2,5
+be85238d,"Remove dictionaries tracking SingleVariable constraints (#2032)","2019-08-20 15:53:38 -0400",0.19.2,JuMP,591,167,112,28,153,25,99,1,6
+4ef4c103,"Merge pull request #1960 from JuliaOpt/bl/add_to_function_constant","2019-08-23 10:03:26 +0200",0.19.2,JuMP,594,167,112,28,156,25,99,0,7
+c1b730cc,"Update to MOI v0.9.1","2019-08-23 13:17:59 +0200",0.19.2,JuMP,594,167,112,28,156,25,99,2,5
+3d177c40,"Merge pull request #2041 from JuliaOpt/bl/dual_objective_value","2019-08-24 21:43:27 +0200",0.19.2,JuMP,595,168,112,28,156,25,99,1,6
+00056c4c,"v0.20.0","2019-08-25 10:50:14 +0200",0.20.0,JuMP,595,168,112,28,156,25,99,2,5
+6968fbee,"Remove MOIB","2019-08-25 14:14:15 +0200",0.20.0,JuMP,595,168,112,28,156,25,99,1,6
+3caea82d,"Add an example of column generation (#2010)","2019-09-07 03:54:28 +0200",0.20.0,JuMP,595,168,112,28,156,25,99,2,5
+54e611f5,"[[un]set_]time_limit_sec (#2053)","2019-09-15 17:42:37 +0200",0.20.0,JuMP,598,168,112,30,157,25,99,1,6
+bc53d262,"Merge pull request #2063 from JuliaOpt/bl/sparse_dot","2019-09-21 21:36:04 +0200",0.20.0,JuMP,606,168,114,30,163,25,99,2,5
+5c799ef2,"Merge pull request #2067 from JuliaOpt/bl/README_solver_list","2019-09-21 21:36:49 +0200",0.20.0,JuMP,606,168,114,30,163,25,99,1,6
+1a4f6635,"Merge pull request #2071 from JuliaOpt/bl/sdpt3","2019-09-30 23:48:16 +0200",0.20.0,JuMP,606,168,114,30,163,25,99,2,5
+04735d26,"Merge pull request #2070 from JuliaOpt/bl/@container","2019-10-04 10:27:14 +0200",0.20.0,JuMP,606,166,118,28,163,25,99,2,5
+ea3eec38,"Merge pull request #2080 from mtanneau/master","2019-10-12 14:20:00 +0200",0.20.0,JuMP,606,166,118,28,163,25,99,0,7
+1ac0d606,"Now deepcopy(::AbstractModel) calls error (#2079)","2019-10-19 11:52:18 -0300",0.20.0,JuMP,606,166,118,28,163,25,99,2,5
+5c27e70c,"Merge pull request #2089 from ericphanson/patch-1","2019-10-25 20:50:00 +0200",0.20.0,JuMP,606,166,118,28,163,25,99,1,6
+13b34a7e,"Merge pull request #2091 from dourouc05/dourouc05-patch-typo-lp-sensitivity","2019-10-31 08:33:01 +0100",0.20.0,JuMP,606,166,118,28,163,25,99,2,5
+9baede15,"Merge pull request #2095 from JuliaOpt/ml/documenter","2019-11-02 16:18:43 -0400",0.20.0,JuMP,606,166,118,28,163,25,99,0,7
+fc2bb8ad,"Deprecate with_optimizer (#2090)","2019-11-04 09:13:53 -0500",0.20.0,JuMP,607,164,117,28,166,26,99,1,6
+b780023b,"Minor JuMP 1.0 roadmap update (#2096)","2019-11-06 14:57:31 -0500",0.20.0,JuMP,607,164,117,28,166,26,99,2,5
+015b38a3,"Merge pull request #2092 from JuliaOpt/bl/indicator","2019-11-19 16:11:01 +0100",0.20.0,JuMP,612,166,117,28,167,26,101,2,5
+fd5b66ef,"Callbacks Episode II: revenge of the solver-independent implementation (#2101)","2019-11-20 12:00:09 -0600",0.20.0,JuMP,613,166,117,28,168,26,101,2,5
+f414ef0d,"Merge pull request #2108 from JuliaOpt/bl/con_name","2019-11-23 23:55:54 +0100",0.20.0,JuMP,615,166,117,28,170,26,101,1,6
+326017cd,"Add support for multiple solutions (#2100)","2019-11-26 10:39:07 -0600",0.20.0,JuMP,628,178,117,28,171,26,101,1,6
+d2f6a29e,"Minor tweaks to solutions.md (#2110)","2019-11-27 18:07:09 -0500",0.20.0,JuMP,628,178,117,28,171,26,101,2,5
+afec045c,"Merge pull request #2129 from JuliaOpt/bl/moiv0.9.9","2019-12-29 16:15:07 +0100",0.20.0,JuMP,634,184,117,28,171,26,101,1,6
+04546c9f,"Add documentation on performance and work-around for sparse variable creation (#2126)","2019-12-29 19:35:35 +0100",0.20.0,JuMP,634,184,117,28,171,26,101,2,5
+00f60735,"Merge pull request #2130 from JuliaOpt/bl/sdpnal","2020-01-03 10:21:13 +0100",0.20.0,JuMP,634,184,117,28,171,26,101,0,7
+cdd734fa,"Merge pull request #2107 from JuliaOpt/bl/mutable_arithmetics","2020-01-03 16:41:53 +0100",0.20.0,JuMP,530,174,90,27,141,25,70,2,1
+47eb01f2,"Merge pull request #2128 from JuliaOpt/bl/macro_constrained_variables","2020-01-04 10:05:19 +0100",0.20.0,JuMP,536,177,94,27,140,25,70,2,1
+145133c0,"Add complementarity constraints (#2132)","2020-01-07 16:21:03 +0100",0.20.0,JuMP,542,181,95,27,141,25,70,0,3
+7a656f69,"Update documentation and examples for callbacks in automatic mode (#2134)","2020-01-07 16:20:19 -0600",0.20.0,JuMP,542,181,95,27,141,25,70,2,1
+7be2ae8e,"Create a version of method delete that deletes a vector of variables. (#2135)","2020-01-12 11:16:45 -0300",0.20.0,JuMP,544,183,95,27,141,25,70,2,1
+dd68f810,"Change docs for variables constrained on creation (#2139)","2020-01-18 23:20:24 +0100",0.20.0,JuMP,544,183,95,27,141,25,70,1,2
+9645ba09,"Merge pull request #2141 from JuliaOpt/bl/instantiate","2020-02-04 13:30:15 +0100",0.20.0,JuMP,547,183,95,26,145,25,70,1,2
+c404d33b,"set_parameter -> set_optimizer_attribute (#2150)","2020-02-04 13:59:46 -0600",0.20.0,JuMP,552,184,95,27,146,27,70,2,1
+088ae5be,"Merge pull request #2151 from JuliaOpt/bl/j1.4","2020-02-05 14:53:40 +0100",0.20.0,JuMP,552,184,95,27,146,27,70,0,3
+c7b5d930,"Install TagBot as a GitHub Action (#2155)","2020-02-09 03:00:36 +0700",0.20.0,JuMP,552,184,95,27,146,27,70,1,2
+02631377,"final prep for v0.21 (#2164)","2020-02-16 07:51:58 -0500",0.20.0,JuMP,552,184,95,27,146,27,70,2,1
+aa08802e,"bump Project.toml for 0.21","2020-02-16 07:54:40 -0500",0.21.0,JuMP,552,184,95,27,146,27,70,1,2
+de63adf0,"improve the deprecation warning for with_optimizer (#2165)","2020-02-17 10:50:41 -0500",0.21.0,JuMP,552,184,95,27,146,27,70,2,1
+fa302b54,"Merge pull request #2178 from JuliaOpt/bl/scalar_product","2020-02-25 09:28:50 +0100",0.21.1,JuMP,552,184,95,27,146,27,70,1,2
+b0f91123,"remove extra ` in docstrings (#2182)","2020-02-27 16:50:14 +0100",0.21.1,JuMP,552,184,95,27,146,27,70,2,1
+f65664ce,"Fix writing of NL models to MOF (#2181)","2020-03-02 21:31:00 -0600",0.21.1,JuMP,552,184,95,27,146,27,70,0,3
+2f47b177,"Add fallback for `_functionize(::MA.Zero)` (#2188)","2020-03-03 08:15:22 -0600",0.21.1,JuMP,553,185,95,27,146,27,70,2,1
+3af8a2c2,"Add @variable to (model, x) in anon var doc (#2177)","2020-03-03 15:16:06 +0100",0.21.1,JuMP,553,185,95,27,146,27,70,1,2
+4ffcd1ff,"Fix missing docstring source links (#2207)","2020-03-30 20:03:40 -0400",0.21.1,JuMP,553,185,95,27,146,27,70,2,1
+6dcd5876,"Merge pull request #2199 from vrngupta53/add-relativegap-getter-branch","2020-04-02 11:50:47 +0200",0.21.1,JuMP,554,186,95,27,146,27,70,2,1
+4e3e2e48,"Merge pull request #2218 from JuliaOpt/bl/prepv0.21.2","2020-04-02 19:52:17 +0200",0.21.1,JuMP,554,186,95,27,146,27,70,1,2
+6017d7bf,"v0.21.2","2020-04-02 19:53:12 +0200",0.21.2,JuMP,554,186,95,27,146,27,70,0,3
+a29caf95,"Added SOS1 and SOS2 struct (#2212)","2020-04-06 12:01:35 -0300",0.21.2,JuMP,556,188,95,27,146,27,70,0,3
+fb52b479,"Added functions simplex_iterations(), barrier_iterations() and node_count() (#2201)","2020-04-06 23:02:21 +0530",0.21.2,JuMP,559,188,95,30,146,27,70,1,2
+c4596a82,"Support MA.Zero in objective and constraints (#2219)","2020-04-06 21:52:59 -0500",0.21.2,JuMP,561,190,95,30,146,27,70,0,3
+24515f31,"Update README.md to mention JuMPTutorials.jl (#2224)","2020-04-12 20:58:06 +0200",0.21.2,JuMP,561,190,95,30,146,27,70,1,2
+a1b7da23,"Function `reduced_cost` (code, documentation, and tests) (#2205)","2020-04-14 13:22:16 -0300",0.21.2,JuMP,562,191,95,30,146,27,70,1,2
+ef902fe3,"Merge pull request #2231 from matbesancon/callback_expr","2020-04-29 13:56:46 +0200",0.21.2,JuMP,563,191,95,30,147,27,70,0,3
+5e1a0989,"[ci skip] Remove blank in test/macros","2020-04-29 14:43:13 +0200",0.21.2,JuMP,563,191,95,30,147,27,70,2,1
+a72e7acb,"Merge pull request #2228 from JuliaOpt/bl/constraint_head","2020-05-04 09:28:46 +0200",0.21.2,JuMP,569,194,95,30,148,29,70,2,1
+13032ebb,"Merge pull request #2051 from dourouc05/dourouc05-constraint-macro","2020-05-12 12:23:55 +0200",0.21.2,JuMP,570,194,95,30,148,30,70,1,2
+ecf12ab5,"Explicit link to the documentation of MOI.FileFormats (#2253)","2020-06-15 16:42:02 +0200",0.21.2,JuMP,570,194,95,30,148,30,70,2,1
+1564660b,"Merge pull request #2240 from jump-dev/bl/bad_index_num","2020-06-17 12:22:09 +0200",0.21.2,JuMP,570,194,95,30,148,30,70,0,3
+01e464f7,"Merge pull request #2247 from jump-dev/bl/set_obj_fun","2020-06-17 14:22:25 +0200",0.21.2,JuMP,570,193,95,30,149,30,70,2,1
+e2fd3ebd,"v0.21.3","2020-06-18 10:53:52 +0200",0.21.3,JuMP,570,193,95,30,149,30,70,1,2
+3537b21c,"[ci skip] Update README with v0.21.3 release","2020-06-18 14:42:08 +0200",0.21.3,JuMP,570,193,95,30,149,30,70,2,1
+bc37e5a3,"Add numeric fallbacks for .value (#2262)","2020-06-19 09:56:35 -0500",0.21.3,JuMP,572,194,96,30,149,30,70,1,2
+0b77aac1,"Fix #2263 (#2264)","2020-06-21 03:48:49 +0200",0.21.3,JuMP,572,194,96,30,149,30,70,2,1
+26c32793,"added note of GAMS solvers to installation doc (#2255)","2020-06-27 19:52:20 +0200",0.21.3,JuMP,572,194,96,30,149,30,70,1,2
+c43b1f19,"Merge pull request #2222 from yashcodes/Updating_error_message","2020-07-01 16:40:54 +0200",0.21.3,JuMP,572,194,96,30,149,30,70,2,1
+70fe5a11,"Merge pull request #2203 from yashcodes/Debug_info_for_unsupported_constraints","2020-07-01 17:04:30 +0200",0.21.3,JuMP,572,194,96,30,149,30,70,0,3
+29f64d81,"Reduce CI load by skipping Julia 1.1, 1.2, and 1.3 (#2269)","2020-07-10 14:30:21 -0500",0.21.3,JuMP,572,194,96,30,149,30,70,1,2
+a62cc35a,"remove invalid assertion in nlp.jl (#2271)","2020-07-11 13:55:23 -0400",0.21.3,JuMP,572,194,96,30,149,30,70,2,1
+42668d1d,"Add checks and tests for NaN in constraints (#2272)","2020-07-11 13:09:18 -0500",0.21.3,JuMP,572,194,96,30,149,30,70,1,2
+1129e58e,"Utility for relaxing integrality (#2275)","2020-07-12 22:19:21 -0400",0.21.3,JuMP,574,196,96,30,149,30,70,1,2
+a125a8f2,"Refactor files in test/ so they can be run independently (#2279)","2020-07-15 08:57:27 -0500",0.21.3,JuMP,574,196,96,30,149,30,70,2,1
+b99d7a74,"Refactor test/operator.jl into functions as opposed to nested testsets (#2285)","2020-07-16 11:11:21 -0500",0.21.3,JuMP,574,196,96,30,149,30,70,1,2
+ec867808,"Refactor test/mutable_arithmetics.jl (#2284)","2020-07-17 10:23:32 -0500",0.21.3,JuMP,574,196,96,30,149,30,70,2,1
+b92ba1b7,"Refactor test/file_formats.jl into functions as opposed to nested testsets (#2286)","2020-07-17 15:51:57 -0500",0.21.3,JuMP,574,196,96,30,149,30,70,1,2
+a2706234,"Print nonlinear subexpressions (#2294)","2020-07-30 16:59:58 -0400",0.21.3,JuMP,576,196,96,30,151,30,70,2,1
+1fd92c0f,"Refactor test/variable.jl into functions as opposed to nested testsets (#2307)","2020-08-08 13:25:55 -0500",0.21.3,JuMP,576,196,96,30,151,30,70,1,2
+b91e2ab5,"Merge pull request #2311 from zdroid/patch-1","2020-08-12 11:44:50 +0200",0.21.3,JuMP,576,196,96,30,151,30,70,2,1
+dd287447,"Bump DataStructures version (#2315)","2020-08-20 17:09:55 -0700",0.21.3,JuMP,576,196,96,30,151,30,70,1,2
+5023f145,"Add `value` for constraints with a custom `var_value` function (#2317)","2020-08-31 02:12:50 +0200",0.21.3,JuMP,578,198,96,30,151,30,70,2,1
+d1b05cd2,"Fix tests for upcoming MOF v0.5 release (#2322)","2020-09-04 07:24:29 +1200",0.21.3,JuMP,578,198,96,30,151,30,70,1,2
+4f8aaf06,"Allow querying conflicts from within JuMP (#2300)","2020-09-07 03:04:22 +0200",0.21.3,JuMP,579,199,96,30,151,30,70,2,1
+f471e425,"Update roadmap items (#2265)","2020-09-07 13:51:58 +1200",0.21.3,JuMP,579,199,96,30,151,30,70,1,2
+cef7d239,"Release v0.21.4 (#2327)","2020-09-14 10:35:09 +1200",0.21.4,JuMP,579,199,96,30,151,30,70,2,1
+a4592816,"Fix DataStructues deprecation warnings (#2329)","2020-09-14 20:48:09 -0400",0.21.4,JuMP,579,199,96,30,151,30,70,1,2
+0ecbdb5b,"Update travis badges (#2332)","2020-09-14 21:51:44 -0400",0.21.4,JuMP,579,199,96,30,151,30,70,2,1
+eeb215e4,"Check dimensions of functions and sets match (#2321)","2020-09-15 15:47:54 -0400",0.21.4,JuMP,579,199,96,30,151,30,70,0,3
+dcaa7b5d,"Dense array keys (#2281)","2020-09-17 11:34:32 +0200",0.21.4,JuMP,579,199,96,30,151,30,70,2,1
+9bf82e97,"Update aff_expr.jl (#2342)","2020-09-22 02:33:37 -0700",0.21.5,JuMP,579,199,96,30,151,30,70,1,2
+6c1a3bbe,"Fix linearity check of user-defined function (#2341)","2020-09-24 02:29:22 +1200",0.21.5,JuMP,579,199,96,30,151,30,70,2,1
+cd32c6dc,"Update GLPK to latest version for examples (#2343)","2020-09-25 00:06:36 +1200",0.21.5,JuMP,579,199,96,30,151,30,70,1,2
+709d41b7,"Update http to https and broken websites update (#2346)","2020-09-29 15:40:05 +0200",0.21.5,JuMP,579,199,96,30,151,30,70,2,1
+5e13de4b,"Relaxation and fixed binary (#2345)","2020-10-07 15:02:43 +0200",0.21.5,JuMP,579,199,96,30,151,30,70,0,3
+65610777,"Add NLopt to solver list (#2349)","2020-10-14 23:18:51 +0200",0.21.5,JuMP,579,199,96,30,151,30,70,1,2
+4143e641,"Update solver urls with jump-dev migration (#2350)","2020-10-15 09:58:21 +0200",0.21.5,JuMP,579,199,96,30,151,30,70,2,1
+ffc978a9,"Add Pavito to solver list (#2351)","2020-10-15 17:15:58 +0200",0.21.5,JuMP,579,199,96,30,151,30,70,0,3
+1ed0e174,"Pavito -> Pavito.jl","2020-10-15 17:18:23 +0200",0.21.5,JuMP,579,199,96,30,151,30,70,2,1
+d9f5835b,"Fix naming convention of internal functions (#2352)","2020-10-15 16:54:28 -0400",0.21.5,JuMP,579,199,96,30,151,30,70,1,2
+0fbc745b,"Merge pull request #2214 from AKS1996/expose_dual_warm_start","2020-10-27 20:02:22 -0300",0.21.5,JuMP,585,200,99,30,153,30,70,1,2
+b7605dd6,"Merge pull request #2365 from MatthewStuber/patch-1","2020-10-31 17:53:44 -0300",0.21.5,JuMP,585,200,99,30,153,30,70,2,1
+af2355d8,"Switch CI to Github actions (#2370)","2020-11-10 12:49:08 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,1,2
+e9b2bf3e,"Typo fix in steelT3.jl (#2378)","2020-11-23 19:48:37 -0500",0.21.5,JuMP,585,200,99,30,153,30,70,0,3
+352f2c19,"Remove convert methods which cause a large number of method invalidations. (#2278)","2020-11-26 20:46:52 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,2,1
+056d8f42,"add factory MIP example - take 2 (#2366)","2020-11-26 15:23:26 -0800",0.21.5,JuMP,585,200,99,30,153,30,70,1,2
+cb22f89b,"Format the src/_Derivatives submodule (#2383)","2020-11-27 15:20:06 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,2,1
+043be22d,"Format the Containers submodule (#2384)","2020-11-28 12:33:17 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,1,2
+72be0c7a,"Add short_to_long_function_def=true to formatter (#2385)","2020-11-28 13:17:29 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,2,1
+77a0b82b,"Remove type assertion in list_of_constraint_types (#2382)","2020-11-30 10:05:43 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,0,3
+d5fa2d67,"[docs] clarify callback behavior (#2381)","2020-12-03 13:21:53 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,1,2
+1d765fb0,"Revert #2390 (#2396)","2020-12-07 08:09:34 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,2,1
+d8d3baae,"Update TagBot.yml (#2398)","2020-12-08 21:15:16 +1300",0.21.5,JuMP,585,200,99,30,153,30,70,1,2
+c2dd80a5,"Adding print_bridge_graph (#2202)","2020-12-11 04:27:08 +0530",0.21.5,JuMP,590,202,101,30,153,30,70,1,3
+1e6b5d85,"Add callback_node_status (#2397)","2020-12-11 11:59:06 +1300",0.21.5,JuMP,591,202,101,30,154,30,70,1,3
+90e63c47,"Format /test directory (#2387)","2020-12-14 16:00:17 +1300",0.21.5,JuMP,591,202,101,30,154,30,70,2,2
+0ea8c5b1,"Throw a better error when extensions used with NLP (#2406)","2020-12-15 08:50:35 +1300",0.21.5,JuMP,592,202,101,30,155,30,70,2,2
+33a34d60,"Fix bug when copying model with named expressions (#2405)","2020-12-15 08:57:27 +1300",0.21.5,JuMP,592,202,101,30,155,30,70,0,4
+5027756d,"Restructure README (#2410)","2020-12-15 10:30:36 +1300",0.21.5,JuMP,592,202,101,30,155,30,70,2,2
+4e2c71e4,"[docs] Clarify duality warning (#2413)","2020-12-16 07:25:44 +1300",0.21.5,JuMP,592,202,101,30,155,30,70,0,4
+80240663,"[docs] Revise installation guide (#2392)","2020-12-16 07:26:56 +1300",0.21.5,JuMP,592,202,101,30,155,30,70,2,2
+b3da7f77,"[docs] Fix link in docs (#2415)","2020-12-16 10:24:51 +1300",0.21.5,JuMP,592,202,101,30,155,30,70,1,3
+52b1b385,"Add lp_sensitivity_report (#2251)","2020-12-16 10:31:19 +1300",0.21.5,JuMP,606,206,105,30,161,30,70,2,2
+a945fb01,"[docs] Add missing docstrings (#2414)","2020-12-16 12:01:11 +1300",0.21.5,JuMP,604,206,103,30,161,30,70,1,3
+ba17068a,"Add an unregister function (#2417)","2020-12-17 08:24:49 +1300",0.21.5,JuMP,605,207,103,30,161,30,70,2,2
+2b0d9100,"Add support for skew symmetric variables (#2416)","2020-12-24 09:04:41 +1300",0.21.5,JuMP,608,208,104,30,161,30,71,1,3
+b562ae89,"Change isapprox(a,b) to a \approx b in tests (#2419)","2021-01-04 15:48:32 -0500",0.21.5,JuMP,608,208,104,30,161,30,71,2,2
+d2398ad1,"Fix error for printing in IJuliaMode (#2420)","2021-01-04 22:25:14 -0300",0.21.5,JuMP,610,209,104,30,162,30,71,1,3
+24d13161,"Fix printing of variable names in IJuliaMode (#2423)","2021-01-14 08:18:54 +1300",0.21.5,JuMP,610,209,104,30,162,30,71,0,4
+ddff45c6,"Add a better error message when there are duplicate indices in a container (#2435)","2021-01-27 08:52:14 +1300",0.21.5,JuMP,610,209,104,30,162,30,71,2,2
+3ccbf399,"Add a CI job for nightly (#2433)","2021-01-28 03:55:18 +1300",0.21.5,JuMP,610,209,104,30,162,30,71,1,3
+5fec8c01,"Prep for JuMP 0.21.6 (#2426)","2021-01-29 12:18:46 +1300",0.21.6,JuMP,610,209,104,30,162,30,71,2,2
+dd916779,"[ci] Fix release branch wildcard for GH actions (#2441)","2021-01-30 07:23:59 +1300",0.21.6,JuMP,610,209,104,30,162,30,71,1,3
+c0da6a5e,"Generalize ConstraintRef Model type (#2436)","2021-01-29 15:43:20 -0300",0.21.6,JuMP,610,212,101,30,162,30,71,1,3
+a171d750,"Refactor examples into subdirectories (#2445)","2021-02-04 06:11:57 +1300",0.21.6,JuMP,610,212,101,30,162,30,71,2,2
+029526b9,"Migrate non-modeling tutorials from JuMPTutorials.jl (#2444)","2021-02-05 13:56:14 +1300",0.21.6,JuMP,612,214,101,30,162,30,71,1,3
+ae798155,"Update NEWS.md (#2452)","2021-02-05 13:04:01 -0800",0.21.6,JuMP,612,214,101,30,162,30,71,2,2
+e25dd204,"Fix build_variable docstrings in sd.jl (#2450)","2021-02-06 21:10:36 +1300",0.21.6,JuMP,612,214,101,30,162,30,71,1,3
+1e7cc25f,"[docs] Tweak wording of multiple results documentation (#2454)","2021-02-08 12:41:32 +1300",0.21.6,JuMP,612,214,101,30,162,30,71,2,2
+0205c989,"[docs] Update done items on roadmap (#2453)","2021-02-09 16:25:14 +1300",0.21.6,JuMP,612,214,101,30,162,30,71,1,3
+62400908,"Update installation.md (#2456)","2021-02-10 16:15:26 -0500",0.21.6,JuMP,612,214,101,30,162,30,71,2,2
+e9c3b514,"Implement coefficient for expressions (#2442)","2021-02-11 19:38:07 +0000",0.21.6,JuMP,618,216,101,30,162,30,75,2,2
+1669dfa6,"[docs] Add Highs to install guide (#2458)","2021-02-12 14:30:47 +1300",0.21.6,JuMP,618,216,101,30,162,30,75,1,3
+ced0fe87,"Fix printing in IJuliaMode (#2447)","2021-02-13 13:41:37 +1300",0.21.6,JuMP,620,218,101,30,162,30,75,2,2
+c432f668,"Add nice fallback for build_variable (#2451)","2021-02-13 13:42:06 +1300",0.21.6,JuMP,622,218,101,30,162,32,75,2,2
+6bdf352d,"Support kwargs in variable macro (#2465)","2021-02-16 11:36:31 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,2,2
+b16098a7,"Special case deg2rad and rad2deg in 2nd_deriv (#2462)","2021-02-16 12:52:32 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,1,3
+0d1d17d6,"Revise tutorial Getting started with Julia (#2459)","2021-02-16 12:53:08 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,2,2
+0ab4a4c8,"Add missing docstrings in sd.jl (#2473)","2021-02-16 21:14:45 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,1,3
+5f73bcf2,"[docs] Refactor the problem modification tutorial into existing docs (#2469)","2021-02-17 15:15:43 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,2,2
+c8358ecb,"Refactor the NLP documentation (#2470)","2021-02-17 15:16:39 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,1,3
+ade0f225,"Rewrite the Model documentation (#2478)","2021-02-18 11:59:05 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,2,2
+78620605,"Delete nonlinear_modelling tutorial (#2479)","2021-02-18 14:43:02 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,1,3
+a23984b6,"Restructure API Reference material (#2480)","2021-02-19 08:28:34 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,0,4
+9daea7da,"Add missing docstrings in JuMP.jl (#2471)","2021-02-19 11:03:02 +1300",0.21.6,JuMP,623,218,101,30,163,32,75,1,3
+4a0aadbf,"Allow AbstractVector in VectorConstraints (#2464)","2021-02-20 08:35:01 +1300",0.21.6,JuMP,623,219,100,30,163,32,75,2,2
+9ed1ca9d,"Increase the visibility of the community forum (#2490)","2021-02-21 09:40:32 +1300",0.21.6,JuMP,623,219,100,30,163,32,75,1,3
+2f9e9051,"Tidy various docstrings (#2481)","2021-02-21 11:46:04 +1300",0.21.6,JuMP,623,219,100,30,163,32,75,0,4
+28d93cc8,"Add better error message when index is same as model (#2486)","2021-02-21 17:07:46 +1300",0.21.6,JuMP,623,219,100,30,163,32,75,1,3
+16426d9a,"Merge example and tutorial directories. (#2493)","2021-02-22 10:12:36 +1300",0.21.6,JuMP,623,219,100,30,163,32,75,2,2
+51b2a912,"Allow filtering constraints when copying a JuMP model. (#2339)","2021-02-22 01:49:31 +0100",0.21.6,JuMP,628,222,100,30,164,32,76,1,3
+684aed0b,"Add sandbox for doc includes (#2498)","2021-02-23 11:10:24 +1300",0.21.6,JuMP,628,222,100,30,164,32,76,2,2
+269f1bdf,"Update power_systems.jl (#2501)","2021-02-23 12:21:57 +1300",0.21.6,JuMP,628,222,100,30,164,32,76,0,4
+00725d2f,"Clarify the difference between variables and parameters (#2502)","2021-02-23 13:31:23 +1300",0.21.6,JuMP,628,222,100,30,164,32,76,2,2
+2792fab2,"Add space shuttle reentry tutorial (#2496)","2021-02-23 23:51:37 +0000",0.21.6,JuMP,628,222,100,30,164,32,76,1,3
+3ba8d435,"Register NLparameters and pretty print them (#2516)","2021-03-06 17:35:17 -0800",0.21.6,JuMP,628,222,100,30,164,32,76,2,2
+54c8b58c,"[docs] Fix typo in callbacks (#2519)","2021-03-09 19:52:20 +1300",0.21.6,JuMP,628,222,100,30,164,32,76,1,3
+994d16bb,"Faster deletion of bounds in fix (#2521)","2021-03-09 20:21:48 +0100",0.21.6,JuMP,628,222,100,30,164,32,76,2,2
+8b130326,"Add `solution_summary` function (#2512)","2021-03-16 12:16:45 +0900",0.21.6,JuMP,638,227,100,30,169,32,76,0,4
+f6be919e,"Formatting: format and add CI action (#2511)","2021-03-18 09:43:30 +1300",0.21.6,JuMP,638,227,100,30,169,32,76,2,2
+9b90b914,"Add a feasibility checker. (#2466)","2021-03-22 15:35:35 +1300",0.21.6,JuMP,659,233,100,30,171,32,89,1,3
+319da3ac,"Add precompilation directives (#2484)","2021-03-22 17:34:08 +1300",0.21.6,JuMP,660,234,100,30,171,32,89,1,3
+51c2be62,"Allow slicing of DenseAxisArray (#2524)","2021-03-23 10:32:55 +1300",0.21.6,JuMP,660,234,100,30,171,32,89,0,4
+e69b855e,"[docs] Add performance tips (#2530)","2021-03-23 16:13:41 +1300",0.21.6,JuMP,660,234,100,30,171,32,89,2,2
+64b290a8,"Refactor MIP tips and tricks (#2531)","2021-03-23 16:22:49 +1300",0.21.6,JuMP,660,234,100,30,171,32,89,0,4
+795fd250,"[docs] refactor conic tips and tricks (#2532)","2021-03-23 17:22:21 +1300",0.21.6,JuMP,660,234,100,30,171,32,89,1,3
+31c52c67,"Expand norm() error message (#2534)","2021-03-24 07:37:16 +1300",0.21.6,JuMP,660,234,100,30,171,32,89,2,2
+d99f2bb8,"Refactor printing to reduce content printed in IJulia mode (#2449)","2021-03-26 10:24:48 +1300",0.21.6,JuMP,664,235,103,30,171,32,89,2,2
+287a5ba4,"[ci skip] update NEWS (#2538)","2021-03-26 12:23:07 +1300",0.21.6,JuMP,664,235,103,30,171,32,89,1,3
+c084ea43,"Improve error message and add warning when re-registering a function (#2543)","2021-03-28 14:01:31 +1300",0.21.6,JuMP,664,235,103,30,171,32,89,2,2
+236b0534,"SCIP.jl installation type change (#2545)","2021-03-28 00:21:21 -0400",0.21.6,JuMP,664,235,103,30,171,32,89,1,3
+93bdd0b7,"Add more docstrings (#2547)","2021-03-31 12:29:11 +1300",0.21.6,JuMP,664,235,103,30,171,32,89,2,2
+d9588b47,"[docs] begin JuMP extensions (#2549)","2021-03-31 16:13:13 +1300",0.21.6,JuMP,664,235,103,30,171,32,89,1,3
+54c3c2c5,"Add set_start_value(x, ::Nothing) (#2551)","2021-03-31 16:46:24 +1300",0.21.6,JuMP,665,236,103,30,171,32,89,0,4
+ff182a7a,"Auto-register nonlinear functions (#2537)","2021-04-05 10:16:29 +1200",0.21.6,JuMP,666,236,103,30,172,32,89,2,2
+f1d41eb8,"Support broadcasting over multiple DenseAxisArrays (#2533)","2021-04-06 08:34:41 +1200",0.21.6,JuMP,666,236,103,30,172,32,89,1,3
+41e4bf0a,"Remove un-used code (#2546)","2021-04-07 07:26:41 +1200",0.21.6,JuMP,666,236,103,30,172,32,89,2,2
+45ce630b,"Various spell check corrections (#2555)","2021-04-11 10:55:41 +0200",0.21.6,JuMP,666,236,103,30,172,32,89,1,3
+67aaf56e,"fix a typo in subexpressions.jl (#2557)","2021-04-12 03:50:17 +0800",0.21.6,JuMP,666,236,103,30,172,32,89,2,2
+2baec4c6,"[ci skip] update news with link to tag notes","2021-04-12 20:28:37 +1200",0.21.7,JuMP,666,236,103,30,172,32,89,1,3
+d9cd5fb1,"Improve types of empty SparseAxisArrays (#2553)","2021-04-16 09:07:10 +1200",0.21.7,JuMP,666,236,103,30,172,32,89,2,2
+e2b6ee95,"Allow AffExpr and QuadExpr in NL expressions (#2559)","2021-04-18 09:16:44 +1200",0.21.7,JuMP,666,236,103,30,172,32,89,1,3
+801c03fe,"Fix handling of nonbasic free variables in lp_sensitivity_report (#2562)","2021-04-21 08:28:35 +1200",0.21.7,JuMP,666,236,103,30,172,32,89,2,2
+35fd771c,"Fix doctests for MOI 0.9.21 (#2575)","2021-04-25 13:19:00 +1200",0.21.7,JuMP,666,236,103,30,172,32,89,1,3
+9d4a3791,"Added ∈ for @variable (#2576)","2021-04-28 16:57:13 -0500",0.21.7,JuMP,666,236,103,30,172,32,89,2,2
+0aa6ad1b,"[docs] remove solver-specific notes (#2578)","2021-04-30 09:07:01 +1200",0.21.7,JuMP,666,236,103,30,172,32,89,1,3
+78ca5da3,"Enhance extendibility of constraint macros (#2574)","2021-05-03 16:29:07 -0500",0.21.7,JuMP,668,236,103,30,174,32,89,1,3
+80626541,"Allow overloading of container types (#2570)","2021-05-12 11:32:23 +1200",0.21.8,JuMP,668,236,103,30,174,32,89,2,2
+56b8dd85,"Update status reporting in rocket notebook (#2597)","2021-05-16 17:53:58 -0400",0.21.8,JuMP,668,236,103,30,174,32,89,1,3
+14d5665e,"Add support for Containers in VectorConstraints (#2590)","2021-05-16 14:54:13 -0700",0.21.8,JuMP,668,236,103,30,174,32,89,2,2
+653b25b0,"Add support for is_valid for nonlinear constraints (#2592)","2021-05-16 17:54:42 -0400",0.21.8,JuMP,669,237,103,30,174,32,89,1,3
+9d1089a9,"Add unsafe_backend (#2572)","2021-05-17 11:28:57 +1200",0.21.8,JuMP,673,237,106,31,174,32,89,1,3
+41ebc5fd,"Generalize build_variable for Variable(s)ConstrainedOnCreation (#2595)","2021-05-17 14:17:12 -0500",0.21.8,JuMP,673,238,105,31,174,32,89,2,2
+3a1ac1b3,"Mention latency in performance tips (#2603)","2021-05-18 13:25:02 +1200",0.21.8,JuMP,673,238,105,31,174,32,89,1,3
+9b3f2ad6,"Fix inference in add_constraint (#2612)","2021-05-25 14:14:37 +1200",0.21.8,JuMP,673,238,105,31,174,32,89,2,2
+5bdec266,"OptimizerWithAttributes direct model constructor (#2614)","2021-05-27 15:24:30 -0700",0.21.8,JuMP,674,239,105,31,174,32,89,1,3
+b3687f39,"Rename backend variables to moi_backend (#2616)","2021-05-28 11:32:44 +1200",0.21.8,JuMP,674,239,105,31,174,32,89,0,4
+972b97cf,"Fix typo in power systems example (#2617)","2021-05-30 21:10:10 -0400",0.21.8,JuMP,674,239,105,31,174,32,89,1,3
+9f02be85,"Add Pluralization of @NLparameters (#2593) (#2619)","2021-06-01 09:14:50 +0530",0.21.8,JuMP,675,239,105,31,175,32,89,2,2
+570e48fa,"Update the JuMP logo to match modern Julia (#2584)","2021-06-04 09:35:57 +1200",0.21.8,JuMP,675,239,105,31,175,32,89,1,3
+cde8bb54,"Fix map for DenseAxisArray with OneTo axes (#2621)","2021-06-07 21:59:38 -0400",0.21.8,JuMP,675,239,105,31,175,32,89,2,2
+2ff880d4,"Fix logo link in README (#2625)","2021-06-14 10:12:13 +1200",0.21.8,JuMP,675,239,105,31,175,32,89,0,4
+9c4dbfd8,"Fix printing on v.17 (#2626)","2021-06-17 10:07:52 +1200",0.21.8,JuMP,675,239,105,31,175,32,89,2,2
+2649184f,"Update printing of SparseAxisArray (#2630)","2021-06-19 11:38:44 +1200",0.21.8,JuMP,675,239,105,31,175,32,89,1,3
+2871a06c,"Update to documenter 0.27 (#2632)","2021-06-21 11:02:27 +1200",0.21.8,JuMP,675,239,105,31,175,32,89,2,2
+6901e8f9,"[docs] suggest fix over a new constraint (#2645)","2021-07-13 11:01:13 +1200",0.21.8,JuMP,675,239,105,31,175,32,89,1,3
+098bd911,"Missing parenthesis in docs. (#2652)","2021-07-28 15:28:51 +0200",0.21.8,JuMP,675,239,105,31,175,32,89,2,2
+2a87c294,"[docs] add example of how to evaluate objective function at a point (#2650)","2021-08-04 16:12:11 +1000",0.21.9,JuMP,675,239,105,31,175,32,89,1,3
+946a6d19,"Add facility location tutorial (#2658)","2021-08-09 01:49:55 -0300",0.21.9,JuMP,675,239,105,31,175,32,89,2,2
+f0f351e7,"Format /docs folder (#2660)","2021-08-09 18:29:01 +1200",0.21.9,JuMP,675,239,105,31,175,32,89,0,4
+7aeec3fb,"Add _get_try and fallbacks for some elements of solution summary (#2661)","2021-08-11 18:31:56 +0900",0.21.9,JuMP,675,239,105,31,175,32,89,1,3
+94c99101,"Add a fallback for getting constraint basis status in `lp_sensitivity_report` (#2664)","2021-08-13 05:16:13 +0900",0.21.9,JuMP,676,239,105,31,176,32,89,2,2
+36933b6b,"[docs] Some solvers do not support start values (#2667)","2021-08-19 16:25:45 +1200",0.21.9,JuMP,676,239,105,31,176,32,89,1,3
+0975852b,"Fix bug in relax_integrality (#2666)","2021-08-20 12:05:22 +1200",0.21.9,JuMP,676,237,105,33,176,32,89,2,2
+9a29c1be,"README improvements (#2668)","2021-08-20 21:25:27 -0300",0.21.9,JuMP,676,237,105,33,176,32,89,1,3
+5a739673,"Update readme - follow rename on Dircourse post (#2669)","2021-08-21 20:29:53 -0300",0.21.9,JuMP,676,237,105,33,176,32,89,2,2
+2e23b5e2,"Improved Raw Expression NLP API (#2672)","2021-08-24 17:53:07 -0500",0.21.9,JuMP,677,237,105,33,177,32,89,1,3
+66295bb3,"Attempt to fix formatting CI (#2674)","2021-08-25 13:55:06 +1200",0.21.9,JuMP,677,237,105,33,177,32,89,2,2
+c9e7a894,"Prep for 0.21.10 (#2681)","2021-09-05 15:01:44 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,1,3
+9c8040f8,"Add MadNLP.jl to suppported solvers (#2684)","2021-09-16 16:35:40 -0700",0.21.10,JuMP,677,237,105,33,177,32,89,2,2
+f9bee2af,"Style guide: `using Foo: Foo` is an acceptable substitute for `import Foo` (#2682)","2021-09-16 22:22:00 -0400",0.21.10,JuMP,677,237,105,33,177,32,89,0,4
+bc7af42c,"[docs] Clarify callback gotchas (#2688)","2021-09-18 12:28:01 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,2,2
+f8a58c67,"Fix performance of show on SparseAxisArray (#2686)","2021-09-18 12:28:31 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,1,3
+e82545d1,"[Containers] add Array constructor for DenseAxisArray (#2689)","2021-09-18 13:40:26 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,2,2
+67d497b5,"Make NonlinearExpression <: AbstractJuMPScalar (#2690)","2021-09-18 13:40:41 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,1,3
+00f682da,"Move release notes to documentation (#2691)","2021-09-19 16:14:14 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,2,2
+c9e57cf9,"[docs] update build to Julia 1.6 (#2693)","2021-09-20 14:32:17 +1200",0.21.10,JuMP,677,237,105,33,177,32,89,1,3
+916d4583,"[breaking] remove deprecated LP sensitivity (#2694)","2021-09-21 12:09:52 +1200",0.21.10,JuMP,667,233,103,31,177,32,87,1,3
+41c7b43b,"[breaking] update to MOI v0.10 (#2695)","2021-09-23 09:47:06 +1200",0.22.0,JuMP,672,236,101,31,180,32,87,1,4
+3ebf94d9,"Improve error message of unsupported constraints (#2685)","2021-09-23 09:56:53 +1200",0.22.0,JuMP,672,236,101,31,180,32,88,2,2
+85f706d5,"[docs] Fix invalid local links (#2700)","2021-09-23 11:31:44 +1200",0.22.0,JuMP,672,236,101,31,180,32,88,1,3
+14194b37,"[breaking] rename .m field of some structs to .model (#2699)","2021-09-23 11:31:57 +1200",0.22.0,JuMP,672,236,101,31,180,32,88,0,4
+7037d5b8,"Fix bug broadcasting constraints with sparse terms (#2558)","2021-09-23 11:34:34 +1200",0.22.0,JuMP,674,236,102,31,181,32,88,2,2
+64b5d923,"[breaking] Ignore infinite variable bounds (#2618)","2021-09-23 11:36:06 +1200",0.22.0,JuMP,676,236,103,31,182,32,88,2,2
+891e087a,"[breaking] remove variable_type and constraint_type (#2702)","2021-09-23 14:11:29 +1200",0.22.0,JuMP,674,234,103,31,182,32,88,2,2
+8d55185a,"Fix deprecation of VectorQuadraticFunction (#2703)","2021-09-23 14:41:28 +1200",0.22.0,JuMP,674,234,103,31,182,32,88,1,3
+a134bed7,"Warn when copying unknown extension data (#2706)","2021-09-24 10:34:07 +1200",0.22.0,JuMP,675,234,103,31,183,32,88,1,3
+118b5ac8,"[breaking] make ::Function first argument of value (#2701)","2021-09-25 12:52:01 +1200",0.22.0,JuMP,676,234,103,31,184,32,88,0,4
+a9890a4c,"Throw better error for singular macros (#2708)","2021-09-27 11:36:00 +1300",0.22.0,JuMP,676,234,103,31,184,32,88,2,2
+a608e52d,"Improve error for non-constant Interval constraints (#2712)","2021-09-28 09:16:12 +1300",0.22.0,JuMP,677,235,103,31,184,32,88,0,4
+4f0ecb44,"Add primal_feasibility_report(::Function (#2710)","2021-09-28 09:22:05 +1300",0.22.0,JuMP,679,237,103,31,184,32,88,1,3
+dae7b412,"[Containers] convert axes to AbstractVector in DenseAxisArray (#2713)","2021-09-29 10:19:26 +1300",0.22.0,JuMP,679,237,103,31,184,32,88,2,2
+e5a42586,"Do not set Name attributes if unsupported (#2704)","2021-09-29 13:40:09 +1300",0.22.0,JuMP,680,237,103,31,184,32,89,0,4
+6672515e,"Clarify documentation of build_variable (#2714)","2021-09-29 16:10:52 +1300",0.22.0,JuMP,678,237,101,31,184,32,89,1,3
+4f99d327,"[docs] Document zero and one gotchas for expressions (#2716)","2021-09-29 16:30:20 +1300",0.22.0,JuMP,678,237,101,31,184,32,89,2,2
+282756a8,"Refactor test/macros.jl into functional form (#2722)","2021-09-30 16:20:41 +1300",0.22.0,JuMP,678,237,101,31,184,32,89,1,3
+85d80bb7,"[breaking] Reset model to OPTIMIZE_NOT_CALLED if model is modified after optimize (#2709)","2021-10-01 10:08:59 +1300",0.22.0,JuMP,678,237,101,31,184,32,89,2,2
+5e519ed8,"[docs] add examples to extension documentation (#2726)","2021-10-01 15:15:05 +1300",0.22.0,JuMP,678,237,101,31,184,32,89,1,3
+a555ebe4,"[breaking] Add anonymous NLparameters and registered named parameters (#2719)","2021-10-01 16:32:05 +1300",0.22.0,JuMP,678,237,101,31,184,32,89,2,2
+28a57b20,"Improve error message for invalidly named containers (#2728)","2021-10-02 12:47:17 +1300",0.22.0,JuMP,679,237,101,31,184,33,89,2,2
+28a06633,"Add vector of scalar variables with `in` syntax (#2657)","2021-10-01 21:31:18 -0300",0.22.0,JuMP,683,240,102,31,184,33,89,2,2
+aca8d910,"[breaking] Make moi_xxx functions private (#2731)","2021-10-04 18:25:44 +1300",0.22.0,JuMP,683,240,102,31,184,33,89,1,3
+742f0e5f,"[breaking] Deprecate SDconstraint and add new syntax for PSDCone constraints (#2732)","2021-10-05 11:16:57 +1300",0.22.0,JuMP,686,243,102,31,184,33,89,2,2
+887761b2,"Add set inequality syntax for any set (#2733)","2021-10-08 09:51:21 +1300",0.22.0,JuMP,688,245,102,31,184,33,89,0,4
+f4af44de,"Update tips_and_tricks.jl (#2737)","2021-10-07 14:29:14 -0700",0.22.0,JuMP,688,245,102,31,184,33,89,2,2
+b1866a40,"[docs] Improve documentation for name and set_name (#2738)","2021-10-08 14:48:54 +1300",0.22.0,JuMP,688,245,102,31,184,33,89,1,3
+4e56e9c4,"Set names for anonymous constraints (#2739)","2021-10-11 10:54:43 +1300",0.22.0,JuMP,688,245,102,31,184,33,89,2,2
+6a790f86,"Don't return MA.Zero from expressions (#2734)","2021-10-11 11:14:35 +1300",0.22.0,JuMP,689,245,102,31,185,33,89,2,2
+cae3b09d,"Warn if DenseAxisArray is passed Number as axis (#2730)","2021-10-11 12:30:50 +1300",0.22.0,JuMP,689,245,102,31,185,33,89,1,3
+7d58b7f6,"[docs] move contributing guide to docs and expand (#2743)","2021-10-12 10:43:51 +1300",0.22.0,JuMP,689,245,102,31,185,33,89,2,2
+ce402d6a,"[docs] better clarify variable bound on LHS error (#2747)","2021-10-12 13:40:44 +1300",0.22.0,JuMP,689,245,102,31,185,33,89,0,4
+55af1eec,"Style improvements to aff_expr.jl (#2749)","2021-10-12 16:34:07 +1300",0.22.0,JuMP,689,245,102,31,185,33,89,1,3
+5afb189a,"[Containers] document nested and vectorized_product (#2751)","2021-10-13 11:16:29 +1300",0.22.0,JuMP,689,245,102,31,185,33,89,2,2
+86da6f34,"[breaking] refactor the parse_constraint methods (#2736)","2021-10-13 11:17:18 +1300",0.22.0,JuMP,684,244,102,31,180,32,91,1,3
+32113417,"Fix incorrect auto register of splats (#2753)","2021-10-14 09:26:20 +1300",0.22.0,JuMP,684,244,102,31,180,32,91,2,2
+a483a44b,"Fix TODO items in print.jl (#2752)","2021-10-14 09:28:40 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,1,3
+4b3ff0ae,"Relax type restriction in _parse_ref_sets (#2754)","2021-10-14 10:01:31 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+a157e4c8,"Improve docstring links for xxx_status (#2765)","2021-10-20 16:14:45 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,0,4
+88326879,"Add release notes for 0.22 (#2764)","2021-10-21 10:01:07 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+7a7d3bda,"[Containers] make Array copy the data (#2768)","2021-10-22 11:15:59 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,0,4
+59168194,"[docs] tweak intro docs and expand installation (#2772)","2021-10-22 14:34:11 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+d19ba420,"[docs] Use local image for space shuttle example (#2771)","2021-10-22 16:48:13 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,1,3
+388d7804,"[docs] revise diet tutorial (#2775)","2021-10-26 08:45:02 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+91b83efc,"[docs] revise cannery tutorial (#2776)","2021-10-26 10:06:57 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,0,4
+3fc267cc,"[docs] add sets and indexing tutorial (#2778)","2021-10-27 08:17:08 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,1,3
+f27b23d0,"[docs] fix admonition in callbacks.md (#2781)","2021-10-27 17:31:27 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+37eac588,"Export Result and Termination status codes (#2782)","2021-11-01 10:40:49 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,0,4
+95c9c5a2,"[docs] Clarify MOI symbol imports (#2787)","2021-11-03 11:13:17 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+1deb2008,"Update release_notes.md (#2789)","2021-11-03 11:45:16 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,1,3
+11cab855,"Temporarily limit DiffRules.jl compat (#2792)","2021-11-05 22:07:21 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,0,4
+fb173eac,"[docs] General edit for common tics (#2791)","2021-11-06 12:19:44 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+37ca6a43,"Revert PR2792 (#2795)","2021-11-10 14:35:04 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,1,3
+744888cd,"Prep for v0.22 release (#2790)","2021-11-10 15:27:18 +1300",0.22.0,JuMP,686,244,101,34,180,32,91,2,2
+4cb82ba6,"Fix bug in containers with tuple indices (#2800)","2021-11-13 11:25:23 +1300",0.22.1,JuMP,686,244,101,34,180,32,91,1,3
+f4e4970c,"[docs] rewrite manual/constraints.md (#2802)","2021-11-16 08:21:49 +1300",0.22.1,JuMP,686,244,101,34,180,32,91,2,2
+646b6a95,"[docs] tidy and extend page on AMLs (#2804)","2021-11-17 09:33:45 +1300",0.22.1,JuMP,686,244,101,34,180,32,91,1,3
+284d28a8,"Fix bug in set_time_limit_sec (#2806)","2021-11-19 11:49:22 +1300",0.22.1,JuMP,687,245,101,35,179,32,91,2,2
+ded93474,"Export OptimizationSense enum from MOI (#2808)","2021-11-19 12:21:32 +1300",0.22.1,JuMP,687,245,101,35,179,32,91,0,4
+fea6787c,"Add Base.isempty(::Model) (#2811)","2021-11-23 21:14:53 +0100",0.22.1,JuMP,687,245,101,35,179,32,91,2,2
+a6d0e242,"[docs] add design patterns tutorial (#2812)","2021-11-29 08:54:55 +1300",0.22.1,JuMP,687,245,101,35,179,32,91,1,3
+f654f2ab,"Refactor print.jl with no visible changes* (#2820)","2021-12-08 21:05:29 +1300",0.22.1,JuMP,687,245,103,35,177,32,91,1,3
+89e5cedc,"[docs] explain how to use Preferences.jl for custom binaries (#2824)","2021-12-10 12:26:30 +1300",0.22.1,JuMP,687,245,103,35,177,32,91,2,2
+59752794,"Rename printing of anonymous JuMP variables (#2822)","2021-12-14 11:41:04 +1300",0.22.1,JuMP,690,247,103,35,178,32,91,2,2
+20b61fb0,"[docs] add copy_extension_data in extensions.md (#2830)","2021-12-15 14:38:41 +1300",0.22.1,JuMP,690,247,103,35,178,32,91,1,3
+e41f3bdf,"Add all_nl_constraints (#2831)","2021-12-18 16:47:51 +1300",0.22.1,JuMP,691,247,103,36,178,32,91,1,3
+b7c97da3,"Fix min and max in NLP expressions (#2842)","2022-01-04 12:41:32 +1300",0.22.1,JuMP,691,247,103,36,178,32,91,2,2
+f6926249,"[docs] Update docs to MOI v0.10.6 (#2846)","2022-01-05 20:57:34 +1300",0.22.1,JuMP,691,247,103,36,178,32,91,1,3
+07511a35,"[docs] Add a tutorial on querying the Hessian of a NLP (#2832)","2022-01-06 10:43:47 +1300",0.22.1,JuMP,691,247,103,36,178,32,91,2,2
+e9257a52,"Add start value for constraints (#2847)","2022-01-09 16:02:21 +1300",0.22.1,JuMP,695,248,104,36,180,32,91,1,3
+b6db00a1,"Pluralized macros return tuples (#2844)","2022-01-09 04:03:34 +0100",0.22.1,JuMP,696,248,104,36,181,32,91,1,3
+f6ff02d0,"[docs] bump MathOptInterface to v0.10.7 (#2848)","2022-01-09 17:10:25 +1300",0.22.1,JuMP,696,248,104,36,181,32,91,2,2
+f63cdaa8,"Prep for v0.22.2 (#2849)","2022-01-11 08:34:34 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,1,3
+1d5d8efd,"[docs] Add introduction sections to tutorials (#2850)","2022-01-11 11:53:51 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,2,2
+5970e5d0,"[docs] update cutting stock algorithm (#2851)","2022-01-12 11:01:49 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,0,4
+3213b1a0,"[docs] fix start value in max_cut_sdp (#2857)","2022-01-24 13:23:12 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,2,2
+0017185f,"[docs] Update Benders decomposition algorithm (#2853)","2022-02-01 15:20:05 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,1,3
+2998920f,"Add warning and improve docs for modify-then-query (#2858)","2022-02-04 09:14:51 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,0,4
+048ae12a,"[docs] update to MOI v0.10.8 and bump SCS (#2860)","2022-02-04 12:08:10 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,2,2
+4db346f4,"Add Aqua.jl as a CI job (#2866)","2022-02-09 11:55:46 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,1,3
+5a82665c,"[Containers] fix broadcasting over empty SparseAxisArray (#2868)","2022-02-10 16:08:52 +1300",0.22.2,JuMP,696,248,104,36,181,32,91,2,2
+538213fd,"Prep for v0.22.3 (#2869)","2022-02-10 16:36:03 +1300",0.22.3,JuMP,696,248,104,36,181,32,91,1,3
+03f871f7,"[docs] fix typo in design patterns tutorial (#2870)","2022-02-14 16:03:27 +1300",0.22.3,JuMP,696,248,104,36,181,32,91,2,2
+b701f0f7,"[docs] add CasADi to Should I use JuMP? (#2872)","2022-02-21 10:34:15 +1300",0.22.3,JuMP,696,248,104,36,181,32,91,1,3
+a5158741,"[breaking] remove deprecated functionality (#2877)","2022-02-21 13:08:43 +1300",0.22.3,JuMP,665,243,105,37,172,11,93,1,3
+2670540c,"[breaking] update to MOI 1.0 and drop Julia 1.0 support (#2876)","2022-02-21 13:42:28 +1300",1.0.0-DEV,JuMP,665,243,104,37,172,11,93,1,4
+1f20e038,"Fix bug in solution summary (#2880)","2022-02-21 14:57:01 +1300",1.0.0-DEV,JuMP,665,243,104,37,172,11,93,2,3
+1e0b6ee8,"Add nl_dual_start_value (#2879)","2022-02-22 14:33:22 +1300",1.0.0-DEV,JuMP,668,245,104,38,172,11,93,2,3
+1d70e4e0,"[breaking] rename nl_ functions to nonlinear_ (#2885)","2022-02-23 11:02:17 +1300",1.0.0-DEV,JuMP,673,250,104,38,172,11,93,2,3
+c66b5b20,"[breaking] remove PrintMode instead of explicit MIME types (#2874)","2022-02-23 11:13:21 +1300",1.0.0-DEV,JuMP,673,252,113,37,162,11,93,2,3
+e7ffb7c0,"Preliminary support for complex numbers (#2391)","2022-02-22 18:48:07 -0500",1.0.0-DEV,JuMP,683,252,118,37,164,11,93,3,5
+bb85e308,"[breaking] rename SymMatrixSpace to SymmetricMatrixSpace (#2889)","2022-02-24 08:42:15 +1300",1.0.0-DEV,JuMP,684,253,118,37,164,11,93,1,7
+11d35274,"[docs] clarify return type of SkewSymmetricMatrixSpace (#2888)","2022-02-24 08:42:39 +1300",1.0.0-DEV,JuMP,684,253,118,37,164,11,93,3,5
+aa697a06,"Fix addition/substraction between variable and complex number (#2890)","2022-02-23 16:39:55 -0500",1.0.0-DEV,JuMP,684,253,118,37,164,11,93,1,7
+9b4847a7,"Prep for v0.23 (#2891)","2022-02-25 13:13:32 +1300",0.23.0,JuMP,684,253,118,37,164,11,93,2,6
+88e92480,"Add complex and real affine expressions (#2895)","2022-02-27 19:37:23 -0500",0.23.0,JuMP,686,253,118,37,164,11,95,2,6
+0b2a7536,"Fix printing of im coefficient (#2897)","2022-02-27 22:06:45 -0500",0.23.0,JuMP,687,253,119,37,164,11,95,2,6
+4d98219b,"Deprecate nl_expr_string and nl_constraint_string (#2893)","2022-03-01 10:31:42 +1300",0.23.0,JuMP,689,253,119,37,164,13,95,3,5
+f87f0e3e,"Fix solution_summary with empty model (#2900)","2022-03-01 14:23:33 +1300",0.23.0,JuMP,690,253,119,37,165,13,95,2,6
+f158ea9b,"Fix jump_function with Complex coefficients (#2901)","2022-03-01 09:56:07 -0500",0.23.0,JuMP,690,253,119,37,165,13,95,3,5
+24a34415,"Fix conj and implement real/imag (#2899)","2022-03-01 09:56:30 -0500",0.23.0,JuMP,693,253,119,37,165,13,98,2,6
+693cb983,"Add Base.abs2 support for variables and expressions (#2904)","2022-03-01 13:54:06 -0500",0.23.0,JuMP,693,253,119,37,165,13,98,1,7
+a8488a21,"Fixes for arithmetic with complex quadratic (#2903)","2022-03-01 15:40:30 -0500",0.23.0,JuMP,697,253,121,37,165,13,100,2,6
+1d30b641,"Prep for v0.23.1 (#2902)","2022-03-02 10:58:36 +1300",0.23.1,JuMP,697,253,121,37,165,13,100,1,7
+c6a2f012,"[docs] Fix SCS compat (#2912)","2022-03-10 08:08:21 +1300",0.23.1,JuMP,697,253,121,37,165,13,100,3,5
+d8763fd7,"Check assumptions when registering a function (#2911)","2022-03-10 21:46:51 +1300",0.23.1,JuMP,698,254,121,37,165,13,100,3,5
+29d6758e,"Fix scoping issue in user-defined Containers (#2916)","2022-03-14 10:06:07 +1300",0.23.1,JuMP,698,254,121,37,165,13,100,2,6
+3446496d,"Convert test/nlp.jl to functional form (#2922)","2022-03-14 12:16:31 +1300",0.23.1,JuMP,698,254,121,37,165,13,100,3,5
+3c3755f4,"[docs] re-add MAX-CUT rounding (#2915)","2022-03-14 14:48:36 -0400",0.23.1,JuMP,699,254,121,37,165,13,101,3,5
+8c925d1e,"Add checked autodiff for user-defined functions (#2917)","2022-03-15 10:02:31 +1300",0.23.1,JuMP,703,254,121,37,167,13,103,3,5
+7fbac648,"[docs] Add script to reproduce logos (#2924)","2022-03-15 12:08:26 +1300",0.23.1,JuMP,703,254,121,37,167,13,103,2,6
+e5efa010,"Add Penbmi in solver list (#2926)","2022-03-16 21:59:50 -0400",0.23.2,JuMP,703,254,121,37,167,13,103,3,5
+d719b923,"Fix write_to_file of NL files and bump MOI to v1.1.1 (#2932)","2022-03-24 13:24:52 +1300",0.23.2,JuMP,704,255,121,37,167,13,103,2,6
+d7f3e15f,"Prep for v1.0 release (#2925)","2022-03-25 07:09:12 +1300",1.0.0,JuMP,696,249,121,37,167,11,103,1,7
+855e7235,"Refactor some tests into functional form (#2934)","2022-03-28 10:51:05 +1300",1.0.0,JuMP,696,249,121,37,167,11,103,3,5
+8ecd560d,"Add num_constraints for counting all constraints in a model (#2936)","2022-03-31 21:55:56 +1300",1.0.0,JuMP,698,250,121,38,167,11,103,3,5
+f1485b63,"[docs] remove superfluous word (#2946)","2022-04-11 21:30:19 +0200",1.0.0,JuMP,698,250,121,38,167,11,103,2,6
+60a5bb0e,"[docs] Convert minimal ellipse tutorial to sections (#2950)","2022-04-13 08:17:03 +1000",1.0.0,JuMP,698,250,121,38,167,11,103,3,5
+32f19596,"Add docs badges to main README (#2952)","2022-04-13 16:58:01 +1000",1.0.0,JuMP,698,250,121,38,167,11,103,2,6
+1b61832f,"Change ""a"" to ""an"" (#2954)","2022-04-16 10:52:55 -0400",1.0.0,JuMP,698,250,121,38,167,11,103,3,5
+3ddee2fd,"Fix passing kwargs to file formats (#2959)","2022-04-22 14:24:32 +1200",1.0.0,JuMP,698,246,125,38,167,11,103,2,6
+4e3c5db0,"[docs] Add RAPOSa solver to the list of solvers (#2962)","2022-04-27 01:03:24 +0200",1.0.0,JuMP,698,246,125,38,167,11,103,3,5
+7999adec,"[docs] clarify primal_feasibility_report for infeasible models (#2964)","2022-04-27 12:29:33 +1200",1.0.0,JuMP,698,246,125,38,167,11,103,2,6
+86e9b018,"[docs] expand example of PackageCompiler.jl (#2965)","2022-04-28 17:28:53 +1200",1.0.0,JuMP,698,246,125,38,167,11,103,1,7
+93cfdf1f,"[docs] add tutorial on LP sensitivity analysis (#2967)","2022-04-29 09:37:41 +1200",1.0.0,JuMP,698,246,125,38,167,11,103,2,6
+73d8b24e,"[docs] discuss for loop in constraint containers (#2969)","2022-04-29 12:34:31 +1200",1.0.0,JuMP,698,246,125,38,167,11,103,3,5
+249d9693,"[docs] clarify modify-then-query in direct mode (#2972)","2022-05-06 08:38:31 +1200",1.0.0,JuMP,698,246,125,38,167,11,103,2,6
+a72e61a2,"Improve error message in write_to_file (#2976)","2022-05-10 10:34:06 +1200",1.0.0,JuMP,701,246,125,38,168,11,105,2,6
+9ea1df38,"Update release_notes.md with explicit info (#2980)","2022-05-11 21:04:56 -0600",1.0.0,JuMP,701,246,125,38,168,11,105,3,5
+f233dd11,"[docs] document set_optimize_hook in extensions (#2982)","2022-05-14 15:42:23 +1200",1.0.0,JuMP,701,246,125,38,168,11,105,2,6
+29c02b74,"Add set_normalized_coefficients (#2968)","2022-05-20 08:26:45 +1200",1.0.0,JuMP,702,246,125,38,168,11,106,3,5
+890b4308,"Add set_string_names_on_creation (#2978)","2022-05-24 12:59:09 +1200",1.0.0,JuMP,705,249,125,38,168,11,106,3,5
+a5eff37a,"Prep for v1.1.0 (#2989)","2022-05-26 08:40:44 +1200",1.1.0,JuMP,705,249,125,38,168,11,106,2,6
+dc4a786c,"[docs] update to MOI v1.3.0 (#2996)","2022-05-28 10:50:37 +1200",1.1.0,JuMP,705,249,125,38,168,11,106,1,7
+124ba754,"Use MathJax to render formula in doc (#3004)","2022-06-12 14:51:04 +0800",1.1.0,JuMP,705,249,125,38,168,11,106,3,5
+0a6b1e42,"Prep for v1.1.1 (#3005)","2022-06-14 21:35:21 +1200",1.1.1,JuMP,705,249,125,38,168,11,106,2,6
+967809e5,"[docs] add Pajarito to list of supported solvers (#3006)","2022-06-22 11:25:11 +1200",1.1.1,JuMP,705,249,125,38,168,11,106,3,5
+9890bb2b,"Add all_constraints for all constraint types (#3002)","2022-06-24 07:17:02 +1200",1.1.1,JuMP,707,251,125,38,168,11,106,3,5
+8ce8452e,"Typo fix in docstring of set_upper_bound (#3011)","2022-06-30 23:56:04 +0200",1.1.1,JuMP,707,251,125,38,168,11,106,2,6
+046d1dc7,"Refactor to use MOI.Nonlinear (#2955)","2022-07-05 10:52:08 +1200",1.1.1,JuMP,698,253,131,34,162,11,100,3,4
+fd66aea8,"Add delete for nonlinear constraints (#3013)","2022-07-05 18:58:42 +1200",1.1.1,JuMP,699,254,131,34,162,11,100,1,6
+639c5ca1,"[docs] add constraint program formulation of Sudoku (#3014)","2022-07-06 08:55:06 +1200",1.1.1,JuMP,699,254,131,34,162,11,100,2,5
+ec4a996c,"Add Clarabel to solver list (#3016)","2022-07-12 09:03:44 +0200",1.1.1,JuMP,699,254,131,34,162,11,100,3,4
+8af2d3f4,"[docs] add style guide on abstract types (#2995)","2022-07-14 09:25:43 +1200",1.1.1,JuMP,699,254,131,34,162,11,100,2,5
+88d4c1b5,"Add value for nonlinear constraints (#3020)","2022-07-16 17:11:54 +1200",1.1.1,JuMP,702,257,131,34,162,11,100,2,5
+eb69b27f,"Typo fix in tutorial: former -> latter (#3025)","2022-07-24 04:10:51 +0200",1.1.1,JuMP,702,257,131,34,162,11,100,3,4
+1844b216,"Fix link to MOI.ObjectiveSense (#3027)","2022-07-25 18:23:30 -0500",1.1.1,JuMP,702,257,131,34,162,11,100,2,5
+0e37702b,"[docs] add COPT to installation (#3030)","2022-08-02 11:01:53 +1200",1.1.1,JuMP,702,257,131,34,162,11,100,3,4
+08dae850,"Fix bug with set_string_name and VariablesConstrainedOnCreation (#3037)","2022-08-15 11:27:52 +1200",1.1.1,JuMP,704,257,131,34,164,11,100,2,5
+0d80cb60,"Fix tests for MOI v1.7.0 (#3038)","2022-08-15 12:16:23 +1200",1.1.1,JuMP,703,257,131,34,164,11,99,2,5
+22e10748,"[docs] simplify conflict documentation (#3039)","2022-08-16 09:06:24 +1200",1.1.1,JuMP,703,257,131,34,164,11,99,3,4
+64d30029,"[docs] update to MOI v1.7.0 (#3040)","2022-08-16 14:14:36 +1200",1.1.1,JuMP,703,257,131,34,164,11,99,2,5
+60938a6b,"[docs] fix release date of v1.2.0 (#3041)","2022-08-16 15:04:20 +1200",1.2.0,JuMP,703,257,131,34,164,11,99,1,6
+51d08648,"[docs] clarify singleton set confusions (#3044)","2022-08-18 16:34:30 +1200",1.2.0,JuMP,703,257,131,34,164,11,99,3,4
+f6720f91,"Fix parsing of double-sided nl constraints (#3045)","2022-08-22 11:40:10 +1200",1.2.0,JuMP,705,258,131,34,165,11,99,2,5
+95a29745,"Prep for v1.2.1 (#3046)","2022-08-22 14:22:41 +1200",1.2.1,JuMP,705,258,131,34,165,11,99,1,6
+f6b1bff9,"Add missing license headers (#3047)","2022-08-24 11:25:59 +1200",1.2.1,JuMP,705,258,131,34,165,11,99,3,4
+25e39dd9,"Improve coverage of src/nlp.jl (#3050)","2022-08-24 12:46:48 +1200",1.2.1,JuMP,705,258,131,34,165,11,99,1,6
+3759d3c4,"Remove unused methods (#3048)","2022-08-24 12:47:06 +1200",1.2.1,JuMP,702,258,128,34,165,11,99,2,5
+711cc5a9,"Improve coverage for src/print.jl (#3051)","2022-08-24 14:23:55 +1200",1.2.1,JuMP,702,258,128,34,165,11,99,3,4
+547895c4,"Improve coverage in src/macros.jl and quad_expr.jl (#3053)","2022-08-24 18:47:28 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,3,4
+4e68204a,"[docs] clarify supported exts in write_to_file (#3054)","2022-08-29 09:21:33 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,2,5
+05e51070,"[docs] add License paragraph to introduction (#3056)","2022-08-29 10:16:46 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,3,4
+f31840c7,"[Containers] add slicing for SparseAxisArray (#3031)","2022-08-29 16:19:14 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,2,5
+a3905555,"Improve coverage in optimizer_interface.jl (#3059)","2022-08-30 12:51:11 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,3,4
+f3c18e5e,"[docs] Remove literate footer in PDF (#3060)","2022-08-30 16:09:02 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,2,5
+f92ac03c,"[Containers] fix DenseAxisArray with Vector key (#3064)","2022-09-02 11:18:15 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,1,6
+59926a99,"[docs] update docs/Project.toml (#3065)","2022-09-02 11:55:46 +1200",1.2.1,JuMP,701,258,128,34,164,11,99,3,4
+b2502d01,"Prep for v1.3.0 (#3066)","2022-09-05 09:59:10 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,2,5
+ada5394b,"[docs] start a tutorial on debugging JuMP models (#3043)","2022-09-10 12:49:41 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,3,4
+6a358d19,"Fix stability of operators with Complex args (#3072)","2022-09-12 11:39:41 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,2,5
+b4b48296,"[docs] override style in PDF output (#3075)","2022-09-16 09:57:08 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,3,4
+c5b301cf,"[docs] add link to documentation PDF (#3076)","2022-09-16 12:02:22 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,1,6
+ac47aca6,"[docs] lots of minor tweaks to the tutorials after reading through the PDF (#3078)","2022-09-16 21:39:46 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,3,4
+fa3f3b36,"[docs] fix typo in getting started with Julia (#3079)","2022-09-18 00:16:47 +0300",1.3.0,JuMP,701,258,128,34,164,11,99,2,5
+72ca1372,"[docs] change Getting started with Julia to use REPL blocks (#3077)","2022-09-18 12:59:25 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,1,6
+0219941c,"[docs] remove urban_plan.jl (#3081)","2022-09-20 07:38:50 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,3,4
+6f3b4d08,"[docs] refactor the transportation problem tutorial (#3082)","2022-09-20 08:19:09 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,2,5
+3dbbfa83,"[docs] condense the simple nonlinear tutorials into a single page (#3084)","2022-09-20 11:54:39 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,3,4
+f3bfb745,"[docs] add comments and multiline strings to getting_started_with_julia (#3085)","2022-09-20 12:28:29 +1200",1.3.0,JuMP,701,258,128,34,164,11,99,2,5
+00ec3268,"Improve performance of `relax_integrality` (#3087)","2022-09-25 15:32:27 -0700",1.3.0,JuMP,701,258,128,34,164,11,99,3,4
+8939bbc9,"[docs] add Vale as a documentation linter (#3080)","2022-09-27 14:30:52 +1300",1.3.0,JuMP,701,258,128,34,164,11,99,2,5
+f5749e5a,"Fix method ambiguities in JuMP (#3092)","2022-09-28 19:16:57 +1300",1.3.0,JuMP,705,258,127,34,164,11,104,3,4
+8e67a083,"[docs] convert getting_started_with_jump into REPLs (#3095)","2022-09-29 13:29:26 +1300",1.3.1,JuMP,705,258,127,34,164,11,104,2,5
+8b774fdd,"[docs] tweak the order and content of should_i_use (#3102)","2022-10-01 16:42:49 +1300",1.3.1,JuMP,705,258,127,34,164,11,104,3,4
+1a5b487b,"Fix copy_to(::Model, src) when src is nonlinear (#3101)","2022-10-08 17:50:25 +1300",1.3.1,JuMP,709,258,127,36,166,11,104,2,5
+b4eee848,"[docs] remove incorrect statement about conflicting objectives (#3107)","2022-10-14 14:41:30 +1300",1.3.1,JuMP,709,258,127,36,166,11,104,3,4
+bcb803ed,"Fix printing of complex coefficients in expressions (#3112)","2022-10-25 08:49:10 +1300",1.3.1,JuMP,709,258,126,36,166,11,105,1,6
+d33e05ce,"Add Tables.jl support to containers (#3104)","2022-10-27 20:13:12 +0200",1.3.1,JuMP,709,258,126,36,166,11,105,2,5
+a9c6e86d,"Prep for v1.4.0 (#3117)","2022-10-29 14:16:38 +1300",1.4.0,JuMP,709,258,126,36,166,11,105,3,4
+df681a86,"[docs] update package versions (#3119)","2022-10-30 12:40:26 +1300",1.4.0,JuMP,709,258,126,36,166,11,105,2,5
+f40df431,"[docs] fix output in diet tutorial (#3120)","2022-10-30 13:24:37 +1300",1.4.0,JuMP,709,258,126,36,166,11,105,1,6
+5c85085e,"[docs] explain Dates.period in set_time_limit_sec (#3121)","2022-10-31 15:16:11 +1300",1.4.0,JuMP,709,258,126,36,166,11,105,2,5
+31fd986a,"Fix error message for vectorized interval constraints (#3123)","2022-11-02 07:31:42 +1300",1.4.0,JuMP,710,258,127,36,166,11,105,2,5
+8827a96f,"Fix optimizer_attribute with AbstractString names (#3127)","2022-11-08 13:16:30 +1300",1.4.0,JuMP,712,259,127,36,167,11,105,3,4
+67b92bc6,"Update format for JuliaFormatter v1.0.15 (#3130)","2022-11-15 20:03:51 +1300",1.4.0,JuMP,712,259,127,36,167,11,105,2,5
+2b7bdfc6,"Add HermitianPSDCone (#3109)","2022-11-17 02:53:46 +0100",1.4.0,JuMP,725,262,136,36,167,11,106,2,5
+e9692eb1,"[docs] build with Documenter#master (v0.28-DEV) (#3094)","2022-11-18 12:12:12 +1300",1.4.0,JuMP,725,262,136,36,167,11,106,3,4
+187a9586,"Add tests for LinearAlgebra wrapper operations (#3132)","2022-11-22 12:00:18 +1300",1.4.0,JuMP,725,262,136,36,167,11,106,2,5
+cbf6ffdf,"Add support for get/set of attributes in optimizer_with_attributes (#3129)","2022-11-24 10:32:25 +1300",1.4.0,JuMP,725,263,136,35,167,11,106,3,4
+a5010427,"[docs] tidy format of the release notes (#3135)","2022-11-24 19:03:45 +1300",1.4.0,JuMP,725,263,136,35,167,11,106,2,5
+d051ac08,"Add support for creation of complex variables (#3134)","2022-11-25 09:29:42 +0100",1.4.0,JuMP,728,263,139,35,167,11,106,3,4
+0878c8ff,"[docs] remove the workforce and steelT3 tutorials (#3143)","2022-12-08 08:26:31 +1300",1.4.0,JuMP,728,263,139,35,167,11,106,2,5
+9b4c8802,"Prep for v1.5.0 (#3142)","2022-12-08 09:07:02 +1300",1.5.0,JuMP,728,263,139,35,167,11,106,3,4
+11c1782f,"Convert more test files to functional form (#3146)","2022-12-08 13:33:52 +1300",1.5.0,JuMP,728,263,139,35,167,11,106,2,5
+96f34777,"[docs] clarify you can use index sets when setting the start value (#3148)","2022-12-09 12:30:11 +1300",1.5.0,JuMP,728,263,139,35,167,11,106,3,4
+d986530f,"Fix promotion and adjoint for complex expressions (#3150)","2022-12-15 04:44:01 +0100",1.5.0,JuMP,729,263,140,35,167,11,106,3,4
+8f6081b0,"Add relax_with_penalty (#3140)","2022-12-20 10:48:38 +1300",1.5.0,JuMP,733,264,142,36,167,11,106,3,4
+ee382c10,"Add explanatory warning before OptimizeNotCalled error (#3156)","2022-12-21 08:34:37 +1300",1.5.0,JuMP,733,264,142,36,167,11,106,2,5
+2298c580,"Add has_start_value function (#3157)","2022-12-20 16:12:44 -0700",1.5.0,JuMP,734,265,142,36,167,11,106,3,4
+6d486d96,"Add support for Hermitian PSD constraint (#3154)","2022-12-23 12:22:53 +0100",1.5.0,JuMP,739,266,144,36,168,11,107,3,4
+355e7793,"[docs] fix typo in tips and tricks (#3163)","2022-12-24 00:27:01 +1300",1.5.0,JuMP,739,266,144,36,168,11,107,2,5
+c57514d8,"Run MutableArithmetics tests with complex coefficients (#3164)","2023-01-01 01:49:12 +0100",1.5.0,JuMP,739,266,144,36,168,11,108,3,3
+0871cfb6,"Prep for v1.6.0 (#3165)","2023-01-02 10:15:16 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,2,4
+d8a32623,"Tidy test/mutable_arithmetics.jl (#3166)","2023-01-03 16:53:47 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,3,3
+c736a7c0,"Tidy test/JuMPExtension.jl (#3169)","2023-01-04 16:22:10 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,2,4
+ed3dc0fb,"Refactor runtests.jl to use a single run_tests function (#3168)","2023-01-05 09:10:45 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,3,3
+6c2b3e1a,"Remove unneeded testsets (#3171)","2023-01-05 11:20:19 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,2,4
+8f26202b,"Remove VERSION checks for unsupported Julia versions (#3172)","2023-01-05 12:26:38 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,1,5
+9f61e95c,"[Containers] add support for view of DenseAxisArray (#3152)","2023-01-06 10:10:12 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,4,2
+2afe069a,"[docs] document how to test JuMP extensions (#3174)","2023-01-06 11:09:14 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,3,3
+10246611,"Fix method ambiguities in JuMP.Containers (#3173)","2023-01-06 12:14:38 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,4,2
+6460d89f,"Improve error message thrown when = used instead of == in macro (#3178)","2023-01-09 14:11:32 +1300",1.6.0,JuMP,739,266,144,36,168,11,108,3,3
+e4b06103,"Improve error message for common case of using Bool instead of Bin (#3181)","2023-01-10 06:23:45 +1300",1.6.0,JuMP,741,266,146,36,168,11,108,3,3
+3bec5762,"[docs] bump the version of Documenter (#3185)","2023-01-11 16:43:27 +1300",1.6.0,JuMP,741,266,146,36,168,11,108,2,4
+5c0b0d86,"Add support for collections of variables in ComplexPlane (#3184)","2023-01-12 09:31:05 +1300",1.6.0,JuMP,744,269,146,36,168,11,108,3,3
+cfc32ce9,"Tidy import of packages and remove unnecessary prefixes (#3186)","2023-01-12 12:04:49 +1300",1.6.0,JuMP,744,269,146,36,168,11,108,4,2
+a978323d,"Refactor JuMP.jl, moving methods into their related files (#3188)","2023-01-17 19:55:53 +1300",1.6.0,JuMP,743,269,145,36,168,11,108,2,4
+5a524cf5,"Add more precompile statements to improve TTFX of Ipopt (#3197)","2023-01-25 11:11:38 +1300",1.6.0,JuMP,743,269,145,36,168,11,108,3,3
+66894f2e,"[docs] Fix typo in the Benders tutorial (#3201)","2023-01-25 20:14:21 +0100",1.7.0,JuMP,743,269,145,36,168,11,108,2,4
+a228a0a2,"[docs] bump version of HiGHS used in docs (#3200)","2023-01-26 08:15:01 +1300",1.7.0,JuMP,743,269,145,36,168,11,108,3,3
+20f36c9d,"[docs] add tutorial on constraint programming (#3202)","2023-01-26 16:30:02 +1300",1.7.0,JuMP,743,269,145,36,168,11,108,1,5
+a9a40b24,"[docs] fix links in release notes (#3203)","2023-01-26 18:57:10 +1300",1.7.0,JuMP,743,269,145,36,168,11,108,3,3
+f3366e54,"[docs] add more conic examples for MOI cones (#3205)","2023-01-31 06:37:08 +1300",1.7.0,JuMP,743,269,145,36,168,11,108,1,5
+71f66bc2,"Add --> syntax support for indicator constraints (#3207)","2023-02-01 08:39:18 +1300",1.7.0,JuMP,744,269,145,36,169,11,108,2,4
+57785aee,"Add <--> syntax support for reified constraints (#3206)","2023-02-01 08:51:07 +1300",1.7.0,JuMP,747,269,145,36,171,11,109,3,3
+18f48b53,"Add fix_discrete_variables for computing the dual of a MIP (#3208)","2023-02-03 16:26:12 +1300",1.7.0,JuMP,750,271,145,37,171,11,109,3,3
+6add68d9,"Use MOI.Utilities.distance_to_set in primal_feasibility_report (#3209)","2023-02-04 14:17:29 +1300",1.7.0,JuMP,737,270,145,37,171,11,97,2,4
+451740ad,"[docs] fix version links in changelog (#3210)","2023-02-06 13:50:43 +1300",1.7.0,JuMP,737,270,145,37,171,11,97,3,3
+cd96cd4e,"[docs] update knapsack tutorial (#3216)","2023-02-14 10:46:46 +1100",1.7.0,JuMP,737,270,145,37,171,11,97,2,4
+237fd6c2,"Switch to LU factorization in lp_sensitivity_report (#3182)","2023-02-15 08:59:40 +1300",1.7.0,JuMP,737,270,145,37,171,11,97,3,3
+0b308bf0,"[docs] add ellipsoid approximation tutorial (#3218)","2023-02-15 14:03:30 +1100",1.7.0,JuMP,737,270,145,37,171,11,97,2,4
+fc5418bd,"Add support for vector-valued objectives (#3176)","2023-02-16 06:53:50 +1300",1.7.0,JuMP,740,267,145,40,172,11,99,3,3
+7d275984,"Prep for v1.8.0 (#3221)","2023-02-16 14:31:45 +1300",1.8.0,JuMP,740,267,145,40,172,11,99,1,5
+eae58d22,"Fix init kwarg in nonlinear generator expressions (#3226)","2023-02-22 09:31:03 +1300",1.8.0,JuMP,740,267,145,40,172,11,99,2,4
+c3981fd4,"[docs] fix typo in network_flows.jl (#3230)","2023-02-22 14:39:31 +1300",1.8.0,JuMP,740,267,145,40,172,11,99,3,3
+50234cb1,"[docs] refactor some conic tutorials into simple_examples.jl (#3229)","2023-02-22 14:42:26 +1300",1.8.0,JuMP,740,267,145,40,172,11,99,2,4
+385c72fa,"[docs] Polish simple SDP examples (#3232)","2023-02-24 04:54:24 +1100",1.8.1,JuMP,740,267,145,40,172,11,99,3,3
+25ad3f0e,"Add get_attribute and set_attribute (#3219)","2023-02-23 23:01:56 -0300",1.8.1,JuMP,749,274,146,35,177,12,99,3,3
+4d64d8dd,"[docs] fix typos in parallelism tutorial (#3243)","2023-02-27 14:55:59 +1100",1.8.1,JuMP,749,274,146,35,177,12,99,2,4
+64cbb63d,"Style fix: requestedcontainer -> requested_container (#3247)","2023-02-27 20:16:40 +0100",1.8.1,JuMP,749,274,146,35,177,12,99,3,3
+45f64f03,"Wrap reshaped vector in LinearAlgebra.Hermitian (#3245)","2023-02-27 20:19:59 +0100",1.8.1,JuMP,749,274,146,35,177,12,99,2,4
+63297621,"Implement Base.isreal for complex expressions (#3252)","2023-02-28 12:04:13 +1300",1.8.2,JuMP,749,274,146,35,177,12,99,3,3
+124e5bbe,"Improve error message when plural macro not passed a block (#3255)","2023-03-01 08:19:39 +1300",1.8.2,JuMP,749,274,146,35,177,12,99,2,4
+7bd8e09d,"Add set_start_values to simplify setting all starting values in a model (#3238)","2023-03-01 09:28:29 +1300",1.8.2,JuMP,752,276,146,35,177,12,100,3,3
+554c8380,"[docs] add example of how to register function with multiple input arguments (#3258)","2023-03-02 08:52:49 +1300",1.8.2,JuMP,752,276,146,35,177,12,100,2,4
+60392b07,"Add quantum state discrimination tutorial (#3250)","2023-03-02 09:40:38 +1300",1.8.2,JuMP,752,276,146,35,177,12,100,3,3
+ac20706e,"Support inequality syntax for HermitianPSDCone (#3256)","2023-03-03 09:57:29 +1300",1.8.2,JuMP,756,278,146,35,177,12,102,2,4
+b9cf868d,"Add remove_bridge, print_active_bridges, and document (#3259)","2023-03-03 10:14:36 +1300",1.8.2,JuMP,756,278,141,37,177,16,102,3,2
+b5d30042,"Revert ""Support inequality syntax for HermitianPSDCone (#3256)"" (#3264)","2023-03-03 19:52:09 +0100",1.8.2,JuMP,752,276,141,37,177,16,100,3,2
+24fd85d4,"[docs] fix bounds in power_systems.jl (#3268)","2023-03-06 15:26:05 +1300",1.8.2,JuMP,752,276,141,37,177,16,100,2,3
+3cc78bda,"[docs] clarify in-place can be slower for small models (#3269)","2023-03-06 19:27:44 +1300",1.8.2,JuMP,752,276,141,37,177,16,100,3,2
+09199959,"Prep for v1.9.0 (#3251)","2023-03-07 13:09:24 +1300",1.9.0,JuMP,752,276,141,37,177,16,100,1,4
+63f92c2d,"Fix compat lower bound of MOI (#3272)","2023-03-08 11:42:16 +1300",1.9.0,JuMP,752,276,141,37,177,16,100,2,3
+b5e50a3d,"[docs] split user-defined Hessian tutorial in two (#3274)","2023-03-09 14:52:13 +1100",1.9.0,JuMP,752,276,141,37,177,16,100,1,4
+17faa1bb,"[docs] Improve docstrings and convert julia blocks to jldoctest (#3276)","2023-03-10 09:20:52 +1300",1.9.0,JuMP,752,276,141,37,177,16,100,3,2
+f38bfcec,"Add JuMP-level Nonnegatives, Nonpositives, and Zeros sets (#3273)","2023-03-11 12:18:19 +1300",1.9.0,JuMP,761,276,144,37,183,16,100,3,2
+9b9e4dcf,"[docs] clarify that macros create new bindings (#3284)","2023-03-16 08:01:43 +1300",1.9.0,JuMP,761,276,144,37,183,16,100,2,3
+59cfe785,"Add support for {Hermitian,Symmetric} in Zeros constraint (#3281)","2023-03-16 08:02:51 +1300",1.9.0,JuMP,768,278,149,37,183,16,100,4,1
+6f098003,"[docs] limit internal threading in parallelism.md (#3283)","2023-03-16 16:23:26 +1300",1.9.0,JuMP,768,278,149,37,183,16,100,3,2
+cca8d6c5,"[docs] Add plot to minimum distortion example. (#3288)","2023-03-17 07:50:37 +1100",1.9.0,JuMP,768,278,149,37,183,16,100,4,1
+3d168dae,"[docs] add Google style rules to Vale and fix warnings (#3285)","2023-03-18 10:51:35 +1300",1.9.0,JuMP,768,278,149,37,183,16,100,3,2
+340770e8,"Add citation for JuMP 1.0 paper (#3294)","2023-03-21 17:27:04 +1300",1.9.0,JuMP,768,278,149,37,183,16,100,2,3
+f4721e67,"Add HermitianMatrixSpace (#3292)","2023-03-22 09:36:03 +0100",1.9.0,JuMP,769,279,149,37,183,16,100,4,1
+faa72909,"[docs] update Pkg versions (#3298)","2023-03-23 15:17:55 +1300",1.9.0,JuMP,769,279,149,37,183,16,100,3,2
+9fae47a3,"Add comment on the order of setting start values (#3303)","2023-03-25 09:48:24 +1300",1.9.0,JuMP,769,279,149,37,183,16,100,4,1
+664711a1,"Add JuMP-level sets for Semicontinuous and Semiinteger (#3302)","2023-03-25 10:38:19 +1300",1.9.0,JuMP,773,281,151,37,183,16,100,3,2
+be7ae582,"Add Hermitian tag in variable macro (#3293)","2023-03-26 23:17:54 +0200",1.9.0,JuMP,773,281,151,37,183,16,100,4,1
+f4c11e4e,"[docs] clarify HiGHS supports QP (#3308)","2023-03-29 09:23:59 +1300",1.9.0,JuMP,773,281,151,37,183,16,100,3,2
+0778238f,"[Containers] add support for Base.getindex(::Container; kwargs...) (#3237)","2023-03-30 06:48:09 +1300",1.9.0,JuMP,776,282,153,37,183,16,100,0,5
+d1f4194b,"Fix error message for unrecognized sense (#3311)","2023-04-03 19:59:46 +1200",1.9.0,JuMP,780,284,153,37,184,16,101,2,3
+3dd83b54,"Prep for v1.10.0 (#3304)","2023-04-03 21:38:48 +1200",1.10.0,JuMP,780,284,153,37,184,16,101,1,4
+a2875314,"[Containers] fix when axis is Vector{Any} (#3280)","2023-04-06 10:01:55 +1200",1.10.0,JuMP,780,284,153,37,184,16,101,2,3
