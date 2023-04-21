@@ -1,0 +1,14 @@
+"Commit","Message","Date","Version","Module","Methods","Stable","Partial","Unstable","Any","Vararg","Generic","TcFail","NoFuel","MethodsDelta","UnstableDelta"
+"e2396987","Merge branch 'main' of https://github.com/fonsp/Pluto.jl","2021-11-16 15:21:03 +0100","0.17.1","Pluto",224,108,19,19,60,11,4,0,3,0,2
+"09169ae9","🏎 Keep a ""banned"" list of notebook_ids that should never restart","2022-03-01 18:14:15 +0100","0.18.1","Pluto",251,117,19,26,62,15,9,0,3,0,3
+"6b0e45c4","Merge pull request #2230 from daschw/colorbar","2019-10-29 09:12:07 +0100","0.27.0","Plots",1586,458,187,119,390,223,192,4,13,0,1
+"172193e7","Merge pull request #2292 from daschw/orca","2019-11-30 17:11:48 +0100","0.28.1","Plots",1606,471,190,125,381,222,208,2,7,0,1
+"20a29079","Merge pull request #2388 from daschw/akw","2020-02-09 09:26:00 +0100","0.29.0","Plots",1640,455,208,126,411,222,207,2,9,0,1
+"bece65e9","Update Project.toml","2020-07-15 21:17:25 +0200","1.5.4","Plots",1576,435,198,125,409,215,176,2,16,0,1
+"e3d13aa1","Merge pull request #3436 from gustaphe/master","2021-04-28 18:40:57 +0200","1.13.2","Plots",1663,428,208,137,462,221,174,2,31,0,1
+"019a742c","Respect :widen when passing :lims (#3552)","2021-06-07 11:46:49 -0700","1.16.3","Plots",1664,427,208,137,463,221,174,2,32,0,1
+"6baa1202","fix transposing in plotlyjs (#3953)","2021-11-26 09:59:44 +0100","1.24.1","Plots",1713,448,214,139,479,226,174,2,31,0,1
+"95d1fa00","Set max_methods=1 (#4010)","2021-12-29 07:31:29 -0500","1.25.3","Plots",1710,427,213,158,479,226,174,2,31,0,21
+"1df65c0d","add fuzzy finding attributes (#4346)","2022-09-15 10:02:39 +0200","1.33.0","Plots",1778,444,228,161,511,236,163,2,33,0,1
+"0975852b","Fix bug in relax_integrality (#2666)","2021-08-20 12:05:22 +1200","0.21.9","JuMP",676,237,105,33,176,32,89,2,2,0,2
+"b9cf868d","Add remove_bridge, print_active_bridges, and document (#3259)","2023-03-03 10:14:36 +1300","1.8.2","JuMP",756,278,141,37,177,16,102,3,2,0,2
