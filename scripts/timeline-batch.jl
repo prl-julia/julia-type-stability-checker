@@ -27,7 +27,6 @@ packages = [
     ("Pluto", "https://github.com/fonsp/Pluto.jl.git"),
 ]
 
-# Use 2/3 of available threads
 n = Threads.nthreads()
 info("== Using $n threads ==")
 
