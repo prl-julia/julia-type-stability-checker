@@ -1,0 +1,7 @@
+Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,DeltaMethods,DeltaUnstable
+04b177d6,💕 Two-way communication & fMIME formatting,2020-02-24 00:47:06 +0100,0.1.0,Saturn,9,6,0,1,2,0,0,0,0,0,-1
+a01a6e70,HTTP.jl 0.9 (#761),2020-12-09 23:29:17 +0100,0.12.16,Pluto,142,54,12,7,53,11,2,0,3,0,-1
+e2396987,Merge branch 'main' of https://github.com/fonsp/Pluto.jl,2021-11-16 15:21:03 +0100,0.17.1,Pluto,224,108,19,19,60,11,4,0,3,0,2
+5205bf5b,🏎 Prevent SessionActions.shutdown from allowing a sneaky restart later,2022-03-01 17:56:26 +0100,0.18.1,Pluto,251,120,19,23,62,15,9,0,3,0,-3
+09169ae9,"🏎 Keep a ""banned"" list of notebook_ids that should never restart",2022-03-01 18:14:15 +0100,0.18.1,Pluto,251,117,19,26,62,15,9,0,3,0,3
+879822a6,log message tweak,2022-05-09 16:27:10 +0200,0.19.3,Pluto,267,127,20,28,64,16,9,0,3,0,-1
