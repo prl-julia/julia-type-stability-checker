@@ -30,9 +30,8 @@ for agg in all_agg_files
     msg = strip(read(joinpath(dir, "timeline_msg.txt"), String))
     when = strip(read(joinpath(dir, "timeline_when.txt"), String))
     version = strip(read(joinpath(dir, "timeline_version.txt"), String))
-    # pkg = strip(read(joinpath(dir, "timeline_pkg.txt"), String))
 
-    # csv excapes
+    # csv escapes
     msg = replace(msg, '"' => "\"\"")
 
     data = strip(read(agg, String))
@@ -43,6 +42,9 @@ for agg in all_agg_files
     end
 end
 
+if !isdir(dirname(out_file))
+    mkpath(dirname(out_file))
+end
 @info "Writing to `$out_file'"
 open(out_file, "w") do f
     write(f, join(result, "\n"))
