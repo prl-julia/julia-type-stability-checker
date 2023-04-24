@@ -25,7 +25,6 @@ using TOML
 repo = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: repository of the package")
 out_dir = length(ARGS) > 1 ? joinpath(pwd(), ARGS[2]) : error("Requires argument: output directory")
 
-cwd = pwd()
 sts_path = dirname(@__DIR__)
 
 # Run cmd (runs in a new process) and capture stdout and stderr.
@@ -48,11 +47,12 @@ function info(s::String)
     flush(stderr)
 end
 
-
 cloned = mktempdir()
 exec(`git clone $repo $cloned`)
-cd(cloned)
-commits = collect(enumerate(reverse(split(strip(exec(`git rev-list --abbrev-commit --first-parent HEAD`))))))
+# Here we can change which commits are processed... E.g. now we only look at
+# the linear main branch, not merged feature branches (the merge commits
+# are still processed though)
+commits = collect(enumerate(reverse(split(strip(exec(`git -C $cloned rev-list --abbrev-commit --first-parent HEAD`))))))
 commits = shuffle(commits)  # ensure the init commits before Project.toml are distributed ~equally
 n = length(commits)
 skipped = 0
@@ -64,7 +64,7 @@ tasks = zeros(Int, nthreads())
 # if the tool takes over an hour, kill it
 timeout = 60 * 60 * 1  # 1 hour in seconds
 
-change_dir_lock = ReentrantLock()  # only 1 thread should be changing directory 
+git_lock = ReentrantLock()  # using `git -C` still seems not to be thread-safe
 skipped_lock = ReentrantLock()
 error_log_lock = ReentrantLock()
 
@@ -83,12 +83,10 @@ error_log_lock = ReentrantLock()
 
         # create my own fresh copy of the repo
         exec(`cp -r $cloned $dir`)
-        lock(change_dir_lock) do
-            cd(dir)
-            exec(`git checkout --quiet $commit`)
-            msg = exec(`git log --pretty=format:'%s' --max-count=1 HEAD`)
-            when = exec(`git log --pretty=format:'%ad' --max-count=1 --date=iso HEAD`)
-            cd(cwd)
+        lock(git_lock) do
+            exec(`git -C $dir checkout --quiet $commit`)
+            msg = exec(`git -C $dir log --pretty=format:'%s' --max-count=1 HEAD`)
+            when = exec(`git -C $dir log --pretty=format:'%ad' --max-count=1 --date=iso HEAD`)
         end
 
         # if the revision doesn't have Project.toml or it's invalid, skip
@@ -183,5 +181,3 @@ b = bar(tasks,
         show_legend=false)
 show(b)
 println()
-
-cd(cwd)
