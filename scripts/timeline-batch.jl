@@ -34,10 +34,12 @@ for (pkg, url) in packages
     _, t = @timed begin
         scratch = joinpath(".", "scratch/$pkg")
         out = joinpath(".", "timelines/$pkg.csv")
+        out_filtered = joinpath(".", "timelines/$pkg-filtered.csv")
         info("=== Checking `$pkg' ===")
         run(`julia --threads=$n $(joinpath(sts_path, "scripts/timeline.jl")) $url $scratch`)
         info("=== Aggregating results for `$pkg' ===")
         run(`julia $(joinpath(sts_path, "scripts/timeline-aggregate.jl")) $scratch $out`)
+        run(`julia $(joinpath(sts_path, "scripts/timeline-filter.jl")) $out $out_filtered`)
     end
     # Report nice time
     t, unit = t, "s"
