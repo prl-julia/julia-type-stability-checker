@@ -127,7 +127,7 @@ error_log_lock = ReentrantLock()
 
             # run the stability checks
             try
-                exec(`timeout $timeout julia $sts_path/scripts/process-package.jl $pkg_name $dir $o`)
+                exec(`timeout $timeout julia $sts_path/scripts/timeline-process-package.jl $pkg_name $dir $o`)
             catch e
                 lock(error_log_lock) do
                     p = joinpath(out_dir, "timeline_error_log.txt")
