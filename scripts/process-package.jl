@@ -11,10 +11,9 @@
 #
 
 sts_path = dirname(dirname(@__FILE__))
-pkg = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: name of the package to process")
-pkg_dir = length(ARGS) > 1 ? ARGS[2] : error("Requires argument: package directory")
-out_dir = length(ARGS) > 2 ? ARGS[3] : error("Requires argument: output directory")
-ver = nothing
+out_dir  = "." # joinpath(sts_path, "scratch", "bulk")
+pkg = length(ARGS) > 0 ? ARGS[1] : error("Requires one argument: name of the package to process")
+ver = length(ARGS) > 1 ? ARGS[2] : nothing
 isempty(strip(pkg)) && (println("ERROR: empty package name"); exit(1))
 
 pkgver(pkg, ver) = pkg * (ver === nothing ? "" : "@" * ver)
@@ -52,7 +51,8 @@ ev(s)=eval(Meta.parse.(s))
 #
 
 # Go to a "fresh" env
-cd(out_dir)
+wd = out_dir #mktempdir()
+cd(wd)
 Pkg.activate(".")
 
 @info "Start with package $(pkgver(pkg, ver))."
@@ -69,7 +69,7 @@ using StabilityCheck
 #    Add the package of interest and make Julia `using` it
 ###
 
-Pkg.develop(path=pkg_dir)
+Pkg.add(name=pkg, version=ver)
 store_cur_version(pkg)
 ev("using $pkg")
 
