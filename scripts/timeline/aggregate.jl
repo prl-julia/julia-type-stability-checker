@@ -1,7 +1,7 @@
 #
 # Aggregate data collected by the timeline.jl script for a given package
 #
-# Usage: Run with `julia <path/to/julia-sts>/scripts/timeline-aggregate.jl <in_dir> <out_file>`
+# Usage: Run with `julia <path/to/julia-sts>/scripts/timeline/aggregate.jl <in_dir> <out_file>`
 # Effect: Writes the summary csv in the out_file
 #
 

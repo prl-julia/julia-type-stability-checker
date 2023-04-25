@@ -15,7 +15,7 @@
 #   * methods delta == 0 && unstable delta != 0: hopefully the stability of an existing method changed
 #   * ...
 #
-# Usage: Run with `julia <path/to/julia-sts>/scripts/timeline-filter.jl <agg_file> <out_file>`
+# Usage: Run with `julia <path/to/julia-sts>/scripts/timeline/filter.jl <agg_file> <out_file>`
 # Effect: Filters the given agg_file csv
 #
 

@@ -1,8 +1,8 @@
 #
 # Process a batch of Julia packages.
 #
-# Usage: Run with `julia --threads=<N> <path/to/julia-sts>/scripts/timeline.jl <github_repo> <out_dir>`
-#        It's recommended to run this using the timeline-batch.jl script but can also be run manually
+# Usage: Run with `julia --threads=<N> <path/to/julia-sts>/scripts/timeline/history.jl <github_repo> <out_dir>`
+#        It's recommended to run this using the timeline/batch.jl script but can also be run manually
 # Effect: runs the type stability checks on the given package and stores the output in out_dir
 #
 # Details:
@@ -25,7 +25,7 @@ using TOML
 repo = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: repository of the package")
 out_dir = length(ARGS) > 1 ? joinpath(pwd(), ARGS[2]) : error("Requires argument: output directory")
 
-sts_path = dirname(@__DIR__)
+sts_path = dirname(dirname(@__DIR__))
 
 # Run cmd (runs in a new process) and capture stdout and stderr.
 # On errors, reformats the exception and rethrows. Otherwise returns the concatenation of stdout and stderr
@@ -127,7 +127,7 @@ error_log_lock = ReentrantLock()
 
             # run the stability checks
             try
-                exec(`timeout $timeout julia $sts_path/scripts/timeline-process-package.jl $pkg_name $dir $o`)
+                exec(`timeout $timeout julia $sts_path/scripts/timeline/process-package.jl $pkg_name $dir $o`)
             catch e
                 lock(error_log_lock) do
                     p = joinpath(out_dir, "timeline_error_log.txt")
