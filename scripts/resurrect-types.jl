@@ -1,6 +1,6 @@
 #
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
-# E.g.: JULIA_DEPOT_PATH=. julia resurrect.jl
+# E.g.: JULIA_DEPOT_PATH=. julia resurrect-types.jl
 #
 
 @info "Starting resurrect.jl. Using packages..."
@@ -36,12 +36,12 @@ guess_package(tyRow) = begin
 end
 
 """
-addpackage: (tyrow : {modl, tyname, occurs}) -> IO ()
+addpackage: String -> IO ()
 
 The function tries to update the current environment in a way that it's possible to
 `Core.eval(tyrow.modl, tyrow.tyname)`.
 """
-addpackage(pkg) = begin
+addpackage(pkg::String) = begin
 
     pkg in ["Core", "Base"] && return true # stdlib-modules don't need anything
 
@@ -69,7 +69,7 @@ end
 #
 main() = begin
     @info "Reading in data..."
-    intypesCsvFile = "all-types-merged.csv"
+    intypesCsvFile = "merged-types.csv"
     intypesCsv = CSV.read(intypesCsvFile, DataFrame)
     @info "... done."
 
