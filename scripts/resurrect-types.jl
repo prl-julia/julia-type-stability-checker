@@ -1,7 +1,20 @@
 #
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
-# E.g.: JULIA_DEPOT_PATH=. julia resurrect-types.jl
+# E.g.:
+#   ❯ JULIA_PROJECT=~/s/sts/repo/scripts JULIA_DEPOT_PATH=. julia ~/s/sts/repo/scripts/resurrect-types.jl
 #
+# Input:
+#   - intypesCsvFile with info about Julia types as dumped by
+#       github.com/prl-julia/julia-type-stability/blob/main/Stability/scripts/julia/merge-intypes.jl
+#
+# Effects:
+#   Load all the types from the file into the current Julia session.
+#
+# So far, it's a testing poligon for something that can become a part of StabilityCheck.
+# The idea is that when we can't enumerate everything, we sample from these types.
+#
+
+intypesCsvFile = "merged-intypes.csv"
 
 @info "Starting resurrect.jl. Using packages..."
 
@@ -69,7 +82,6 @@ end
 #
 main() = begin
     @info "Reading in data..."
-    intypesCsvFile = "merged-types.csv"
     intypesCsv = CSV.read(intypesCsvFile, DataFrame)
     @info "... done."
 
@@ -108,3 +120,5 @@ main() = begin
     end
     @show (i,fi,gi,ei,failed)
 end
+
+main()
