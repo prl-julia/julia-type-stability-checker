@@ -22,20 +22,19 @@
 agg_file = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: aggregate csv")
 out_file = length(ARGS) > 1 ? ARGS[2] : error("Requires argument: output file")
 
-using CSV, DataFrames
+include("utils.jl")
 
-function delta(column::Vector{Int64})
-    vcat(0, diff(column))
-end
+using CSV
+using DataFrames
 
 df = CSV.read(agg_file, DataFrame)
+
+delta(col::Vector{Int64}) = vcat(0, diff(col))
 df.DeltaMethods = delta(df.Methods)
 df.DeltaUnstable = delta(df.Unstable)
 
-df = df[(df.DeltaMethods .== 0) .& (df.DeltaUnstable .!= 0), :]
+df = df[(df.DeltaMethods.==0).&(df.DeltaUnstable.!=0), :]
 
-if !isdir(dirname(out_file))
-    mkpath(dirname(out_file))
-end
-@info "Writing to `$out_file'"
-CSV.write(out_file, df)
+buf = IOBuffer()
+CSV.write(buf, df; quotestrings=true)
+dump(out_file, String(take!(buf)))

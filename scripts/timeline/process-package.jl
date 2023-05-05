@@ -5,11 +5,12 @@
 # Effect: resulting files are stored in the CWD
 #
 
-sts_path = dirname(dirname(@__DIR__))
 pkg = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: name of the package to process")
 pkg_dir = length(ARGS) > 1 ? ARGS[2] : error("Requires argument: package directory")
 out_dir = length(ARGS) > 2 ? ARGS[3] : error("Requires argument: output directory")
 isempty(strip(pkg)) && (println("ERROR: empty package name"); exit(1))
+
+include("utils.jl")
 
 using Pkg
 
@@ -25,13 +26,13 @@ ev(s) = eval(Meta.parse.(s))
 cd(out_dir)
 Pkg.activate(".")
 
-@info "Start with package $pkg"
+@info_extra "Start with package $pkg"
 
-haskey(Pkg.project().dependencies, "StabilityCheck") || Pkg.develop(path=sts_path)
+haskey(Pkg.project().dependencies, "StabilityCheck") || Pkg.develop(path=STS_PATH)
 using StabilityCheck
 
 Pkg.develop(path=pkg_dir)
 ev("using $pkg")
 
 checkModule(ev(module_name("$pkg")), out_dir, pkg=pkg)
-@info "Module $pkg processed."
+@info_extra "Module $pkg processed"
