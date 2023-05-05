@@ -1,12 +1,12 @@
 #
-# Plot the evolution of unstable method counts
+# Plot the evolution of unstable method counts over time
 #
 # This creates a pdf with a plot of absolute number of unstable methods for each commit in
 # history as well as two plots that show the percentage of stable and unstable methods vs. all methods
 # for each commit.
 # 
 # Usage: Run with `julia <path/to/julia-sts>/scripts/timeline/plot.jl <agg_file> <out_file>`
-# Effect: Creates a visualization of the evolution of method stability
+# Effect: Creates a visualization of the evolution of method stability in out_file.
 #
 
 agg_file = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: aggregate csv")

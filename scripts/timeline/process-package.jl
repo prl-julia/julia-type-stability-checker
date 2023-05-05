@@ -1,8 +1,11 @@
 #
 # Goal: proces one Julia package (test for stability, store results in CSV)
 #
-# Usage: Run from any place with `julia <path/to/julia-sts>/scripts/timeline/process-package.jl`
-# Effect: resulting files are stored in the CWD
+# Usage: Run from any place with `julia <path/to/julia-sts>/scripts/timeline/process-package.jl <pkg> <pkg_dir> <out_dir>`
+#        This script is a copy and slight modification of scripts/process-package.jl. It expects the name of a package,
+#        the directory with the package repo and an out directory to write results.
+#
+# Effect: resulting files are stored in the out_dir
 #
 
 pkg = length(ARGS) > 0 ? ARGS[1] : error("Requires argument: name of the package to process")

@@ -2,6 +2,7 @@
 # Process a batch of Julia packages.
 #
 # Usage: Run with `julia --threads=<N> <path/to/julia-sts>/scripts/timeline/batch.jl pkg_file scratch_dir out_dir`
+#        The pkg_file should contain one package name per line.
 #        It's recommended to redirect output to a log file (e.g. `&> LOG` in bash)
 # Effect: results are stored in `out_dir`, temporary intermediate files are in `scratch_dir`
 #
