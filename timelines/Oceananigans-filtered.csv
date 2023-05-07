@@ -1,1 +1,2 @@
 "Module","Methods","Stable","Partial","Unstable","Any","Vararg","Generic","TcFail","NoFuel","Version","Commit","Message","Date","DeltaMethods","DeltaUnstable"
+"Seapickle",12,3,0,4,5,0,0,0,0,"Seapickle@0.1.0","4e35c5d1b","Slow but elegant circshift derivative operators.","2018-11-08 15:49:58 -0500",0,-3

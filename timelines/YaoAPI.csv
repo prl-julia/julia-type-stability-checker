@@ -1,0 +1,4 @@
+Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
+YaoAPI,2,1,0,0,1,0,0,0,0,"YaoAPI@0.1.0","8440f29e","Merge pull request #303 from QuantumBFS/roger/lib","2021-12-07 15:08:30 -0500"
+YaoAPI,4,1,0,0,2,0,1,0,0,"YaoAPI@0.1.1","bc0563a7","Merge branch 'master' of https://github.com/QuantumBFS/Yao.jl","2022-01-04 21:01:46 -0500"
+YaoAPI,2,1,0,0,1,0,0,0,0,"YaoAPI@0.4.0","4b72e43f","Merge branch 'master' of https://github.com/QuantumBFS/Yao.jl","2022-04-28 23:06:25 -0400"

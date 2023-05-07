@@ -1,0 +1,4 @@
+Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
+CUDNN,744,57,6,3,662,0,16,0,0,"CUDNN@1.0.0","62473cac6","Make it possible to load subpackages without the necessary JLLs.","2023-02-02 09:54:10 +0100"
+cuDNN,744,57,6,3,662,0,16,0,0,"cuDNN@1.0.0","a70c83e2c","Rename subpackages to conform with NVIDIA's capitalization of things.","2023-02-02 10:47:08 +0100"
+cuDNN,743,56,6,3,662,0,16,0,0,"cuDNN@1.0.2","2ad2de7d1","Support runtime discovery for non-toolkit libraries (CUTENSOR, CUDNN, CUQUANTUM) (#1858)","2023-04-14 03:50:49 -0400"

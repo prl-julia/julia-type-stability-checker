@@ -1,0 +1,5 @@
+Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
+CUTENSOR,68,16,9,0,43,0,0,0,0,"CUTENSOR@0.1.0","014fcef47","Merge pull request #1629 from JuliaGPU/tb/jll","2022-10-21 20:41:19 +0200"
+CUTENSOR,86,19,9,0,58,0,0,0,0,"CUTENSOR@0.1.0","3d1670c9f","Merge pull request #1636 from JuliaGPU/tb/cutensor2","2022-10-21 20:41:43 +0200"
+cuTENSOR,86,19,9,0,58,0,0,0,0,"cuTENSOR@1.0.0","a70c83e2c","Rename subpackages to conform with NVIDIA's capitalization of things.","2023-02-02 10:47:08 +0100"
+cuTENSOR,85,18,9,0,58,0,0,0,0,"cuTENSOR@1.0.2","2ad2de7d1","Support runtime discovery for non-toolkit libraries (CUTENSOR, CUDNN, CUQUANTUM) (#1858)","2023-04-14 03:50:49 -0400"
