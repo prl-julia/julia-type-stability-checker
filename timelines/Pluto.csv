@@ -1,176 +1,177 @@
-Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel
-f33ed485,"✨","2020-02-23 02:53:29 +0100",0.1.0,Saturn,1,1,0,0,0,0,0,0,0
-7136c6f5,"☎ yes hello this is API speaking","2020-02-23 21:11:36 +0100",0.1.0,Saturn,9,5,0,2,2,0,0,0,0
-04b177d6,"💕 Two-way communication & fMIME formatting","2020-02-24 00:47:06 +0100",0.1.0,Saturn,9,6,0,1,2,0,0,0,0
-4f4f2ab3,"✍ docs and todos","2020-02-24 03:08:25 +0100",0.1.0,Saturn,10,6,0,1,3,0,0,0,0
-8e656009,"Merge pull request #20 from fonsp/react","2020-03-01 18:09:43 +0100",0.1.0,Saturn,16,14,0,0,2,0,0,0,0
-5544ace2,"✍ Renamed to Pluto.jl","2020-03-01 18:15:55 +0100",0.1.0,Pluto,16,14,0,0,2,0,0,0,0
-1284234f,"reorganize & eliminate bug in React.jl","2020-03-02 21:50:11 +0100",0.1.0,Pluto,20,16,0,1,3,0,0,0,0
-6c6f01be,"add error when modifying same variable in multiple cells","2020-03-02 23:00:58 +0100",0.1.0,Pluto,21,16,0,2,3,0,0,0,0
-84185af6,"λ Crazy lambdas","2020-03-03 18:38:55 +0100",0.2.0,Pluto,22,16,0,2,4,0,0,0,0
-98914eca,"📂 Basic file I/O","2020-03-05 12:48:02 +0100",0.2.0,Pluto,27,17,0,2,8,0,0,0,0
-a7e7b3d0,"🆕 Attempt at automerging into General","2020-03-16 11:58:33 +0100",0.3.0,Pluto,50,28,0,1,21,0,0,0,0
-3fcb08ea,"👶 Restructuring","2020-03-20 00:02:48 +0100",0.3.2,Pluto,49,27,0,1,21,0,0,0,0
-0ee82d7b,"🏃‍♀️ List running sessions","2020-03-23 00:34:12 +0100",0.3.4,Pluto,51,28,0,1,21,1,0,0,0
-a381ce80,"✂ Separate modules for different notebooks","2020-03-23 10:44:10 +0100",0.3.5,Pluto,51,27,0,1,22,1,0,0,0
-4d941d4c,"🐞 Small UI fixes","2020-03-26 15:12:19 +0100",0.3.6,Pluto,52,28,0,1,22,1,0,0,0
-d7133814,"Merge pull request #37 from fonsp/new-reactivity","2020-03-28 00:50:32 +0100",0.4.0,Pluto,57,32,1,1,22,1,0,0,0
-1d9e7e0f,"🚂 Notebook in separate process","2020-03-31 02:40:23 +0200",0.5.0,Pluto,56,31,2,1,21,1,0,0,0
-a37ca9bd,"Merge pull request #46 from fonsp/cleanup","2020-04-01 01:26:17 +0200",0.5.2,Pluto,59,32,2,0,24,1,0,0,0
-fc6652ea,"☁ More cleanup","2020-04-01 15:41:38 +0200",0.5.2,Pluto,58,31,2,0,24,1,0,0,0
-ad60d950,"🔥 Hard cell stop function","2020-04-02 02:15:27 +0200",0.5.4,Pluto,59,31,2,0,24,2,0,0,0
-0f082eee,"🎤 JS response system","2020-04-02 20:58:03 +0200",0.5.5,Pluto,76,44,2,0,26,4,0,0,0
-bd3e068d,"📰 Never miss a Pluto.jl update again","2020-04-02 21:37:51 +0200",0.5.5,Pluto,77,44,2,0,27,4,0,0,0
-a36547be,"separate cell cache update from running","2020-04-03 11:32:45 +0200",0.5.8,Pluto,78,45,2,0,27,4,0,0,0
-75dd4db0,"☯ Autcomplete","2020-04-03 22:12:39 +0200",0.5.9,Pluto,84,48,2,0,30,4,0,0,0
-8489fc18,"🦉 Fix #45 and #55 and #57","2020-04-04 23:33:45 +0200",0.5.11,Pluto,85,47,2,1,30,4,0,0,1
-c55d53b4,"🐶 Fix #41","2020-04-05 21:24:01 +0200",0.5.12,Pluto,86,48,2,1,30,4,0,0,1
-10301b00,"🛑 Error in showing error","2020-04-05 22:34:01 +0200",0.5.13,Pluto,88,48,2,2,30,4,0,0,2
-33fdc82c,"🖼 Image MIME types","2020-04-06 00:25:24 +0200",0.5.14,Pluto,89,48,2,2,31,4,0,0,2
-10d2b23c,"Merge pull request #66 from fonsp/always-distributed","2020-04-07 23:10:49 +0200",0.5.15,Pluto,85,46,1,2,30,4,0,0,2
-fadd82ca,"🚁 Windows fixes","2020-04-09 23:32:43 +0200",0.5.19,Pluto,86,46,1,2,31,4,0,0,2
-22592e3a,"🍳 Fix #12 yay!","2020-04-10 01:35:44 +0200",0.5.20,Pluto,88,46,1,2,33,4,0,0,2
-cb4ac1d3,"📚 Live docs","2020-04-11 22:25:05 +0200",0.5.21,Pluto,90,46,1,2,35,4,0,0,2
-f6271487,"🐰 Speedy","2020-04-12 01:31:10 +0200",0.6.0,Pluto,88,46,1,2,33,4,0,0,2
-f97ace45,"🐴 Fix #75","2020-04-12 21:24:44 +0200",0.6.0,Pluto,89,46,1,2,34,4,0,0,2
-81ef356d,"👀 Sync code folds","2020-04-12 22:02:42 +0200",0.6.1,Pluto,92,48,1,2,35,4,0,0,2
-532cb0ff,"Merge pull request #86 from fonsp/interactivity","2020-04-16 01:37:55 +0200",0.6.4,Pluto,98,50,4,2,36,4,0,0,2
-1a89fdc4,"👆 Interactive sample","2020-04-16 02:08:05 +0200",0.7.0,Pluto,96,48,4,2,36,4,0,0,2
-047d2640,"🐌 Long WebSocket messages","2020-04-16 15:57:39 +0200",0.7.3,Pluto,97,48,5,2,36,4,0,0,2
-e304977e,"🌷 Improved function extension and tuple support","2020-04-28 18:51:55 +0200",0.7.6,Pluto,98,49,5,2,36,4,0,0,2
-580ab811,"☝ Topological order saving improvements","2020-04-30 17:11:47 +0200",0.7.6,Pluto,99,49,5,2,37,4,0,0,2
-3e2ef4b6,"🌐 Custom host address","2020-05-01 14:55:52 +0200",0.7.9,Pluto,101,49,7,2,37,4,0,0,2
-f37d43e8,"Merge pull request #98 from fonsp/proxiable","2020-05-03 21:08:33 +0200",0.7.9,Pluto,100,48,7,2,37,4,0,0,2
-f6709f91,"🛹 Performance","2020-05-12 01:32:57 +0200",0.8.6,Pluto,101,49,7,2,37,4,0,0,2
-4e170fb4,"▶ Some API for nextjournal","2020-05-14 19:05:39 +0200",0.8.8,Pluto,102,49,7,2,38,4,0,0,2
-092fac3c,"📚 Interactive stack trace","2020-05-17 00:46:29 +0200",0.8.9,Pluto,103,49,7,3,38,4,0,0,2
-9648ad6c,"🦴 Julia 1.0 stability improvements","2020-05-18 03:58:24 +0200",0.8.11,Pluto,109,51,7,3,42,4,0,0,2
-276e37f0,"🧹 Clean up Parse.jl","2020-05-19 15:48:36 +0200",0.8.12,Pluto,106,52,7,2,39,4,0,0,2
-2d2c6f13,"🚩 Stop workspace and recent notebooks","2020-05-20 02:55:11 +0200",0.9.0,Pluto,107,54,7,0,40,4,0,0,2
-9c61c4a9,"🦊 Browser compat fix","2020-05-21 01:10:47 +0200",0.9.2,Pluto,105,53,7,0,39,4,0,0,2
-02102c64,"Nice File Not Found Page (#149)","2020-06-16 12:42:22 -0400",0.9.10,Pluto,107,53,7,0,41,4,0,0,2
-64a19c4d,"🎹 Hot reload & browser debugging for Pluto devs","2020-06-18 04:10:15 +0200",0.9.10,Pluto,108,53,7,0,42,4,0,0,2
-dabc5a10,"🔌 Connection issues","2020-06-26 20:12:09 +0200",0.9.11,Pluto,107,53,7,0,41,4,0,0,2
-35b9473f,"🖐 Pluto v1.5 support & autotesting","2020-07-06 21:48:56 +0200",0.9.11,Pluto,110,53,8,0,42,4,0,0,3
-2d217690,"💾 Improved file UI","2020-07-11 14:23:03 +0000",0.10.3,Pluto,112,53,9,0,42,5,0,0,3
-7acb658a,"🥇 Prioritize Markdown","2020-07-15 01:51:38 +0200",0.10.6,Pluto,113,54,9,0,42,5,0,0,3
-d6ae39c9,"🏗 Restructuring","2020-07-15 15:28:32 +0200",0.10.6,Pluto,109,52,8,1,40,5,0,0,3
-87c98f8e,"🗃 Notebook async IO fix (#223)","2020-07-21 17:45:57 +0200",0.10.11,Pluto,108,48,6,3,42,6,0,0,3
-c5143b33,"🔗 Relative URL for notebook redirects","2020-07-29 23:08:30 +0000",0.11.1,Pluto,109,48,6,3,43,6,0,0,3
-8f381eea,"Automatically select an open port ... (#266)","2020-08-13 15:34:46 +0200",0.11.5,Pluto,109,49,5,3,43,6,0,0,3
-5cc783ec,"🦈 Performance! MsgPack for faster images and pre-rendered md""""","2020-08-13 18:06:24 +0000",0.11.6,Pluto,118,49,8,4,44,8,2,0,3
-0239000d,"Allow Pluto.run(host), i.e. without specifying port. (#310)","2020-08-23 00:03:40 +0200",0.11.8,Pluto,119,49,8,4,45,8,2,0,3
-d4be9bfc,"◻ Windows file bug","2020-08-27 13:21:24 +0200",0.11.9,Pluto,120,50,8,4,45,8,2,0,3
-acc2117b,"✂ Offer to split multiline cells (#335)","2020-09-02 18:29:41 +0200",0.11.11,Pluto,122,51,8,4,46,8,2,0,3
-9b5ff75a,"💈 Cell queued state (#349)","2020-09-04 22:56:58 +0530",0.11.12,Pluto,124,53,8,4,46,8,2,0,3
-4d0bf177,"🔌 Automatic reconnect (#370)","2020-09-06 01:38:51 +0000",0.11.12,Pluto,126,52,8,5,46,10,2,0,3
-9fdc353e,"🔗 Restrict /open access to internal links","2020-09-08 14:11:48 +0200",0.11.12,Pluto,128,52,8,5,48,10,2,0,3
-d57e1f73,"implement per notebook env in backend (#341)","2020-09-09 05:44:34 -0400",0.11.13,Pluto,129,52,8,5,49,10,2,0,3
-d0ff39e6,"add launbrowser on run (#190)","2020-09-09 23:55:31 +0530",0.11.14,Pluto,131,53,9,5,49,10,2,0,3
-d574dfb1,"⚙ new config system without environment variables (#367)","2020-09-14 18:13:58 -0400",0.11.14,Pluto,132,53,11,8,44,11,2,0,3
-4f7f41ae,"Make sure cells don't use top-level return (#446)","2020-09-19 01:10:25 +0200",0.11.14,Pluto,133,53,11,8,45,11,2,0,3
-2572b6fd,"Changed default location to ~/.julia/pluto_notebooks BUT (#475)","2020-10-02 20:24:58 +0200",0.11.14,Pluto,134,54,11,8,45,11,2,0,3
-be964421,"🗝 Secret for access on multi-user computers (#529)","2020-10-05 18:23:45 +0200",0.12.0,Pluto,137,56,12,8,45,11,2,0,3
-7cc235ff,"Javascript """"""""""enhancements"""""""" (#539)","2020-10-07 15:12:51 +0200",0.12.0,Pluto,138,56,12,8,46,11,2,0,3
-88ab8a39,"👒 Include function signature in reactive edge - fix #177 (#538)","2020-10-07 21:47:34 +0200",0.12.0,Pluto,143,55,12,8,52,11,2,0,3
-355edff7,"clean fix url escaping","2020-10-11 21:12:31 +0000",0.12.3,Pluto,142,54,12,8,52,11,2,0,3
-f0853ccb,"Open a notebook directly from Pluto.run (#601)","2020-10-27 00:00:02 -0400",0.12.4,Pluto,143,55,12,8,52,11,2,0,3
-7728d580,"cleanup #601","2020-10-29 12:04:29 +0000",0.12.4,Pluto,144,55,12,8,53,11,2,0,3
-df726e82,"😴 Lazy load more items (#638)","2020-11-05 00:43:01 +0100",0.12.6,Pluto,146,55,12,8,55,11,2,0,3
-ddf7e3a8,"🧹 small cleanup","2020-11-19 13:01:55 +0000",0.12.10,Pluto,145,55,12,8,54,11,2,0,3
-efdabfe6,"🐰 Wrap code in functions to make it faster (#720)","2020-11-27 11:32:27 +0100",0.12.12,Pluto,142,53,12,8,53,11,2,0,3
-a01a6e70,"HTTP.jl 0.9 (#761)","2020-12-09 23:29:17 +0100",0.12.16,Pluto,142,54,12,7,53,11,2,0,3
-6c8a3661,"Ignore IOError when closing connections (#683)","2020-12-11 18:34:07 +0800",0.12.16,Pluto,143,54,12,7,53,11,3,0,3
-dff84f0d,"🧯 Dralbase state managment (#710)","2020-12-29 23:01:46 +0100",0.12.18,Pluto,132,53,15,8,39,11,3,0,3
-03a28fd3,"Pluto ux process file drop (#707)","2020-12-30 20:17:11 +0200",0.12.18,Pluto,133,53,15,8,40,11,3,0,3
-473be5b8,"🧸 Open your own files as samples (#828)","2021-01-08 18:29:13 +0100",0.12.18,Pluto,134,53,15,8,41,11,3,0,3
-2170d2d9,"Fix firebasey performance with large images part 2","2021-01-29 16:31:05 +0100",0.12.20,Pluto,136,53,15,8,42,11,4,0,3
-20f2db67,"Rewrite some old tests (#884)","2021-01-29 20:14:34 +0100",0.12.20,Pluto,135,53,14,8,42,11,4,0,3
-a79fb8bb,"cleanup","2021-02-04 13:48:35 +0100",0.12.20,Pluto,136,54,14,8,42,11,4,0,3
-b164ec7c,"Throttle sending intermediate state updates during a reactive run","2021-02-11 20:21:19 +0100",0.12.20,Pluto,138,56,14,8,42,11,4,0,3
-f417792a,"🌀 Don't prerender loops","2021-02-19 23:31:37 +0100",0.12.20,Pluto,140,57,14,8,43,11,4,0,3
-35cba0a0,"Update & format tests, add patch recovery code (#963)","2021-03-04 22:27:37 +0200",0.14.0,Pluto,141,58,14,8,43,11,4,0,3
-e440d5b7,"If there is an error while saving, don't overwrite the old file (#976)","2021-03-09 14:39:48 +0100",0.14.0,Pluto,142,58,14,8,44,11,4,0,3
-c441f956,"🩹 Detect broken process and offer to restart (#948)","2021-03-10 13:52:47 +0100",0.14.0,Pluto,146,61,14,9,44,11,4,0,3
-05b22e65,"Refactor: make the jl state look more like js (#1009)","2021-03-25 20:04:50 +0100",0.14.0,Pluto,149,62,14,9,46,11,4,0,3
-79496d63,"Trailing throttle syncs to front-end (#1036)","2021-04-01 22:26:44 +0300",0.14.0,Pluto,148,61,14,9,46,11,4,0,3
-038396f9,"Visualize cell dependencies (Backend) (#891)","2021-04-01 22:20:36 +0200",0.14.0,Pluto,155,67,14,9,47,11,4,0,3
-bac224bf,"Copy new state-based export from PlutoSliderServer (#1063)","2021-04-07 00:50:28 +0200",0.14.1,Pluto,159,68,14,9,50,11,4,0,3
-0254946f,"Option to disable writing to file (#1047)","2021-04-14 14:40:41 +0200",0.14.1,Pluto,160,69,14,9,50,11,4,0,3
-3f71b999,"more file extension flexibility","2021-04-16 11:05:18 +0200",0.14.3,Pluto,162,71,14,9,50,11,4,0,3
-1a55e830,"Skip topology update on set bond value (#1120)","2021-04-26 21:11:01 +0200",0.14.3,Pluto,166,71,16,11,50,11,4,0,3
-00b9c271,"Function to update_from_file","2021-04-29 17:27:47 +0300",0.14.4,Pluto,167,71,16,12,50,11,4,0,3
-25ece1df,"🥐 Bake jl file into static export, binder button on exported HTML files (#1191)","2021-05-24 21:41:37 +0200",0.14.5,Pluto,168,71,17,12,50,11,4,0,3
-5d189616,"Refactor tree viewer and fix indent (#1176) (#1217)","2021-06-07 11:29:37 +0200",0.14.7,Pluto,169,72,17,12,50,11,4,0,3
-13e2fc71,"PLJ-928 Bond value fix (#975)","2021-06-08 20:55:25 +0300",0.14.7,Pluto,169,72,16,12,51,11,4,0,3
-aef57ba4,"🎁 Built-in Pkg management (#844)","2021-06-11 12:18:51 +0200",0.15.0,Pluto,198,89,16,17,58,11,4,0,3
-e3535fb2,"🐼 Fix #1270","2021-07-02 01:54:29 +0200",0.15.0,Pluto,197,88,16,18,57,11,4,0,3
-71753aae,"huh","2021-07-02 02:06:43 +0200",0.15.0,Pluto,198,89,16,17,58,11,4,0,3
-81608898,"Analyse macros (#1032)","2021-07-27 18:52:26 +0200",0.15.1,Pluto,206,96,16,17,59,11,4,0,3
-5a85c6bc,"Open multiple notebooks at start and without browser (#1324)","2021-08-26 18:28:32 +0200",0.15.1,Pluto,212,101,17,17,59,11,4,0,3
-58989314,"Compare embedded pkg in update_from_file","2021-09-25 23:58:19 +0200",0.16.1,Pluto,213,101,18,17,59,11,4,0,3
-3f65b53b,"part 2","2021-09-26 00:00:46 +0200",0.16.1,Pluto,214,102,18,17,59,11,4,0,3
-c1733120,"Merge branch 'main' of https://github.com/fonsp/Pluto.jl into main","2021-09-26 11:25:30 +0000",0.16.1,Pluto,216,104,18,17,59,11,4,0,3
-3bf07fa6,"Reactive `using Module` (#1541)","2021-10-11 10:01:15 +0200",0.16.1,Pluto,218,105,18,17,60,11,4,0,3
-2c0b1969,"Fix wrong environment for using in Pkg.activate notebooks (#1577)","2021-10-20 01:29:06 +0200",0.16.2,Pluto,217,104,18,17,60,11,4,0,3
-45666d48,"🥨 Split `notebook_differences` to its own function (#1618)","2021-11-02 12:06:10 +0100",0.17.0,Pluto,219,106,18,17,60,11,4,0,3
-b19d0229,"Ignore file contents before first cell without warning, and after cell order with warning","2021-11-02 22:17:36 +0100",0.17.0,Pluto,220,106,18,17,61,11,4,0,3
-bcd4cbc4,"Update to macro runtime & PlutoHooks.jl (#1597)","2021-11-04 00:07:01 +0100",0.17.1,Pluto,223,109,19,17,60,11,4,0,3
-964cf415,"Use parcel to bundle (#1561)","2021-11-08 01:35:23 +0100",0.17.1,Pluto,224,110,19,17,60,11,4,0,3
-e2396987,"Merge branch 'main' of https://github.com/fonsp/Pluto.jl","2021-11-16 15:21:03 +0100",0.17.1,Pluto,224,108,19,19,60,11,4,0,3
-a6b15d20,"Fix world age issues causing 404 on master (#1676)","2021-11-17 06:14:14 -0500",0.17.1,Pluto,225,108,19,19,61,11,4,0,3
-838709e7,"Add `isolated_cell_id_js` to `generate_html`","2021-11-19 18:31:17 +0100",0.17.1,Pluto,225,109,19,19,60,11,4,0,3
-21ebce23,"Allow cyclic references in some cases (#1668)","2021-11-26 21:21:34 +0100",0.17.2,Pluto,229,113,19,19,60,11,4,0,3
-e4ebe4d4,"Simpler `disable_writing_notebook_file` logic (#1717)","2021-12-01 23:56:24 +0100",0.17.2,Pluto,230,114,19,19,60,11,4,0,3
-2b9a5ad4,"Remove `is_first_value` from state (#1736)","2021-12-06 20:06:26 +0100",0.17.2,Pluto,230,114,20,19,59,11,4,0,3
-c6e0b0f5,"Fix #1681","2021-12-06 21:37:10 +0100",0.17.2,Pluto,231,115,20,19,59,11,4,0,3
-d60123b7,"API for widgets to return possible bind values (#1600)","2021-12-06 23:41:58 +0100",0.17.2,Pluto,232,115,20,20,59,11,4,0,3
-46c6b4be,"Fix favicon in bundle","2021-12-13 12:56:01 +0100",0.17.3,Pluto,233,116,20,20,59,11,4,0,3
-76a64ba6,"🐮 add `possible_bond_values_length` (#1763)","2021-12-15 18:15:49 +0100",0.17.3,Pluto,234,116,20,21,59,11,4,0,3
-e42655f1,"Pluto events interface: Server Event interface (#1782)","2021-12-23 17:16:20 +0200",0.17.3,Pluto,235,111,20,26,60,11,4,0,3
-210a0e06,"Remove file drag drop 😟 (#1780)","2022-01-04 21:33:34 +0100",0.17.3,Pluto,234,111,20,26,59,11,4,0,3
-3fa8ec49,"Cache files from frontend-dist if they have a parcel hash (#1834)","2022-01-21 14:39:35 +0100",0.17.7,Pluto,236,112,20,26,60,11,4,0,3
-2d7e783e,"Fix #1852, relocatable changes for sysimage usage. (#1853)","2022-02-01 23:57:37 +0000",0.17.7,Pluto,236,112,20,26,61,10,4,0,3
-e73c11a3,"New heuristic to skip intermediate bond values (#1892)","2022-02-05 00:29:01 +0100",0.17.7,Pluto,236,112,19,26,62,10,4,0,3
-7a74c63e,"Store cell order in NotebookTopology (#1920)","2022-02-16 14:27:11 +0100",0.18.0,Pluto,251,117,19,26,62,15,9,0,3
-5205bf5b,"🏎 Prevent SessionActions.shutdown from allowing a sneaky restart later","2022-03-01 17:56:26 +0100",0.18.1,Pluto,251,120,19,23,62,15,9,0,3
-09169ae9,"🏎 Keep a ""banned"" list of notebook_ids that should never restart","2022-03-01 18:14:15 +0100",0.18.1,Pluto,251,117,19,26,62,15,9,0,3
-87affb44,"some extra API","2022-03-11 13:41:16 +0100",0.18.1,Pluto,253,117,19,26,63,16,9,0,3
-d873da9a,"Cell metadata and persistent cell deactivation (#1895)","2022-03-19 16:00:50 +0100",0.18.4,Pluto,255,119,19,26,63,16,9,0,3
-15a94f41,"Use MIMEs.jl (#2004)","2022-03-29 10:17:19 +0200",0.18.4,Pluto,254,119,19,26,62,16,9,0,3
-bd4b8ac6,"💌 `Pluto.frontmatter` (#2008)","2022-04-04 14:34:17 +0200",0.18.4,Pluto,257,122,19,26,62,16,9,0,3
-b0f6b738,"PlutoPkg install race condition (#1919)","2022-04-04 19:51:22 +0200",0.19.0,Pluto,260,124,19,27,62,16,9,0,3
-a07df403,"Option to hide logs per cell persistently (#2023)","2022-04-07 18:27:29 +0200",0.19.0,Pluto,263,124,20,29,62,16,9,0,3
-4d9ab63f,"Improve readability and inferability inside `Pluto.run(session, router)` (#2028)","2022-04-07 20:22:55 +0200",0.19.0,Pluto,264,124,20,29,63,16,9,0,3
-a96a4c00,"Invalidate expanded exprs when dependent macros gets removed (#1778)","2022-04-23 12:25:12 +0200",0.19.2,Pluto,265,125,20,29,63,16,9,0,3
-3e52767f,"⚡️ 5x`@bind` speedup! Caching for `update_dependency_cache!` (#2080)","2022-05-02 14:30:07 +0200",0.19.3,Pluto,266,126,20,29,63,16,9,0,3
-83b42a7c,"Change path to wsl path, if on wsl (#2085)","2022-05-09 19:55:35 +0530",0.19.3,Pluto,267,126,20,29,64,16,9,0,3
-879822a6,"log message tweak","2022-05-09 16:27:10 +0200",0.19.3,Pluto,267,127,20,28,64,16,9,0,3
-22ed3bff,"Slightly reduce TTFX for `SessionActions.open` (#2098)","2022-05-09 23:37:01 +0200",0.19.4,Pluto,267,127,20,28,63,16,9,0,4
-bd4af1d8,"Notebook metadata (#2016)","2022-05-17 14:06:01 -0600",0.19.4,Pluto,271,129,21,28,64,16,9,0,4
-a2b1e7a2,"move some files around","2022-05-17 23:14:52 +0200",0.19.4,Pluto,271,130,21,28,63,16,9,0,4
-089870f9,"Pluto.frontmatter(nb) from nb.metadata (#2110)","2022-05-18 00:32:50 +0200",0.19.4,Pluto,272,127,21,32,63,16,9,0,4
-16985ac3,"Use frontmatter for <meta> tags in HTML export (#2111)","2022-05-18 02:17:29 +0200",0.19.4,Pluto,275,129,21,32,64,16,9,0,4
-1179cf67,"Support dependent bound variables for SliderServer (#2014)","2022-05-19 01:30:39 +0200",0.19.4,Pluto,276,127,21,32,67,16,9,0,4
-0880fe7c,"Refactor `load_notebook_nobackup` (#2137)","2022-05-27 19:44:21 +0200",0.19.5,Pluto,281,129,23,32,68,16,9,0,4
-d05bccc6,"Use bundled editor.html for static export if possible (#2133)","2022-06-02 23:34:25 +0200",0.19.6,Pluto,286,133,24,32,68,16,9,0,4
-c21290a7,"Implement @skip_as_script functionality inside cell metadata (#2018)","2022-06-16 00:40:58 +0200",0.19.8,Pluto,287,133,24,33,68,16,9,0,4
-f56f9c4d,"🥕 `Pluto.set_frontmatter!` API","2022-06-16 15:30:17 +0200",0.19.9,Pluto,289,134,25,33,68,16,9,0,4
-dc4bd39e,"Track dependency of `skipped_as_script` cells (#2178)","2022-06-26 17:39:39 +0200",0.19.9,Pluto,292,136,25,34,68,16,9,0,4
-87184bb9,"Update to HTTP.jl 1.0 (#2185)","2022-07-12 22:23:41 +0200",0.19.9,Pluto,295,141,24,31,70,16,9,0,4
-61e5548b,"Add base_url option (#2227)","2022-07-27 08:13:43 +0200",0.19.10,Pluto,298,142,24,31,72,16,9,0,4
-289c1d61,"Compare metadata when reloading from file (#2291)","2022-09-21 16:49:40 +0200",0.19.12,Pluto,299,142,24,32,72,16,9,0,4
-49017448,"PlutoPkg: if Pkg.resolve fails, try updating the registries (#2298)","2022-10-05 16:21:46 +0200",0.19.12,Pluto,300,143,24,32,72,16,9,0,4
-95ece0da,"Allow solving multiple definitions by disabling one, attempt 2 (#2303)","2022-10-07 13:22:38 +0200",0.19.12,Pluto,300,144,24,32,71,16,9,0,4
-dfb90c25,"Merge branch 'main' of https://github.com/fonsp/Pluto.jl","2022-10-19 19:38:35 +0200",0.19.13,Pluto,304,148,23,32,72,16,9,0,4
-ab418abc,"Print secret to console if main page requested without it (#2322)","2022-11-09 16:05:52 +0100",0.19.14,Pluto,305,148,23,32,73,16,9,0,4
-5d4a7675,"expose a function to return the bond names (#2379)","2022-11-23 22:09:09 +0100",0.19.16,Pluto,306,148,23,33,73,16,9,0,4
-f0aa1a32,"cleanup index.html","2022-12-12 18:28:18 +0100",0.19.17,Pluto,308,148,25,33,73,16,9,0,4
-8dee2c4c,"oopsie","2022-12-12 18:38:55 +0100",0.19.17,Pluto,310,149,26,33,73,16,9,0,4
-febc398c,"🩺 Process status (#2399)","2022-12-13 22:04:25 +0100",0.19.17,Pluto,312,151,26,33,73,16,9,0,4
-72d7b689,"Make featured notebook sources a frontend launch param (#2412)","2022-12-14 00:24:24 +0100",0.19.17,Pluto,314,153,26,33,73,16,9,0,4
-d66cad4f,"Packages.jl mini refactor","2022-12-22 17:34:17 +0100",0.19.18,Pluto,315,154,26,33,73,16,9,0,4
-8ca62be1,"Pkg.instantiate before initial resolve when opening a notebook (#2420)","2022-12-22 20:42:14 +0100",0.19.18,Pluto,317,156,26,33,73,16,9,0,4
-91b0e928,"Update skipped/disabled cell dependency before saving notebook (#2239)","2023-02-20 22:02:08 +0100",0.19.22,Pluto,319,158,26,33,73,16,9,0,4
-5513ec86,"A few random cleanups (#2496)","2023-03-13 15:10:14 -0400",0.19.22,Pluto,320,159,26,33,73,16,9,0,4
-ab0a2fff,"Capture and display Pkg logs in the notebook (#2507)","2023-03-14 14:32:49 +0100",0.19.22,Pluto,321,160,26,33,73,16,9,0,4
+Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
+Saturn,1,1,0,0,0,0,0,0,0,"Saturn@0.1.0","f33ed485","✨","2020-02-23 02:53:29 +0100"
+Saturn,9,5,0,2,2,0,0,0,0,"Saturn@0.1.0","7136c6f5","☎ yes hello this is API speaking","2020-02-23 21:11:36 +0100"
+Saturn,9,6,0,1,2,0,0,0,0,"Saturn@0.1.0","04b177d6","💕 Two-way communication & fMIME formatting","2020-02-24 00:47:06 +0100"
+Saturn,10,6,0,1,3,0,0,0,0,"Saturn@0.1.0","4f4f2ab3","✍ docs and todos","2020-02-24 03:08:25 +0100"
+Saturn,16,14,0,0,2,0,0,0,0,"Saturn@0.1.0","8e656009","Merge pull request #20 from fonsp/react","2020-03-01 18:09:43 +0100"
+Pluto,16,14,0,0,2,0,0,0,0,"Pluto@0.1.0","5544ace2","✍ Renamed to Pluto.jl","2020-03-01 18:15:55 +0100"
+Pluto,20,16,0,1,3,0,0,0,0,"Pluto@0.1.0","1284234f","reorganize & eliminate bug in React.jl","2020-03-02 21:50:11 +0100"
+Pluto,21,16,0,2,3,0,0,0,0,"Pluto@0.1.0","6c6f01be","add error when modifying same variable in multiple cells","2020-03-02 23:00:58 +0100"
+Pluto,22,16,0,2,4,0,0,0,0,"Pluto@0.2.0","84185af6","λ Crazy lambdas","2020-03-03 18:38:55 +0100"
+Pluto,27,17,0,2,8,0,0,0,0,"Pluto@0.2.0","98914eca","📂 Basic file I/O","2020-03-05 12:48:02 +0100"
+Pluto,50,28,0,1,21,0,0,0,0,"Pluto@0.3.0","a7e7b3d0","🆕 Attempt at automerging into General","2020-03-16 11:58:33 +0100"
+Pluto,49,27,0,1,21,0,0,0,0,"Pluto@0.3.2","3fcb08ea","👶 Restructuring","2020-03-20 00:02:48 +0100"
+Pluto,51,28,0,1,21,1,0,0,0,"Pluto@0.3.4","0ee82d7b","🏃‍♀️ List running sessions","2020-03-23 00:34:12 +0100"
+Pluto,51,27,0,1,22,1,0,0,0,"Pluto@0.3.5","a381ce80","✂ Separate modules for different notebooks","2020-03-23 10:44:10 +0100"
+Pluto,52,28,0,1,22,1,0,0,0,"Pluto@0.3.6","4d941d4c","🐞 Small UI fixes","2020-03-26 15:12:19 +0100"
+Pluto,57,32,1,1,22,1,0,0,0,"Pluto@0.4.0","d7133814","Merge pull request #37 from fonsp/new-reactivity","2020-03-28 00:50:32 +0100"
+Pluto,56,31,2,1,21,1,0,0,0,"Pluto@0.5.0","1d9e7e0f","🚂 Notebook in separate process","2020-03-31 02:40:23 +0200"
+Pluto,59,32,2,0,24,1,0,0,0,"Pluto@0.5.2","a37ca9bd","Merge pull request #46 from fonsp/cleanup","2020-04-01 01:26:17 +0200"
+Pluto,58,31,2,0,24,1,0,0,0,"Pluto@0.5.2","fc6652ea","☁ More cleanup","2020-04-01 15:41:38 +0200"
+Pluto,59,31,2,0,24,2,0,0,0,"Pluto@0.5.4","ad60d950","🔥 Hard cell stop function","2020-04-02 02:15:27 +0200"
+Pluto,76,44,2,0,26,4,0,0,0,"Pluto@0.5.5","0f082eee","🎤 JS response system","2020-04-02 20:58:03 +0200"
+Pluto,77,44,2,0,27,4,0,0,0,"Pluto@0.5.5","bd3e068d","📰 Never miss a Pluto.jl update again","2020-04-02 21:37:51 +0200"
+Pluto,78,45,2,0,27,4,0,0,0,"Pluto@0.5.8","a36547be","separate cell cache update from running","2020-04-03 11:32:45 +0200"
+Pluto,84,48,2,0,30,4,0,0,0,"Pluto@0.5.9","75dd4db0","☯ Autcomplete","2020-04-03 22:12:39 +0200"
+Pluto,85,47,2,1,30,4,0,0,1,"Pluto@0.5.11","8489fc18","🦉 Fix #45 and #55 and #57","2020-04-04 23:33:45 +0200"
+Pluto,86,48,2,1,30,4,0,0,1,"Pluto@0.5.12","c55d53b4","🐶 Fix #41","2020-04-05 21:24:01 +0200"
+Pluto,88,48,2,2,30,4,0,0,2,"Pluto@0.5.13","10301b00","🛑 Error in showing error","2020-04-05 22:34:01 +0200"
+Pluto,89,48,2,2,31,4,0,0,2,"Pluto@0.5.14","33fdc82c","🖼 Image MIME types","2020-04-06 00:25:24 +0200"
+Pluto,85,46,1,2,30,4,0,0,2,"Pluto@0.5.15","10d2b23c","Merge pull request #66 from fonsp/always-distributed","2020-04-07 23:10:49 +0200"
+Pluto,86,46,1,2,31,4,0,0,2,"Pluto@0.5.19","fadd82ca","🚁 Windows fixes","2020-04-09 23:32:43 +0200"
+Pluto,88,46,1,2,33,4,0,0,2,"Pluto@0.5.20","22592e3a","🍳 Fix #12 yay!","2020-04-10 01:35:44 +0200"
+Pluto,90,46,1,2,35,4,0,0,2,"Pluto@0.5.21","cb4ac1d3","📚 Live docs","2020-04-11 22:25:05 +0200"
+Pluto,88,46,1,2,33,4,0,0,2,"Pluto@0.6.0","f6271487","🐰 Speedy","2020-04-12 01:31:10 +0200"
+Pluto,89,46,1,2,34,4,0,0,2,"Pluto@0.6.0","f97ace45","🐴 Fix #75","2020-04-12 21:24:44 +0200"
+Pluto,92,48,1,2,35,4,0,0,2,"Pluto@0.6.1","81ef356d","👀 Sync code folds","2020-04-12 22:02:42 +0200"
+Pluto,98,50,4,2,36,4,0,0,2,"Pluto@0.6.4","532cb0ff","Merge pull request #86 from fonsp/interactivity","2020-04-16 01:37:55 +0200"
+Pluto,96,48,4,2,36,4,0,0,2,"Pluto@0.7.0","1a89fdc4","👆 Interactive sample","2020-04-16 02:08:05 +0200"
+Pluto,97,48,5,2,36,4,0,0,2,"Pluto@0.7.3","047d2640","🐌 Long WebSocket messages","2020-04-16 15:57:39 +0200"
+Pluto,98,49,5,2,36,4,0,0,2,"Pluto@0.7.6","e304977e","🌷 Improved function extension and tuple support","2020-04-28 18:51:55 +0200"
+Pluto,99,49,5,2,37,4,0,0,2,"Pluto@0.7.6","580ab811","☝ Topological order saving improvements","2020-04-30 17:11:47 +0200"
+Pluto,101,49,7,2,37,4,0,0,2,"Pluto@0.7.9","3e2ef4b6","🌐 Custom host address","2020-05-01 14:55:52 +0200"
+Pluto,100,48,7,2,37,4,0,0,2,"Pluto@0.7.9","f37d43e8","Merge pull request #98 from fonsp/proxiable","2020-05-03 21:08:33 +0200"
+Pluto,101,49,7,2,37,4,0,0,2,"Pluto@0.8.6","f6709f91","🛹 Performance","2020-05-12 01:32:57 +0200"
+Pluto,102,49,7,2,38,4,0,0,2,"Pluto@0.8.8","4e170fb4","▶ Some API for nextjournal","2020-05-14 19:05:39 +0200"
+Pluto,103,49,7,3,38,4,0,0,2,"Pluto@0.8.9","092fac3c","📚 Interactive stack trace","2020-05-17 00:46:29 +0200"
+Pluto,109,51,7,3,42,4,0,0,2,"Pluto@0.8.11","9648ad6c","🦴 Julia 1.0 stability improvements","2020-05-18 03:58:24 +0200"
+Pluto,106,52,7,2,39,4,0,0,2,"Pluto@0.8.12","276e37f0","🧹 Clean up Parse.jl","2020-05-19 15:48:36 +0200"
+Pluto,107,54,7,0,40,4,0,0,2,"Pluto@0.9.0","2d2c6f13","🚩 Stop workspace and recent notebooks","2020-05-20 02:55:11 +0200"
+Pluto,105,53,7,0,39,4,0,0,2,"Pluto@0.9.2","9c61c4a9","🦊 Browser compat fix","2020-05-21 01:10:47 +0200"
+Pluto,107,53,7,0,41,4,0,0,2,"Pluto@0.9.10","02102c64","Nice File Not Found Page (#149)","2020-06-16 12:42:22 -0400"
+Pluto,108,53,7,0,42,4,0,0,2,"Pluto@0.9.10","64a19c4d","🎹 Hot reload & browser debugging for Pluto devs","2020-06-18 04:10:15 +0200"
+Pluto,107,53,7,0,41,4,0,0,2,"Pluto@0.9.11","dabc5a10","🔌 Connection issues","2020-06-26 20:12:09 +0200"
+Pluto,110,53,8,0,42,4,0,0,3,"Pluto@0.9.11","35b9473f","🖐 Pluto v1.5 support & autotesting","2020-07-06 21:48:56 +0200"
+Pluto,112,53,9,0,42,5,0,0,3,"Pluto@0.10.3","2d217690","💾 Improved file UI","2020-07-11 14:23:03 +0000"
+Pluto,113,54,9,0,42,5,0,0,3,"Pluto@0.10.6","7acb658a","🥇 Prioritize Markdown","2020-07-15 01:51:38 +0200"
+Pluto,109,52,8,1,40,5,0,0,3,"Pluto@0.10.6","d6ae39c9","🏗 Restructuring","2020-07-15 15:28:32 +0200"
+Pluto,108,48,6,3,42,6,0,0,3,"Pluto@0.10.11","87c98f8e","🗃 Notebook async IO fix (#223)","2020-07-21 17:45:57 +0200"
+Pluto,109,48,6,3,43,6,0,0,3,"Pluto@0.11.1","c5143b33","🔗 Relative URL for notebook redirects","2020-07-29 23:08:30 +0000"
+Pluto,109,49,5,3,43,6,0,0,3,"Pluto@0.11.5","8f381eea","Automatically select an open port ... (#266)","2020-08-13 15:34:46 +0200"
+Pluto,118,49,8,4,44,8,2,0,3,"Pluto@0.11.6","5cc783ec","🦈 Performance! MsgPack for faster images and pre-rendered md""""","2020-08-13 18:06:24 +0000"
+Pluto,119,49,8,4,45,8,2,0,3,"Pluto@0.11.8","0239000d","Allow Pluto.run(host), i.e. without specifying port. (#310)","2020-08-23 00:03:40 +0200"
+Pluto,120,50,8,4,45,8,2,0,3,"Pluto@0.11.9","d4be9bfc","◻ Windows file bug","2020-08-27 13:21:24 +0200"
+Pluto,122,51,8,4,46,8,2,0,3,"Pluto@0.11.11","acc2117b","✂ Offer to split multiline cells (#335)","2020-09-02 18:29:41 +0200"
+Pluto,124,53,8,4,46,8,2,0,3,"Pluto@0.11.12","9b5ff75a","💈 Cell queued state (#349)","2020-09-04 22:56:58 +0530"
+Pluto,126,52,8,5,46,10,2,0,3,"Pluto@0.11.12","4d0bf177","🔌 Automatic reconnect (#370)","2020-09-06 01:38:51 +0000"
+Pluto,128,52,8,5,48,10,2,0,3,"Pluto@0.11.12","9fdc353e","🔗 Restrict /open access to internal links","2020-09-08 14:11:48 +0200"
+Pluto,129,52,8,5,49,10,2,0,3,"Pluto@0.11.13","d57e1f73","implement per notebook env in backend (#341)","2020-09-09 05:44:34 -0400"
+Pluto,131,53,9,5,49,10,2,0,3,"Pluto@0.11.14","d0ff39e6","add launbrowser on run (#190)","2020-09-09 23:55:31 +0530"
+Pluto,132,53,11,8,44,11,2,0,3,"Pluto@0.11.14","d574dfb1","⚙ new config system without environment variables (#367)","2020-09-14 18:13:58 -0400"
+Pluto,133,53,11,8,45,11,2,0,3,"Pluto@0.11.14","4f7f41ae","Make sure cells don't use top-level return (#446)","2020-09-19 01:10:25 +0200"
+Pluto,134,54,11,8,45,11,2,0,3,"Pluto@0.11.14","2572b6fd","Changed default location to ~/.julia/pluto_notebooks BUT (#475)","2020-10-02 20:24:58 +0200"
+Pluto,137,56,12,8,45,11,2,0,3,"Pluto@0.12.0","be964421","🗝 Secret for access on multi-user computers (#529)","2020-10-05 18:23:45 +0200"
+Pluto,138,56,12,8,46,11,2,0,3,"Pluto@0.12.0","7cc235ff","Javascript """"""""""enhancements"""""""" (#539)","2020-10-07 15:12:51 +0200"
+Pluto,143,55,12,8,52,11,2,0,3,"Pluto@0.12.0","88ab8a39","👒 Include function signature in reactive edge - fix #177 (#538)","2020-10-07 21:47:34 +0200"
+Pluto,142,54,12,8,52,11,2,0,3,"Pluto@0.12.3","355edff7","clean fix url escaping","2020-10-11 21:12:31 +0000"
+Pluto,143,55,12,8,52,11,2,0,3,"Pluto@0.12.4","f0853ccb","Open a notebook directly from Pluto.run (#601)","2020-10-27 00:00:02 -0400"
+Pluto,144,55,12,8,53,11,2,0,3,"Pluto@0.12.4","7728d580","cleanup #601","2020-10-29 12:04:29 +0000"
+Pluto,146,55,12,8,55,11,2,0,3,"Pluto@0.12.6","df726e82","😴 Lazy load more items (#638)","2020-11-05 00:43:01 +0100"
+Pluto,145,55,12,8,54,11,2,0,3,"Pluto@0.12.10","ddf7e3a8","🧹 small cleanup","2020-11-19 13:01:55 +0000"
+Pluto,142,53,12,8,53,11,2,0,3,"Pluto@0.12.12","efdabfe6","🐰 Wrap code in functions to make it faster (#720)","2020-11-27 11:32:27 +0100"
+Pluto,142,54,12,7,53,11,2,0,3,"Pluto@0.12.16","a01a6e70","HTTP.jl 0.9 (#761)","2020-12-09 23:29:17 +0100"
+Pluto,143,54,12,7,53,11,3,0,3,"Pluto@0.12.16","6c8a3661","Ignore IOError when closing connections (#683)","2020-12-11 18:34:07 +0800"
+Pluto,132,53,15,8,39,11,3,0,3,"Pluto@0.12.18","dff84f0d","🧯 Dralbase state managment (#710)","2020-12-29 23:01:46 +0100"
+Pluto,133,53,15,8,40,11,3,0,3,"Pluto@0.12.18","03a28fd3","Pluto ux process file drop (#707)","2020-12-30 20:17:11 +0200"
+Pluto,134,53,15,8,41,11,3,0,3,"Pluto@0.12.18","473be5b8","🧸 Open your own files as samples (#828)","2021-01-08 18:29:13 +0100"
+Pluto,136,53,15,8,42,11,4,0,3,"Pluto@0.12.20","2170d2d9","Fix firebasey performance with large images part 2","2021-01-29 16:31:05 +0100"
+Pluto,135,53,14,8,42,11,4,0,3,"Pluto@0.12.20","20f2db67","Rewrite some old tests (#884)","2021-01-29 20:14:34 +0100"
+Pluto,136,54,14,8,42,11,4,0,3,"Pluto@0.12.20","76ea9231","New analysis method","2021-02-02 22:44:57 +0100"
+Pluto,138,56,14,8,42,11,4,0,3,"Pluto@0.12.20","b164ec7c","Throttle sending intermediate state updates during a reactive run","2021-02-11 20:21:19 +0100"
+Pluto,140,57,14,8,43,11,4,0,3,"Pluto@0.12.20","f417792a","🌀 Don't prerender loops","2021-02-19 23:31:37 +0100"
+Pluto,141,58,14,8,43,11,4,0,3,"Pluto@0.14.0","35cba0a0","Update & format tests, add patch recovery code (#963)","2021-03-04 22:27:37 +0200"
+Pluto,142,58,14,8,44,11,4,0,3,"Pluto@0.14.0","e440d5b7","If there is an error while saving, don't overwrite the old file (#976)","2021-03-09 14:39:48 +0100"
+Pluto,146,61,14,9,44,11,4,0,3,"Pluto@0.14.0","c441f956","🩹 Detect broken process and offer to restart (#948)","2021-03-10 13:52:47 +0100"
+Pluto,149,62,14,9,46,11,4,0,3,"Pluto@0.14.0","05b22e65","Refactor: make the jl state look more like js (#1009)","2021-03-25 20:04:50 +0100"
+Pluto,148,61,14,9,46,11,4,0,3,"Pluto@0.14.0","79496d63","Trailing throttle syncs to front-end (#1036)","2021-04-01 22:26:44 +0300"
+Pluto,155,67,14,9,47,11,4,0,3,"Pluto@0.14.0","038396f9","Visualize cell dependencies (Backend) (#891)","2021-04-01 22:20:36 +0200"
+Pluto,159,68,14,9,50,11,4,0,3,"Pluto@0.14.1","bac224bf","Copy new state-based export from PlutoSliderServer (#1063)","2021-04-07 00:50:28 +0200"
+Pluto,160,69,14,9,50,11,4,0,3,"Pluto@0.14.1","0254946f","Option to disable writing to file (#1047)","2021-04-14 14:40:41 +0200"
+Pluto,162,71,14,9,50,11,4,0,3,"Pluto@0.14.3","3f71b999","more file extension flexibility","2021-04-16 11:05:18 +0200"
+Pluto,166,71,16,11,50,11,4,0,3,"Pluto@0.14.3","1a55e830","Skip topology update on set bond value (#1120)","2021-04-26 21:11:01 +0200"
+Pluto,167,71,16,12,50,11,4,0,3,"Pluto@0.14.4","00b9c271","Function to update_from_file","2021-04-29 17:27:47 +0300"
+Pluto,168,71,17,12,50,11,4,0,3,"Pluto@0.14.5","25ece1df","🥐 Bake jl file into static export, binder button on exported HTML files (#1191)","2021-05-24 21:41:37 +0200"
+Pluto,169,72,17,12,50,11,4,0,3,"Pluto@0.14.7","5d189616","Refactor tree viewer and fix indent (#1176) (#1217)","2021-06-07 11:29:37 +0200"
+Pluto,169,72,16,12,51,11,4,0,3,"Pluto@0.14.7","13e2fc71","PLJ-928 Bond value fix (#975)","2021-06-08 20:55:25 +0300"
+Pluto,198,89,16,17,58,11,4,0,3,"Pluto@0.15.0","aef57ba4","🎁 Built-in Pkg management (#844)","2021-06-11 12:18:51 +0200"
+Pluto,197,88,16,18,57,11,4,0,3,"Pluto@0.15.0","e3535fb2","🐼 Fix #1270","2021-07-02 01:54:29 +0200"
+Pluto,198,89,16,17,58,11,4,0,3,"Pluto@0.15.0","71753aae","huh","2021-07-02 02:06:43 +0200"
+Pluto,206,96,16,17,59,11,4,0,3,"Pluto@0.15.1","81608898","Analyse macros (#1032)","2021-07-27 18:52:26 +0200"
+Pluto,212,101,17,17,59,11,4,0,3,"Pluto@0.15.1","5a85c6bc","Open multiple notebooks at start and without browser (#1324)","2021-08-26 18:28:32 +0200"
+Pluto,213,101,18,17,59,11,4,0,3,"Pluto@0.16.1","58989314","Compare embedded pkg in update_from_file","2021-09-25 23:58:19 +0200"
+Pluto,214,102,18,17,59,11,4,0,3,"Pluto@0.16.1","3f65b53b","part 2","2021-09-26 00:00:46 +0200"
+Pluto,216,104,18,17,59,11,4,0,3,"Pluto@0.16.1","c1733120","Merge branch 'main' of https://github.com/fonsp/Pluto.jl into main","2021-09-26 11:25:30 +0000"
+Pluto,218,105,18,17,60,11,4,0,3,"Pluto@0.16.1","3bf07fa6","Reactive `using Module` (#1541)","2021-10-11 10:01:15 +0200"
+Pluto,217,104,18,17,60,11,4,0,3,"Pluto@0.16.2","2c0b1969","Fix wrong environment for using in Pkg.activate notebooks (#1577)","2021-10-20 01:29:06 +0200"
+Pluto,219,106,18,17,60,11,4,0,3,"Pluto@0.17.0","45666d48","🥨 Split `notebook_differences` to its own function (#1618)","2021-11-02 12:06:10 +0100"
+Pluto,220,106,18,17,61,11,4,0,3,"Pluto@0.17.0","b19d0229","Ignore file contents before first cell without warning, and after cell order with warning","2021-11-02 22:17:36 +0100"
+Pluto,223,109,19,17,60,11,4,0,3,"Pluto@0.17.1","bcd4cbc4","Update to macro runtime & PlutoHooks.jl (#1597)","2021-11-04 00:07:01 +0100"
+Pluto,224,110,19,17,60,11,4,0,3,"Pluto@0.17.1","964cf415","Use parcel to bundle (#1561)","2021-11-08 01:35:23 +0100"
+Pluto,224,108,19,19,60,11,4,0,3,"Pluto@0.17.1","e2396987","Merge branch 'main' of https://github.com/fonsp/Pluto.jl","2021-11-16 15:21:03 +0100"
+Pluto,225,108,19,19,61,11,4,0,3,"Pluto@0.17.1","a6b15d20","Fix world age issues causing 404 on master (#1676)","2021-11-17 06:14:14 -0500"
+Pluto,225,109,19,19,60,11,4,0,3,"Pluto@0.17.1","838709e7","Add `isolated_cell_id_js` to `generate_html`","2021-11-19 18:31:17 +0100"
+Pluto,229,113,19,19,60,11,4,0,3,"Pluto@0.17.2","21ebce23","Allow cyclic references in some cases (#1668)","2021-11-26 21:21:34 +0100"
+Pluto,230,114,19,19,60,11,4,0,3,"Pluto@0.17.2","e4ebe4d4","Simpler `disable_writing_notebook_file` logic (#1717)","2021-12-01 23:56:24 +0100"
+Pluto,230,114,20,19,59,11,4,0,3,"Pluto@0.17.2","2b9a5ad4","Remove `is_first_value` from state (#1736)","2021-12-06 20:06:26 +0100"
+Pluto,231,115,20,19,59,11,4,0,3,"Pluto@0.17.2","c6e0b0f5","Fix #1681","2021-12-06 21:37:10 +0100"
+Pluto,232,115,20,20,59,11,4,0,3,"Pluto@0.17.2","d60123b7","API for widgets to return possible bind values (#1600)","2021-12-06 23:41:58 +0100"
+Pluto,233,116,20,20,59,11,4,0,3,"Pluto@0.17.3","46c6b4be","Fix favicon in bundle","2021-12-13 12:56:01 +0100"
+Pluto,234,116,20,21,59,11,4,0,3,"Pluto@0.17.3","76a64ba6","🐮 add `possible_bond_values_length` (#1763)","2021-12-15 18:15:49 +0100"
+Pluto,235,111,20,26,60,11,4,0,3,"Pluto@0.17.3","e42655f1","Pluto events interface: Server Event interface (#1782)","2021-12-23 17:16:20 +0200"
+Pluto,234,111,20,26,59,11,4,0,3,"Pluto@0.17.3","210a0e06","Remove file drag drop 😟 (#1780)","2022-01-04 21:33:34 +0100"
+Pluto,236,112,20,26,60,11,4,0,3,"Pluto@0.17.7","3fa8ec49","Cache files from frontend-dist if they have a parcel hash (#1834)","2022-01-21 14:39:35 +0100"
+Pluto,236,112,20,26,61,10,4,0,3,"Pluto@0.17.7","2d7e783e","Fix #1852, relocatable changes for sysimage usage. (#1853)","2022-02-01 23:57:37 +0000"
+Pluto,236,112,19,26,62,10,4,0,3,"Pluto@0.17.7","e73c11a3","New heuristic to skip intermediate bond values (#1892)","2022-02-05 00:29:01 +0100"
+Pluto,251,117,19,26,62,15,9,0,3,"Pluto@0.18.0","7a74c63e","Store cell order in NotebookTopology (#1920)","2022-02-16 14:27:11 +0100"
+Pluto,251,120,19,23,62,15,9,0,3,"Pluto@0.18.1","5205bf5b","🏎 Prevent SessionActions.shutdown from allowing a sneaky restart later","2022-03-01 17:56:26 +0100"
+Pluto,251,117,19,26,62,15,9,0,3,"Pluto@0.18.1","09169ae9","🏎 Keep a ""banned"" list of notebook_ids that should never restart","2022-03-01 18:14:15 +0100"
+Pluto,253,117,19,26,63,16,9,0,3,"Pluto@0.18.1","87affb44","some extra API","2022-03-11 13:41:16 +0100"
+Pluto,255,119,19,26,63,16,9,0,3,"Pluto@0.18.4","d873da9a","Cell metadata and persistent cell deactivation (#1895)","2022-03-19 16:00:50 +0100"
+Pluto,254,119,19,26,62,16,9,0,3,"Pluto@0.18.4","15a94f41","Use MIMEs.jl (#2004)","2022-03-29 10:17:19 +0200"
+Pluto,257,122,19,26,62,16,9,0,3,"Pluto@0.18.4","bd4b8ac6","💌 `Pluto.frontmatter` (#2008)","2022-04-04 14:34:17 +0200"
+Pluto,260,124,19,27,62,16,9,0,3,"Pluto@0.19.0","b0f6b738","PlutoPkg install race condition (#1919)","2022-04-04 19:51:22 +0200"
+Pluto,263,124,20,29,62,16,9,0,3,"Pluto@0.19.0","a07df403","Option to hide logs per cell persistently (#2023)","2022-04-07 18:27:29 +0200"
+Pluto,264,124,20,29,63,16,9,0,3,"Pluto@0.19.0","4d9ab63f","Improve readability and inferability inside `Pluto.run(session, router)` (#2028)","2022-04-07 20:22:55 +0200"
+Pluto,265,125,20,29,63,16,9,0,3,"Pluto@0.19.2","a96a4c00","Invalidate expanded exprs when dependent macros gets removed (#1778)","2022-04-23 12:25:12 +0200"
+Pluto,266,126,20,29,63,16,9,0,3,"Pluto@0.19.3","3e52767f","⚡️ 5x`@bind` speedup! Caching for `update_dependency_cache!` (#2080)","2022-05-02 14:30:07 +0200"
+Pluto,267,126,20,29,64,16,9,0,3,"Pluto@0.19.3","83b42a7c","Change path to wsl path, if on wsl (#2085)","2022-05-09 19:55:35 +0530"
+Pluto,267,127,20,28,64,16,9,0,3,"Pluto@0.19.3","879822a6","log message tweak","2022-05-09 16:27:10 +0200"
+Pluto,267,127,20,28,63,16,9,0,4,"Pluto@0.19.4","22ed3bff","Slightly reduce TTFX for `SessionActions.open` (#2098)","2022-05-09 23:37:01 +0200"
+Pluto,271,129,21,28,64,16,9,0,4,"Pluto@0.19.4","bd4af1d8","Notebook metadata (#2016)","2022-05-17 14:06:01 -0600"
+Pluto,271,130,21,28,63,16,9,0,4,"Pluto@0.19.4","a2b1e7a2","move some files around","2022-05-17 23:14:52 +0200"
+Pluto,272,127,21,32,63,16,9,0,4,"Pluto@0.19.4","089870f9","Pluto.frontmatter(nb) from nb.metadata (#2110)","2022-05-18 00:32:50 +0200"
+Pluto,275,129,21,32,64,16,9,0,4,"Pluto@0.19.4","16985ac3","Use frontmatter for <meta> tags in HTML export (#2111)","2022-05-18 02:17:29 +0200"
+Pluto,276,127,21,32,67,16,9,0,4,"Pluto@0.19.4","1179cf67","Support dependent bound variables for SliderServer (#2014)","2022-05-19 01:30:39 +0200"
+Pluto,281,129,23,32,68,16,9,0,4,"Pluto@0.19.5","0880fe7c","Refactor `load_notebook_nobackup` (#2137)","2022-05-27 19:44:21 +0200"
+Pluto,286,133,24,32,68,16,9,0,4,"Pluto@0.19.6","d05bccc6","Use bundled editor.html for static export if possible (#2133)","2022-06-02 23:34:25 +0200"
+Pluto,287,133,24,33,68,16,9,0,4,"Pluto@0.19.8","c21290a7","Implement @skip_as_script functionality inside cell metadata (#2018)","2022-06-16 00:40:58 +0200"
+Pluto,289,134,25,33,68,16,9,0,4,"Pluto@0.19.9","f56f9c4d","🥕 `Pluto.set_frontmatter!` API","2022-06-16 15:30:17 +0200"
+Pluto,292,136,25,34,68,16,9,0,4,"Pluto@0.19.9","dc4bd39e","Track dependency of `skipped_as_script` cells (#2178)","2022-06-26 17:39:39 +0200"
+Pluto,295,141,24,31,70,16,9,0,4,"Pluto@0.19.9","87184bb9","Update to HTTP.jl 1.0 (#2185)","2022-07-12 22:23:41 +0200"
+Pluto,298,142,24,31,72,16,9,0,4,"Pluto@0.19.10","61e5548b","Add base_url option (#2227)","2022-07-27 08:13:43 +0200"
+Pluto,299,142,24,32,72,16,9,0,4,"Pluto@0.19.12","289c1d61","Compare metadata when reloading from file (#2291)","2022-09-21 16:49:40 +0200"
+Pluto,300,143,24,32,72,16,9,0,4,"Pluto@0.19.12","49017448","PlutoPkg: if Pkg.resolve fails, try updating the registries (#2298)","2022-10-05 16:21:46 +0200"
+Pluto,300,144,24,32,71,16,9,0,4,"Pluto@0.19.12","95ece0da","Allow solving multiple definitions by disabling one, attempt 2 (#2303)","2022-10-07 13:22:38 +0200"
+Pluto,304,148,23,32,72,16,9,0,4,"Pluto@0.19.13","dfb90c25","Merge branch 'main' of https://github.com/fonsp/Pluto.jl","2022-10-19 19:38:35 +0200"
+Pluto,305,148,23,32,73,16,9,0,4,"Pluto@0.19.14","ab418abc","Print secret to console if main page requested without it (#2322)","2022-11-09 16:05:52 +0100"
+Pluto,306,148,23,33,73,16,9,0,4,"Pluto@0.19.16","5d4a7675","expose a function to return the bond names (#2379)","2022-11-23 22:09:09 +0100"
+Pluto,308,148,25,33,73,16,9,0,4,"Pluto@0.19.17","f0aa1a32","cleanup index.html","2022-12-12 18:28:18 +0100"
+Pluto,310,149,26,33,73,16,9,0,4,"Pluto@0.19.17","8dee2c4c","oopsie","2022-12-12 18:38:55 +0100"
+Pluto,312,151,26,33,73,16,9,0,4,"Pluto@0.19.17","febc398c","🩺 Process status (#2399)","2022-12-13 22:04:25 +0100"
+Pluto,314,153,26,33,73,16,9,0,4,"Pluto@0.19.17","72d7b689","Make featured notebook sources a frontend launch param (#2412)","2022-12-14 00:24:24 +0100"
+Pluto,315,154,26,33,73,16,9,0,4,"Pluto@0.19.18","d66cad4f","Packages.jl mini refactor","2022-12-22 17:34:17 +0100"
+Pluto,317,156,26,33,73,16,9,0,4,"Pluto@0.19.18","8ca62be1","Pkg.instantiate before initial resolve when opening a notebook (#2420)","2022-12-22 20:42:14 +0100"
+Pluto,319,158,26,33,73,16,9,0,4,"Pluto@0.19.22","91b0e928","Update skipped/disabled cell dependency before saving notebook (#2239)","2023-02-20 22:02:08 +0100"
+Pluto,320,159,26,33,73,16,9,0,4,"Pluto@0.19.22","5513ec86","A few random cleanups (#2496)","2023-03-13 15:10:14 -0400"
+Pluto,321,160,26,33,73,16,9,0,4,"Pluto@0.19.22","ab0a2fff","Capture and display Pkg logs in the notebook (#2507)","2023-03-14 14:32:49 +0100"
+Pluto,324,163,26,33,73,16,9,0,4,"Pluto@0.19.24","75065513","Julia 1.9: Ensure that precompile caches match by running `Pkg.precompile()` in an isolated Julia process (#2499)","2023-04-11 14:01:51 +0200"

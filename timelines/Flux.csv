@@ -1,75 +1,83 @@
-Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel
-b348e31f,"Merge pull request #667 from FluxML/donottrack","2019-03-08 11:38:37 +0000",0.0.0,Flux,401,11,70,0,139,56,125,0,0
-8a559694,"Merge pull request #698 from oxinabox/ox/learnablemaxout","2019-03-25 16:06:32 +0000",0.0.0,Flux,403,12,70,0,140,56,125,0,0
-7418a2d7,"Merge pull request #696 from shreyas-kowshik/group_norm_patch","2019-03-29 16:35:51 -0700",0.0.0,Flux,407,12,71,0,143,56,125,0,0
-13cfcb5f,"Merge pull request #718 from FluxML/sf/asymmetric_padding","2019-04-25 22:29:14 +0100",0.0.0,Flux,307,11,68,4,107,48,66,0,3
-eff60064,"Merge pull request #612 from dhairyagandhi96/onecold","2019-04-30 19:40:19 +0530",0.0.0,Flux,308,11,68,4,107,49,66,0,3
-16fc41cd,"Merge #756","2019-05-13 16:37:57 +0000",0.8.3,Flux,307,11,68,4,107,49,65,0,3
-68ba6e4e,"Merge #563","2019-05-13 17:16:10 +0000",0.8.3,Flux,312,11,68,4,112,49,65,0,3
-8ee6af1b,"Merge #762","2019-05-14 10:36:22 +0000",0.8.3,Flux,317,11,69,4,114,49,67,0,3
-1902c0e7,"Merge #446","2019-06-05 13:28:41 +0000",0.8.3,Flux,319,11,69,5,115,49,67,0,3
-509b21a4,"Merge pull request #1571 from FluxML/dg/cuda16","2021-04-23 18:38:35 +0530",0.12.2,Flux,457,17,68,0,151,73,147,0,1
-e6629dd9,"Merge pull request #1545 from queensferryme/feat/ea","2021-05-15 01:59:44 +0530",0.12.3,Flux,462,17,68,0,156,73,147,0,1
-335286ad,"Merge #1620","2021-06-15 23:28:22 +0000",0.12.4,Flux,465,17,68,0,157,73,148,0,2
-87a0065d,"Merge #1467","2021-07-10 18:20:16 +0000",0.12.4,Flux,484,19,71,0,171,73,148,0,2
-ee4c1303,"Merge #1661","2021-07-12 17:20:34 +0000",0.12.4,Flux,488,19,71,0,171,77,148,0,2
-1a0b5193,"Merge #1660","2021-07-13 18:46:41 +0000",0.12.4,Flux,487,19,70,0,171,77,148,0,2
-99317301,"Merge #1516","2021-07-13 23:17:33 +0000",0.12.5,Flux,490,19,70,0,172,79,148,0,2
-5d2a9555,"Merge #1675","2021-08-02 12:30:12 +0000",0.12.6,Flux,494,19,70,0,174,81,148,0,2
-dbb9f82e,"Merge #1681","2021-08-04 16:48:29 +0000",0.12.6,Flux,500,19,70,0,179,82,148,0,2
-2468a066,"Merge #1704","2021-09-06 15:47:10 +0000",0.12.6,Flux,507,19,77,0,179,82,148,0,2
-c91867fd,"Merge #1711","2021-09-15 14:03:57 +0000",0.12.6,Flux,506,18,77,0,179,82,148,0,2
-460f0050,"Merge #1708","2021-09-29 08:56:03 +0000",0.12.6,Flux,500,19,70,0,179,82,148,0,2
-2c8c3c7f,"Merge #1726","2021-10-10 16:11:35 +0000",0.12.7,Flux,502,19,72,0,179,82,148,0,2
-f66be896,"Merge #1744","2021-10-25 14:43:13 +0000",0.12.8,Flux,506,19,76,0,179,82,148,0,2
-fe803a1a,"Merge #1794","2021-12-13 18:27:18 +0000",0.12.8,Flux,507,20,76,0,179,82,148,0,2
-75e37710,"Merge #1761","2022-01-16 18:02:49 +0000",0.12.8,Flux,509,20,76,0,180,82,149,0,2
-8418a3c5,"Merge #1847","2022-01-24 03:14:48 +0000",0.12.8,Flux,535,20,81,0,179,87,166,0,2
-8d3b8d3e,"Merge pull request #1849 from darsnack/darsnack/dropout-rng","2022-01-27 16:10:23 -0600",0.12.9,Flux,551,21,86,0,189,87,166,0,2
-5244ade5,"Merge pull request #1856 from pxl-th/master","2022-02-03 09:36:52 -0800",0.12.9,Flux,553,21,86,0,190,87,167,0,2
-cce7ad09,"Speed up `onehotbatch` (#1861)","2022-02-05 11:12:47 -0500",0.12.9,Flux,558,21,86,0,195,87,167,0,2
-9b21e2cc,"Simplify `trainable`, `functor` and `Parallel` (#1862)","2022-02-05 14:30:13 -0500",0.12.9,Flux,561,22,87,0,196,87,167,0,2
-a45cc055,"Merge pull request #1751 from FluxML/cl/v013","2022-02-05 21:06:34 +0100",0.13.0-DEV,Flux,556,22,87,0,191,87,167,0,2
-7b568137,"Replace unrolled `foldl` used to evaluate `Chain` with a better one (#1809)","2022-02-05 16:02:16 -0500",0.13.0-DEV,Flux,559,22,87,0,193,87,168,0,2
-13a65bef,"Merge pull request #1874 from FluxML/cl/mlutils","2022-02-18 01:29:00 +0100",0.13.0-DEV,Flux,544,21,82,1,184,87,167,0,2
-b35b23b2,"Merge pull request #1877 from theabhirath/trunc-normal","2022-02-19 11:01:32 -0600",0.13.0-DEV,Flux,550,21,84,1,185,90,167,0,2
-f49e81e7,"Print channel dimensions of `Dense` like those of `Conv` (#1658)","2022-02-19 18:49:22 -0500",0.13.0-DEV,Flux,554,21,85,1,188,90,167,0,2
-57ef5c08,"Make RNN layers accept `in => out` (#1886)","2022-02-20 22:15:25 -0500",0.13.0-DEV,Flux,558,21,88,1,189,90,167,0,2
-525b645e,"Replace `@adjoint` with `rrule` (#1863)","2022-02-24 10:27:03 -0500",0.13.0-DEV,Flux,557,21,88,1,188,90,167,0,2
-0b3e8c5d,"Merge pull request #1888 from TLipede/speed-onehot","2022-03-04 09:50:42 -0600",0.13.0-DEV,Flux,558,21,88,1,189,90,167,0,2
-0edf602d,"rm Flux.Zeros (#1882)","2022-03-05 11:39:40 -0500",0.13.0-DEV,Flux,558,21,88,1,190,89,167,0,2
-5e05de7b,"depend on Optimisers (#1864)","2022-03-05 11:40:18 -0500",0.13.0-DEV,Flux,550,21,81,1,189,89,167,0,2
-9755d57a,"Merge pull request #1881 from theabhirath/diagonal","2022-03-05 16:40:15 -0600",0.13.0-DEV,Flux,551,21,81,1,190,89,167,0,2
-b6dbefb2,"Mark initialisations nograd, restrict signatures (#1908)","2022-03-20 08:13:05 -0500",0.13.0-DEV,Flux,551,21,83,1,188,89,167,0,2
-81eea849,"Use `destructure` from Optimisers.jl (#1901)","2022-03-21 09:49:23 -0400",0.13.0-DEV,Flux,549,21,83,1,186,89,167,0,2
-57beb232,"Improve docs for initialisation (#1912)","2022-03-26 20:06:14 -0400",0.13.0-DEV,Flux,566,28,86,1,183,99,167,0,2
-a0b804af,"Merge pull request #1921 from FluxML/cl/dept","2022-04-02 18:44:37 +0200",0.13.0-DEV,Flux,566,28,84,1,185,99,167,0,2
-5f17f1c3,"Rename `Diagonal` to `Scale` (#1927)","2022-04-04 23:09:53 -0400",0.13.0,Flux,571,28,85,1,186,102,167,0,2
-674527e0,"Merge pull request #1875 from darsnack/load-structured","2022-04-05 08:54:55 -0500",0.13.0,Flux,584,28,88,1,196,102,167,0,2
-24f40b6d,"Merge pull request #1945 from KronosTheLate/add_firstindex_method_to_chain","2022-04-13 13:53:36 -0700",0.13.0,Flux,585,28,88,1,196,103,167,0,2
-58785f37,"Merge pull request #1948 from MarcoVela/1974-recur-type-stability","2022-04-28 17:13:46 -0700",0.13.0,Flux,587,28,88,1,196,103,169,0,2
-946b815e,"Merge pull request #1956 from FluxML/bc/conv-helper-tweaks","2022-05-01 08:35:22 -0700",0.13.0,Flux,591,28,90,1,198,103,169,0,2
-25457f52,"Merge pull request #1959 from FluxML/cl/oh","2022-05-07 22:53:06 +0200",0.13.0,Flux,592,28,90,1,199,103,169,0,2
-0b01b777,"Merge pull request #1983 from theabhirath/pairwise-fusion-2","2022-06-06 08:59:04 -0700",0.13.3,Flux,599,28,91,1,204,103,170,0,2
-952c4a51,"Merge pull request #1996 from Karthik-d-k/namecase","2022-06-15 20:09:20 -0700",0.13.3,Flux,603,29,91,1,207,103,170,0,2
-a7f58491,"Remove CTC loss (moved to NNlib) (#2024)","2022-07-26 15:37:34 -0400",0.13.5,Flux,605,29,91,1,209,103,170,0,2
-0b62a911,"use Functors 0.3 in Flux (#2007)","2022-07-29 22:32:23 -0400",0.13.5,Flux,606,30,90,1,208,104,170,0,3
-1914f381,"using OneHotArrays (#2025)","2022-08-10 09:20:28 -0700",0.13.5,Flux,581,30,83,1,194,104,166,0,3
-0840625b,"Merge pull request #2052 from FluxML/bc/restore-private-fns","2022-08-28 15:01:43 -0700",0.13.5,Flux,584,31,83,1,194,106,166,0,3
-5546e1da,"Merge pull request #2041 from darsnack/load-filter","2022-09-05 15:19:24 -0400",0.13.5,Flux,586,31,83,1,196,106,166,0,3
-1ec32c25,"Add `@autosize` (#2078)","2022-10-10 14:34:03 -0400",0.13.6,Flux,604,35,86,3,205,106,166,0,3
-c7ed5fed,"Merge pull request #2081 from Saransh-cpp/create_bias","2022-10-11 17:55:29 -0700",0.13.6,Flux,602,35,86,3,205,104,166,0,3
-74bd04b7,"Fix #2086 re `@autosize` (#2087)","2022-10-16 11:25:57 -0400",0.13.6,Flux,603,35,87,3,205,104,166,0,3
-8d948e81,"Add explicit `train!`, unify `update!`, and auto-translate the two `Adam`s (#2082)","2022-11-20 17:10:20 -0500",0.13.8,Flux,621,36,89,17,206,104,166,0,3
-40f0a63f,"Re-write training docs (#2114)","2022-12-15 17:03:58 -0500",0.13.9,Flux,624,36,89,17,209,104,166,0,3
-79971741,"use NNlib.within_gradient (#2152)","2023-01-06 19:09:43 -0500",0.13.11,Flux,625,36,89,17,210,104,166,0,3
-e33de0ce,"Move `dropout` to NNlib (#2150)","2023-01-31 20:32:56 -0500",0.13.11,Flux,612,36,91,17,196,104,165,0,3
-d511d7aa,"Match layer output to weights (#2156)","2023-02-07 23:04:16 -0500",0.13.12,Flux,618,36,91,17,200,104,167,0,3
-2d357ad3,"Add friendly size check (#2176)","2023-02-09 23:23:35 -0500",0.13.12,Flux,618,36,92,17,200,103,167,0,3
-68b165cf,"Add `f16` (#2184)","2023-02-11 05:11:20 -0500",0.13.12,Flux,620,36,92,17,202,101,169,0,3
-d91c203d,"remove flatten","2023-02-13 09:22:38 +0100",0.13.12,Flux,619,36,91,17,202,101,169,0,3
-6278916b,"Revert ""remove flatten""","2023-02-13 09:33:46 +0100",0.13.12,Flux,620,36,92,17,202,101,169,0,3
-8a45b88e,"remove Flux.flatten in favor of MLUtils.flatten (#2188)","2023-02-14 14:16:42 +0100",0.13.12,Flux,619,36,91,17,202,101,169,0,3
-dd6318f5,"reintroduce flatten (#2196)","2023-02-24 04:28:20 +0100",0.13.13,Flux,620,36,92,17,202,101,169,0,3
-cc1ae6c3,"Merge pull request #2189 from pxl-th/pxl-th/amdgpu","2023-02-28 07:22:01 -0800",0.13.13,Flux,623,37,92,17,204,101,169,0,3
-0155f61e,"MultiHeadAttention implementation (#2146)","2023-03-11 08:53:14 +0100",0.13.14,Flux,629,39,91,17,209,101,169,0,3
+Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
+Flux,401,11,70,0,139,56,125,0,0,"Flux@0.0.0","b348e31f","Merge pull request #667 from FluxML/donottrack","2019-03-08 11:38:37 +0000"
+Flux,403,12,70,0,140,56,125,0,0,"Flux@0.0.0","8a559694","Merge pull request #698 from oxinabox/ox/learnablemaxout","2019-03-25 16:06:32 +0000"
+Flux,407,12,71,0,143,56,125,0,0,"Flux@0.0.0","7418a2d7","Merge pull request #696 from shreyas-kowshik/group_norm_patch","2019-03-29 16:35:51 -0700"
+Flux,307,11,68,4,107,48,66,0,3,"Flux@0.0.0","13cfcb5f","Merge pull request #718 from FluxML/sf/asymmetric_padding","2019-04-25 22:29:14 +0100"
+Flux,308,11,68,4,107,49,66,0,3,"Flux@0.0.0","eff60064","Merge pull request #612 from dhairyagandhi96/onecold","2019-04-30 19:40:19 +0530"
+Flux,307,11,68,4,107,49,65,0,3,"Flux@0.8.3","16fc41cd","Merge #756","2019-05-13 16:37:57 +0000"
+Flux,312,11,68,4,112,49,65,0,3,"Flux@0.8.3","68ba6e4e","Merge #563","2019-05-13 17:16:10 +0000"
+Flux,317,11,69,4,114,49,67,0,3,"Flux@0.8.3","8ee6af1b","Merge #762","2019-05-14 10:36:22 +0000"
+Flux,319,11,69,5,115,49,67,0,3,"Flux@0.8.3","1902c0e7","Merge #446","2019-06-05 13:28:41 +0000"
+Flux,457,17,68,0,151,73,147,0,1,"Flux@0.12.2","509b21a4","Merge pull request #1571 from FluxML/dg/cuda16","2021-04-23 18:38:35 +0530"
+Flux,462,17,68,0,156,73,147,0,1,"Flux@0.12.3","e6629dd9","Merge pull request #1545 from queensferryme/feat/ea","2021-05-15 01:59:44 +0530"
+Flux,465,17,68,0,157,73,148,0,2,"Flux@0.12.4","335286ad","Merge #1620","2021-06-15 23:28:22 +0000"
+Flux,484,19,71,0,171,73,148,0,2,"Flux@0.12.4","87a0065d","Merge #1467","2021-07-10 18:20:16 +0000"
+Flux,488,19,71,0,171,77,148,0,2,"Flux@0.12.4","ee4c1303","Merge #1661","2021-07-12 17:20:34 +0000"
+Flux,487,19,70,0,171,77,148,0,2,"Flux@0.12.4","1a0b5193","Merge #1660","2021-07-13 18:46:41 +0000"
+Flux,490,19,70,0,172,79,148,0,2,"Flux@0.12.5","99317301","Merge #1516","2021-07-13 23:17:33 +0000"
+Flux,494,19,70,0,174,81,148,0,2,"Flux@0.12.6","5d2a9555","Merge #1675","2021-08-02 12:30:12 +0000"
+Flux,500,19,70,0,179,82,148,0,2,"Flux@0.12.6","dbb9f82e","Merge #1681","2021-08-04 16:48:29 +0000"
+Flux,507,19,77,0,179,82,148,0,2,"Flux@0.12.6","2468a066","Merge #1704","2021-09-06 15:47:10 +0000"
+Flux,506,18,77,0,179,82,148,0,2,"Flux@0.12.6","c91867fd","Merge #1711","2021-09-15 14:03:57 +0000"
+Flux,500,19,70,0,179,82,148,0,2,"Flux@0.12.6","460f0050","Merge #1708","2021-09-29 08:56:03 +0000"
+Flux,502,19,72,0,179,82,148,0,2,"Flux@0.12.7","2c8c3c7f","Merge #1726","2021-10-10 16:11:35 +0000"
+Flux,506,19,76,0,179,82,148,0,2,"Flux@0.12.8","f66be896","Merge #1744","2021-10-25 14:43:13 +0000"
+Flux,507,20,76,0,179,82,148,0,2,"Flux@0.12.8","fe803a1a","Merge #1794","2021-12-13 18:27:18 +0000"
+Flux,509,20,76,0,180,82,149,0,2,"Flux@0.12.8","75e37710","Merge #1761","2022-01-16 18:02:49 +0000"
+Flux,535,20,81,0,179,87,166,0,2,"Flux@0.12.8","8418a3c5","Merge #1847","2022-01-24 03:14:48 +0000"
+Flux,551,21,86,0,189,87,166,0,2,"Flux@0.12.9","8d3b8d3e","Merge pull request #1849 from darsnack/darsnack/dropout-rng","2022-01-27 16:10:23 -0600"
+Flux,553,21,86,0,190,87,167,0,2,"Flux@0.12.9","5244ade5","Merge pull request #1856 from pxl-th/master","2022-02-03 09:36:52 -0800"
+Flux,558,21,86,0,195,87,167,0,2,"Flux@0.12.9","cce7ad09","Speed up `onehotbatch` (#1861)","2022-02-05 11:12:47 -0500"
+Flux,561,22,87,0,196,87,167,0,2,"Flux@0.12.9","9b21e2cc","Simplify `trainable`, `functor` and `Parallel` (#1862)","2022-02-05 14:30:13 -0500"
+Flux,556,22,87,0,191,87,167,0,2,"Flux@0.13.0-DEV","a45cc055","Merge pull request #1751 from FluxML/cl/v013","2022-02-05 21:06:34 +0100"
+Flux,559,22,87,0,193,87,168,0,2,"Flux@0.13.0-DEV","7b568137","Replace unrolled `foldl` used to evaluate `Chain` with a better one (#1809)","2022-02-05 16:02:16 -0500"
+Flux,544,21,82,1,184,87,167,0,2,"Flux@0.13.0-DEV","13a65bef","Merge pull request #1874 from FluxML/cl/mlutils","2022-02-18 01:29:00 +0100"
+Flux,550,21,84,1,185,90,167,0,2,"Flux@0.13.0-DEV","b35b23b2","Merge pull request #1877 from theabhirath/trunc-normal","2022-02-19 11:01:32 -0600"
+Flux,554,21,85,1,188,90,167,0,2,"Flux@0.13.0-DEV","f49e81e7","Print channel dimensions of `Dense` like those of `Conv` (#1658)","2022-02-19 18:49:22 -0500"
+Flux,558,21,88,1,189,90,167,0,2,"Flux@0.13.0-DEV","57ef5c08","Make RNN layers accept `in => out` (#1886)","2022-02-20 22:15:25 -0500"
+Flux,557,21,88,1,188,90,167,0,2,"Flux@0.13.0-DEV","525b645e","Replace `@adjoint` with `rrule` (#1863)","2022-02-24 10:27:03 -0500"
+Flux,558,21,88,1,189,90,167,0,2,"Flux@0.13.0-DEV","0b3e8c5d","Merge pull request #1888 from TLipede/speed-onehot","2022-03-04 09:50:42 -0600"
+Flux,558,21,88,1,190,89,167,0,2,"Flux@0.13.0-DEV","0edf602d","rm Flux.Zeros (#1882)","2022-03-05 11:39:40 -0500"
+Flux,550,21,81,1,189,89,167,0,2,"Flux@0.13.0-DEV","5e05de7b","depend on Optimisers (#1864)","2022-03-05 11:40:18 -0500"
+Flux,551,21,81,1,190,89,167,0,2,"Flux@0.13.0-DEV","9755d57a","Merge pull request #1881 from theabhirath/diagonal","2022-03-05 16:40:15 -0600"
+Flux,551,21,83,1,188,89,167,0,2,"Flux@0.13.0-DEV","b6dbefb2","Mark initialisations nograd, restrict signatures (#1908)","2022-03-20 08:13:05 -0500"
+Flux,549,21,83,1,186,89,167,0,2,"Flux@0.13.0-DEV","81eea849","Use `destructure` from Optimisers.jl (#1901)","2022-03-21 09:49:23 -0400"
+Flux,566,28,86,1,183,99,167,0,2,"Flux@0.13.0-DEV","57beb232","Improve docs for initialisation (#1912)","2022-03-26 20:06:14 -0400"
+Flux,566,28,84,1,185,99,167,0,2,"Flux@0.13.0-DEV","a0b804af","Merge pull request #1921 from FluxML/cl/dept","2022-04-02 18:44:37 +0200"
+Flux,571,28,85,1,186,102,167,0,2,"Flux@0.13.0","5f17f1c3","Rename `Diagonal` to `Scale` (#1927)","2022-04-04 23:09:53 -0400"
+Flux,584,28,88,1,196,102,167,0,2,"Flux@0.13.0","674527e0","Merge pull request #1875 from darsnack/load-structured","2022-04-05 08:54:55 -0500"
+Flux,585,28,88,1,196,103,167,0,2,"Flux@0.13.0","24f40b6d","Merge pull request #1945 from KronosTheLate/add_firstindex_method_to_chain","2022-04-13 13:53:36 -0700"
+Flux,587,28,88,1,196,103,169,0,2,"Flux@0.13.0","58785f37","Merge pull request #1948 from MarcoVela/1974-recur-type-stability","2022-04-28 17:13:46 -0700"
+Flux,591,28,90,1,198,103,169,0,2,"Flux@0.13.0","946b815e","Merge pull request #1956 from FluxML/bc/conv-helper-tweaks","2022-05-01 08:35:22 -0700"
+Flux,592,28,90,1,199,103,169,0,2,"Flux@0.13.0","25457f52","Merge pull request #1959 from FluxML/cl/oh","2022-05-07 22:53:06 +0200"
+Flux,599,28,91,1,204,103,170,0,2,"Flux@0.13.3","0b01b777","Merge pull request #1983 from theabhirath/pairwise-fusion-2","2022-06-06 08:59:04 -0700"
+Flux,603,29,91,1,207,103,170,0,2,"Flux@0.13.3","952c4a51","Merge pull request #1996 from Karthik-d-k/namecase","2022-06-15 20:09:20 -0700"
+Flux,605,29,91,1,209,103,170,0,2,"Flux@0.13.5","a7f58491","Remove CTC loss (moved to NNlib) (#2024)","2022-07-26 15:37:34 -0400"
+Flux,606,30,90,1,208,104,170,0,3,"Flux@0.13.5","0b62a911","use Functors 0.3 in Flux (#2007)","2022-07-29 22:32:23 -0400"
+Flux,581,30,83,1,194,104,166,0,3,"Flux@0.13.5","1914f381","using OneHotArrays (#2025)","2022-08-10 09:20:28 -0700"
+Flux,584,31,83,1,194,106,166,0,3,"Flux@0.13.5","0840625b","Merge pull request #2052 from FluxML/bc/restore-private-fns","2022-08-28 15:01:43 -0700"
+Flux,586,31,83,1,196,106,166,0,3,"Flux@0.13.5","5546e1da","Merge pull request #2041 from darsnack/load-filter","2022-09-05 15:19:24 -0400"
+Flux,604,35,86,3,205,106,166,0,3,"Flux@0.13.6","1ec32c25","Add `@autosize` (#2078)","2022-10-10 14:34:03 -0400"
+Flux,602,35,86,3,205,104,166,0,3,"Flux@0.13.6","c7ed5fed","Merge pull request #2081 from Saransh-cpp/create_bias","2022-10-11 17:55:29 -0700"
+Flux,603,35,87,3,205,104,166,0,3,"Flux@0.13.6","74bd04b7","Fix #2086 re `@autosize` (#2087)","2022-10-16 11:25:57 -0400"
+Flux,621,36,89,17,206,104,166,0,3,"Flux@0.13.8","8d948e81","Add explicit `train!`, unify `update!`, and auto-translate the two `Adam`s (#2082)","2022-11-20 17:10:20 -0500"
+Flux,624,36,89,17,209,104,166,0,3,"Flux@0.13.9","40f0a63f","Re-write training docs (#2114)","2022-12-15 17:03:58 -0500"
+Flux,625,36,89,17,210,104,166,0,3,"Flux@0.13.11","79971741","use NNlib.within_gradient (#2152)","2023-01-06 19:09:43 -0500"
+Flux,612,36,91,17,196,104,165,0,3,"Flux@0.13.11","e33de0ce","Move `dropout` to NNlib (#2150)","2023-01-31 20:32:56 -0500"
+Flux,618,36,91,17,200,104,167,0,3,"Flux@0.13.12","d511d7aa","Match layer output to weights (#2156)","2023-02-07 23:04:16 -0500"
+Flux,618,36,92,17,200,103,167,0,3,"Flux@0.13.12","2d357ad3","Add friendly size check (#2176)","2023-02-09 23:23:35 -0500"
+Flux,620,36,92,17,202,101,169,0,3,"Flux@0.13.12","68b165cf","Add `f16` (#2184)","2023-02-11 05:11:20 -0500"
+Flux,619,36,91,17,202,101,169,0,3,"Flux@0.13.12","d91c203d","remove flatten","2023-02-13 09:22:38 +0100"
+Flux,620,36,92,17,202,101,169,0,3,"Flux@0.13.12","6278916b","Revert ""remove flatten""","2023-02-13 09:33:46 +0100"
+Flux,619,36,91,17,202,101,169,0,3,"Flux@0.13.12","8a45b88e","remove Flux.flatten in favor of MLUtils.flatten (#2188)","2023-02-14 14:16:42 +0100"
+Flux,620,36,92,17,202,101,169,0,3,"Flux@0.13.13","dd6318f5","reintroduce flatten (#2196)","2023-02-24 04:28:20 +0100"
+Flux,623,37,92,17,204,101,169,0,3,"Flux@0.13.13","cc1ae6c3","Merge pull request #2189 from pxl-th/pxl-th/amdgpu","2023-02-28 07:22:01 -0800"
+Flux,623,37,91,17,205,101,169,0,3,"Flux@0.13.14","1258ddf7","dummy implementation of flatten (#2205)","2023-03-10 23:05:34 +0100"
+Flux,629,39,91,17,209,101,169,0,3,"Flux@0.13.14","0155f61e","MultiHeadAttention implementation (#2146)","2023-03-11 08:53:14 +0100"
+Flux,630,39,91,17,209,101,170,0,3,"Flux@0.13.14","6a68a7c3","f16,f32,.. don't convert int arrays + handle complex (#2228)","2023-04-17 19:07:41 +0200"
+Flux,632,39,92,17,210,101,170,0,3,"Flux@0.13.15","dfea43cc","Add `EmbeddingBag` (#2031)","2023-04-17 21:06:26 -0500"
+Flux,637,41,92,17,213,101,170,0,3,"Flux@0.13.15","11c3d06a","Print the state of Dropout etc. (#2222)","2023-04-24 21:08:56 -0400"
+Flux,637,41,95,17,210,101,170,0,3,"Flux@0.13.15","7e329f3f","fix perf issue loadmodel! (#2241)","2023-04-25 14:20:09 +0200"
+Flux,641,41,96,17,212,102,170,0,3,"Flux@0.13.15","d022b9ff","Remove greek-letter keyword arguments (#2139)","2023-04-29 13:44:21 -0400"
+Flux,642,41,97,17,212,102,170,0,3,"Flux@0.13.15","5790b73f","`gpu(::DataLoader)`, take III (#2245)","2023-05-01 17:24:06 -0400"
+Flux,645,42,97,17,214,102,170,0,3,"Flux@0.13.15","5fe8ada2","add Flux.state(x) (#2239)","2023-05-05 16:54:18 +0200"

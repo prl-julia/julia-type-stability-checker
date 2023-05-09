@@ -1,43 +1,43 @@
-Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel
-8c6bb9aa,"UI layer","2018-08-30 11:37:30 +0200",0.1.0,Genie,12,2,0,0,7,0,3,0,0
-8998c9f6,"apps as standalone modules","2019-02-13 18:43:15 +0100",0.1.0,Genie,14,3,0,0,8,0,3,0,0
-db73fdbd,"api cleanup","2019-02-17 20:36:17 +0100",0.8.2,Genie,24,11,0,0,10,0,3,0,0
-fe52905b,"fixed startup ratelimit","2019-05-05 23:02:28 +0200",0.9.1,Genie,21,8,0,0,10,0,3,0,0
-594e1c3f,"json rendering fix","2019-05-06 09:39:32 +0200",0.9.1,Genie,20,7,0,0,10,0,3,0,0
-6a88886b,"simplified file structure, support for markdown views with metadata, markdown views building and caching in Flax","2019-08-02 00:01:40 +0200",0.11.0,Genie,46,24,0,0,19,0,3,0,0
-39549643,"toolbox fixes, Genie serves static files","2019-08-02 19:37:49 +0200",0.11.0,Genie,49,25,0,0,21,0,3,0,0
-f92caaf9,"pre-release cleanup; docstrings updates","2019-08-07 13:20:01 +0200",0.13.0,Genie,51,41,0,0,5,2,3,0,0
-18cec973,"documentation, docstrings and API extensions","2019-08-11 17:03:42 +0200",0.13.2,Genie,49,39,0,0,5,2,3,0,0
-d0673ceb,"documentation and API extensions","2019-08-12 14:14:38 +0200",0.13.2,Genie,52,42,0,0,5,2,3,0,0
-ace7b4e9,"v0.14.0","2019-08-21 18:18:46 +0200",0.14.0,Genie,53,43,0,0,5,2,3,0,0
-4b653b8b,"v0.15.0","2019-08-22 23:51:02 +0200",0.15.0,Genie,54,43,0,1,5,2,3,0,0
-d7fc35bd,"v0.16.0","2019-08-29 09:53:57 +0200",0.16.0,Genie,57,46,0,1,5,2,3,0,0
-2dab05c9,"v0.17.0","2019-08-31 00:51:33 +0200",0.17.0,Genie,58,47,0,1,5,2,3,0,0
-9c3462cd,"enhancements","2019-09-01 12:54:08 +0200",0.17.0,Genie,57,46,0,1,5,2,3,0,0
-40437a24,"v0.18.2","2019-09-27 14:13:48 +0200",0.18.2,Genie,63,52,0,1,5,2,3,0,0
-4e46bc63,"v0.19.0","2019-10-03 20:47:10 +0200",0.19.0,Genie,64,53,0,1,5,2,3,0,0
-72244bff,"Merge pull request #278 from GenieFramework/compathelper/new_version/2020-09-16-18-03-46-074-3383574844","2020-09-17 09:42:40 +0200",1.2.0,Genie,57,47,0,1,7,2,0,0,0
-e19151e0,"Small tweaks and fixes.","2020-10-04 11:44:37 +0200",1.5.0,Genie,58,47,0,2,7,2,0,0,0
-6ab8ed26,"Tests updates","2020-10-04 19:06:53 +0200",1.5.0,Genie,60,49,0,2,7,2,0,0,0
-e6c2be01,"v1.7","2020-10-11 11:27:12 +0200",1.7,Genie,84,64,1,2,9,2,6,0,0
-7c7561ae,"Add autostart option","2020-10-13 11:14:17 +0200",1.7.1,Genie,85,65,1,2,9,2,6,0,0
-16349a22,"v1.9 (HEAD requests, array[] GET params, extra Router utilities,)","2020-11-24 13:49:23 +0100",1.9.0,Genie,93,69,1,2,13,2,6,0,0
-57836da2,"Replace eval statements of SECRET_TOKEN with a global Ref approach (#312)","2020-12-02 15:40:00 +0100",1.9.1,Genie,96,71,2,2,13,2,6,0,0
-17b7b233,"Manual merge of testable apps","2020-12-30 22:51:21 +0100",1.10.0,Genie,97,72,2,2,13,2,6,0,0
-119ecc56,"v1.10","2020-12-30 23:10:07 +0100",1.10.0,Genie,98,72,2,2,14,2,6,0,0
-82e4386d,"v2: breaking: removed ""syntactic sugar"" macros","2021-06-18 11:26:50 +0200",2,Genie,96,66,2,6,14,2,6,0,0
-0bbef755,"v2 bug fixes and new features","2021-06-25 13:40:12 +0200",2.0.0,Genie,97,67,2,6,14,2,6,0,0
-e0f15c6a,"v2 coming up!","2021-06-26 13:47:55 +0200",2.0.0,Genie,96,66,2,6,14,2,6,0,0
-84cc1812,"earlybinding fixes","2021-09-23 11:02:10 +0300",3.1.0,Genie,97,67,2,6,14,2,6,0,0
-ce9ba54b,"Multiple servers and currenturl","2021-10-22 21:11:11 +0200",4.0.0,Genie,98,68,2,6,14,2,6,0,0
-d88b1b94,"Fixes","2021-11-10 15:25:26 +0100",4.1.1,Genie,100,70,2,6,14,2,6,0,0
-aebb4922,"Server isrunning check","2021-11-20 21:16:38 +0100",4.2.0,Genie,104,74,2,6,14,2,6,0,0
-36bf0925,"+ v4.3 + Sessions API improvements + optimized HTML parsing of Julia UIs + Small improvements in AppServer API","2021-11-26 00:37:25 +0100",4.3.0,Genie,105,75,2,6,14,2,6,0,0
-e6e98725,"Improved newapp generation","2022-02-04 20:39:11 +0100",4.10.0,Genie,111,80,2,6,15,2,6,0,0
-f765b29a,"Fix loadapp","2022-02-05 13:07:15 +0100",4.10.1,Genie,111,81,2,6,14,2,6,0,0
-27c8da42,"various fixes and improvements","2022-02-11 14:39:13 +0100",4.11.0,Genie,112,81,2,6,14,3,6,0,0
-3293f69a,"Fixed WS exception catching, router tweaks","2022-02-24 20:42:09 +0100",4.15.0,Genie,113,82,2,6,14,3,6,0,0
-f6ae6a1d,"genie v5","2022-07-21 21:33:18 +0200",5.0.0,Genie,55,35,1,4,8,1,6,0,0
-50a5590c,"App loading refactoring","2022-10-07 23:31:08 +0200",5.7.1,Genie,55,34,1,4,9,1,6,0,0
-900a0ed4,"v5.10 - serve_file method","2022-10-19 19:16:52 +0200",5.10.0,Genie,56,35,1,4,9,1,6,0,0
-43619eb0,"ensure different views build path by default","2023-03-23 22:33:57 +0100",5.15.3,Genie,57,36,1,4,9,1,6,0,0
+Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
+Genie,12,2,0,0,7,0,3,0,0,"Genie@0.1.0","8c6bb9aa","UI layer","2018-08-30 11:37:30 +0200"
+Genie,14,3,0,0,8,0,3,0,0,"Genie@0.1.0","8998c9f6","apps as standalone modules","2019-02-13 18:43:15 +0100"
+Genie,24,11,0,0,10,0,3,0,0,"Genie@0.8.2","db73fdbd","api cleanup","2019-02-17 20:36:17 +0100"
+Genie,21,8,0,0,10,0,3,0,0,"Genie@0.9.1","fe52905b","fixed startup ratelimit","2019-05-05 23:02:28 +0200"
+Genie,20,7,0,0,10,0,3,0,0,"Genie@0.9.1","594e1c3f","json rendering fix","2019-05-06 09:39:32 +0200"
+Genie,46,24,0,0,19,0,3,0,0,"Genie@0.11.0","6a88886b","simplified file structure, support for markdown views with metadata, markdown views building and caching in Flax","2019-08-02 00:01:40 +0200"
+Genie,49,25,0,0,21,0,3,0,0,"Genie@0.11.0","39549643","toolbox fixes, Genie serves static files","2019-08-02 19:37:49 +0200"
+Genie,51,41,0,0,5,2,3,0,0,"Genie@0.13.0","f92caaf9","pre-release cleanup; docstrings updates","2019-08-07 13:20:01 +0200"
+Genie,49,39,0,0,5,2,3,0,0,"Genie@0.13.2","18cec973","documentation, docstrings and API extensions","2019-08-11 17:03:42 +0200"
+Genie,52,42,0,0,5,2,3,0,0,"Genie@0.13.2","d0673ceb","documentation and API extensions","2019-08-12 14:14:38 +0200"
+Genie,53,43,0,0,5,2,3,0,0,"Genie@0.14.0","ace7b4e9","v0.14.0","2019-08-21 18:18:46 +0200"
+Genie,54,43,0,1,5,2,3,0,0,"Genie@0.15.0","4b653b8b","v0.15.0","2019-08-22 23:51:02 +0200"
+Genie,57,46,0,1,5,2,3,0,0,"Genie@0.16.0","d7fc35bd","v0.16.0","2019-08-29 09:53:57 +0200"
+Genie,58,47,0,1,5,2,3,0,0,"Genie@0.17.0","2dab05c9","v0.17.0","2019-08-31 00:51:33 +0200"
+Genie,57,46,0,1,5,2,3,0,0,"Genie@0.17.0","9c3462cd","enhancements","2019-09-01 12:54:08 +0200"
+Genie,63,52,0,1,5,2,3,0,0,"Genie@0.18.2","40437a24","v0.18.2","2019-09-27 14:13:48 +0200"
+Genie,64,53,0,1,5,2,3,0,0,"Genie@0.19.0","4e46bc63","v0.19.0","2019-10-03 20:47:10 +0200"
+Genie,57,47,0,1,7,2,0,0,0,"Genie@1.2.0","72244bff","Merge pull request #278 from GenieFramework/compathelper/new_version/2020-09-16-18-03-46-074-3383574844","2020-09-17 09:42:40 +0200"
+Genie,58,47,0,2,7,2,0,0,0,"Genie@1.5.0","e19151e0","Small tweaks and fixes.","2020-10-04 11:44:37 +0200"
+Genie,60,49,0,2,7,2,0,0,0,"Genie@1.5.0","6ab8ed26","Tests updates","2020-10-04 19:06:53 +0200"
+Genie,84,64,1,2,9,2,6,0,0,"Genie@1.7","e6c2be01","v1.7","2020-10-11 11:27:12 +0200"
+Genie,85,65,1,2,9,2,6,0,0,"Genie@1.7.1","7c7561ae","Add autostart option","2020-10-13 11:14:17 +0200"
+Genie,93,69,1,2,13,2,6,0,0,"Genie@1.9.0","16349a22","v1.9 (HEAD requests, array[] GET params, extra Router utilities,)","2020-11-24 13:49:23 +0100"
+Genie,96,71,2,2,13,2,6,0,0,"Genie@1.9.1","57836da2","Replace eval statements of SECRET_TOKEN with a global Ref approach (#312)","2020-12-02 15:40:00 +0100"
+Genie,97,72,2,2,13,2,6,0,0,"Genie@1.10.0","17b7b233","Manual merge of testable apps","2020-12-30 22:51:21 +0100"
+Genie,98,72,2,2,14,2,6,0,0,"Genie@1.10.0","119ecc56","v1.10","2020-12-30 23:10:07 +0100"
+Genie,96,66,2,6,14,2,6,0,0,"Genie@2","82e4386d","v2: breaking: removed ""syntactic sugar"" macros","2021-06-18 11:26:50 +0200"
+Genie,97,67,2,6,14,2,6,0,0,"Genie@2.0.0","0bbef755","v2 bug fixes and new features","2021-06-25 13:40:12 +0200"
+Genie,96,66,2,6,14,2,6,0,0,"Genie@2.0.0","e0f15c6a","v2 coming up!","2021-06-26 13:47:55 +0200"
+Genie,97,67,2,6,14,2,6,0,0,"Genie@3.1.0","84cc1812","earlybinding fixes","2021-09-23 11:02:10 +0300"
+Genie,98,68,2,6,14,2,6,0,0,"Genie@4.0.0","ce9ba54b","Multiple servers and currenturl","2021-10-22 21:11:11 +0200"
+Genie,100,70,2,6,14,2,6,0,0,"Genie@4.1.1","d88b1b94","Fixes","2021-11-10 15:25:26 +0100"
+Genie,104,74,2,6,14,2,6,0,0,"Genie@4.2.0","aebb4922","Server isrunning check","2021-11-20 21:16:38 +0100"
+Genie,105,75,2,6,14,2,6,0,0,"Genie@4.3.0","36bf0925","+ v4.3 + Sessions API improvements + optimized HTML parsing of Julia UIs + Small improvements in AppServer API","2021-11-26 00:37:25 +0100"
+Genie,111,80,2,6,15,2,6,0,0,"Genie@4.10.0","e6e98725","Improved newapp generation","2022-02-04 20:39:11 +0100"
+Genie,111,81,2,6,14,2,6,0,0,"Genie@4.10.1","f765b29a","Fix loadapp","2022-02-05 13:07:15 +0100"
+Genie,112,81,2,6,14,3,6,0,0,"Genie@4.11.0","27c8da42","various fixes and improvements","2022-02-11 14:39:13 +0100"
+Genie,113,82,2,6,14,3,6,0,0,"Genie@4.15.0","3293f69a","Fixed WS exception catching, router tweaks","2022-02-24 20:42:09 +0100"
+Genie,55,35,1,4,8,1,6,0,0,"Genie@5.0.0","f6ae6a1d","genie v5","2022-07-21 21:33:18 +0200"
+Genie,55,34,1,4,9,1,6,0,0,"Genie@5.7.1","50a5590c","App loading refactoring","2022-10-07 23:31:08 +0200"
+Genie,56,35,1,4,9,1,6,0,0,"Genie@5.10.0","900a0ed4","v5.10 - serve_file method","2022-10-19 19:16:52 +0200"
+Genie,57,36,1,4,9,1,6,0,0,"Genie@5.15.3","43619eb0","ensure different views build path by default","2023-03-23 22:33:57 +0100"
