@@ -47,9 +47,12 @@ function pkg_info(pkg::AbstractString)
 end
 
 function pretty_duration(t)
+    if isnan(t) || isinf(t)
+        return "??"
+    end
     u = "s"
-    units = ["m", "h", "d"]
-    facs = [60, 60, 24]
+    units = ["m", "h", "d", "w"]
+    facs = [60, 60, 24, 7]
     while !isempty(facs) && t > first(facs)
         u = popfirst!(units)
         t /= popfirst!(facs)

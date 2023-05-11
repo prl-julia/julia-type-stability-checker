@@ -150,6 +150,18 @@ $ ls /tmp/timeline
 Multisets.csv  Multisets-filtered.csv  Multisets.pdf
 ```
 
+If there are errors, the log will mention the file and line number to look at to see the details, such as:
+
+```
+[ Info: ...: failed, please check log /tmp/scratch/timeline_error_log.txt:2795580
+```
+
+Stdout and stderr of the failed commit can then be seen for instance with (mind the `+` before the line number):
+
+```bash
+tail -n +2795580 /tmp/scratch/timeline_error_log.txt | less
+```
+
 ## Sharing Results
 
 The results of the scripts should preferably be added to the [julia-sts-data](https://github.com/ulysses4ever/julia-sts-data) repository instead of this one.

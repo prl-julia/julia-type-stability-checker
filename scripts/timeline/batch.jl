@@ -67,8 +67,8 @@ for (repo, pkgs) in repos
                 end
             end
         catch e
-            @info_extra "Processing repository $repo failed: $e"
+            @info_extra "Processing repository `$repo' failed: $e"
         end
     end
-    @info_extra "=== Done with $repo in $(pretty_duration(t))"
+    @info_extra "=== Done with `$repo' in $(pretty_duration(t))"
 end

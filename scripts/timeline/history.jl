@@ -74,16 +74,19 @@ n = length(commits)
 @info_extra "Checking $n commits"
 
 # bookkeeping
-tasks = zeros(Int, nthreads()) # how many tasks each thread processed
-skipped = 0
+successful = zeros(Int, nthreads())
+failed = zeros(Int, nthreads())
+skipped = zeros(Int, nthreads())
+
+progress_lock = ReentrantLock()
 last_progress_report = 0
 PROGRESS_FREQ_SEC = 30
-TIMEOUT_SEC = 60 * 30  # task timeout, send SIGTERM after TIMEOUT_SEC, then SIGKILL after 60 more sec
 START = time()
 
+TIMEOUT_SEC = 60 * 30  # task timeout, send SIGTERM after TIMEOUT_SEC
+KILL_SEC = 60 # then send SIGKILL after KILL_SEC if still running
+
 git_lock = ReentrantLock()  # using `git -C` still seems not to be thread-safe
-progress_lock = ReentrantLock()
-skipped_lock = ReentrantLock()
 error_log_lock = ReentrantLock()
 
 @sync @threads for (i, commit) in commits
@@ -109,12 +112,14 @@ error_log_lock = ReentrantLock()
                 now = time()
                 if now - last_progress_report > PROGRESS_FREQ_SEC
                     global last_progress_report = now
-                    done = sum(tasks) + skipped
+                    nsuccessful = sum(successful)
+                    nfailed = sum(failed)
+                    nskipped = sum(skipped)
                     total = n * length(subdirs)
-                    frac = done / total
+                    frac = (nsuccessful + nfailed + nskipped) / total
                     elapsed = now - START
                     est = elapsed / frac - elapsed
-                    @info_extra "Progress: $(round(frac * 100, digits=2))% ($(done - skipped) tasks done, $skipped skipped, elapsed $(pretty_duration(elapsed)), est. remaining $(pretty_duration(est)))"
+                    @info_extra "Progress: $(round(frac * 100, digits=2))% ($nsuccessful successful, $nfailed failed, $nskipped skipped, elapsed $(pretty_duration(elapsed)), est. remaining $(pretty_duration(est)))"
                 end
             end
 
@@ -126,13 +131,10 @@ error_log_lock = ReentrantLock()
                 TOML.parsefile(joinpath(project_dir, "Project.toml"))
             catch
                 @info_extra "Thread #$me, commit #$i ($commit), pkg $pkg: skipping (can't parse Project.toml)"
-                lock(skipped_lock) do
-                    global skipped += 1
-                end
+                skipped[me] += 1
                 continue
             end
 
-            tasks[me] += 1
             pkg_name = get(project, "name", "??")
             version = get(project, "version", "0.0.0")
             @info_extra "Thread #$me, commit #$i ($commit), pkg $pkg: processing $pkg_name@$version"
@@ -146,8 +148,10 @@ error_log_lock = ReentrantLock()
             try
                 # Timeout if the checking takes too long..
                 # Also send SIGKILL if the process hangs (noticed that sometimes there's a deadlock?)
-                exec(`timeout -k 60 $TIMEOUT_SEC julia $PROCESS_PACKAGE $pkg_name $project_dir $commit_out_dir`)
+                exec(`timeout -k $KILL_SEC $TIMEOUT_SEC julia $PROCESS_PACKAGE $pkg_name $project_dir $commit_out_dir`)
+                successful[me] += 1
             catch e
+                failed[me] += 1
                 lock(error_log_lock) do
                     p = joinpath(out_dir, "timeline_error_log.txt")
                     # we report the line where this report is in the error log for easier navigation
@@ -178,4 +182,5 @@ end
 rm(cloned, recursive=true)
 
 # show the work distribution among threads - should be close to uniform
-@info_extra "Work distribution: $tasks"
+@info_extra "Work distribution: $(sum.(zip(successful, failed, skipped)))"
+@info_extra "Stats: $(sum(successful)) successful, $(sum(failed)) failed, $(sum(skipped)) skipped, elapsed $(pretty_duration(time() - START))"

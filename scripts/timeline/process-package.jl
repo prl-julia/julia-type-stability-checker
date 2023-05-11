@@ -29,7 +29,7 @@ ev(s) = eval(Meta.parse.(s))
 cd(out_dir)
 Pkg.activate(".")
 
-@info_extra "Start with package $pkg"
+@info_extra "Start with package `$pkg'"
 
 haskey(Pkg.project().dependencies, "StabilityCheck") || Pkg.develop(path=STS_PATH)
 using StabilityCheck
@@ -38,4 +38,4 @@ Pkg.develop(path=pkg_dir)
 ev("using $pkg")
 
 checkModule(ev(module_name("$pkg")), out_dir, pkg=pkg)
-@info_extra "Module $pkg processed"
+@info_extra "Module `$pkg' processed"

@@ -10,7 +10,11 @@ out_file = length(ARGS) > 1 ? ARGS[2] : error("Requires argument: output file")
 
 include("utils.jl")
 
-all_agg_files = sort(split(exec(`find $in_dir -maxdepth 2 -name "*-agg.txt"`), "\n"))
+all_agg_files = try
+    sort(split(exec(`find $in_dir -maxdepth 2 -name "*-agg.txt"`), "\n"))
+catch
+    []
+end
 
 if length(all_agg_files) == 0 || (length(all_agg_files) == 1 && first(all_agg_files) == "")
     @info_extra "No aggregate files found..."
