@@ -1,6 +1,0 @@
-Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
-YaoBase,137,16,52,0,33,13,23,0,0,"YaoBase@0.14.5","8440f29e","Merge pull request #303 from QuantumBFS/roger/lib","2021-12-07 15:08:30 -0500"
-YaoBase,134,16,51,0,32,12,23,0,0,"YaoBase@0.14.6","bc0563a7","Merge branch 'master' of https://github.com/QuantumBFS/Yao.jl","2022-01-04 21:01:46 -0500"
-YaoBase,142,16,52,0,34,12,28,0,0,"YaoBase@0.15.0","fef45cf8","Merge branch 'master' of https://github.com/QuantumBFS/Yao.jl","2022-02-11 21:14:48 -0500"
-YaoBase,142,18,55,0,33,12,24,0,0,"YaoBase@0.15.0","9d89da7d","remove batch dimension (#334)","2022-02-13 18:30:21 -0500"
-YaoBase,142,20,53,0,33,12,24,0,0,"YaoBase@0.15.0","353b3e59","fix YaoAPI version","2022-02-15 05:09:21 -0500"

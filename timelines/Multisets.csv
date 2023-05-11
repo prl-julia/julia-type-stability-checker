@@ -1,3 +1,0 @@
-Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel
-19f1220,"Added Project.toml","2020-04-06 14:03:58 -0400",0.0.0,Multisets,12,3,1,0,1,0,7,0,0
-0dd0d96,"Merge pull request #3 from laurium-labs/master","2021-10-07 17:28:18 -0400",0.4.2,Multisets,14,4,1,0,1,0,8,0,0

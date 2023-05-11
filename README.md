@@ -149,3 +149,7 @@ $ ls /tmp/scratch/Multisets/
 $ ls /tmp/timeline
 Multisets.csv  Multisets-filtered.csv  Multisets.pdf
 ```
+
+## Sharing Results
+
+The results of the scripts should preferably be added to the [julia-sts-data](https://github.com/ulysses4ever/julia-sts-data) repository instead of this one.

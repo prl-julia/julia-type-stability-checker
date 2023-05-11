@@ -1,6 +1,0 @@
-Commit,Message,Date,Version,Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,DeltaMethods,DeltaUnstable
-04735d26,Merge pull request #2070 from JuliaOpt/bl/@container,2019-10-04 10:27:14 +0200,0.20.0,JuMP,606,166,118,28,163,25,99,2,5,0,-2
-0975852b,Fix bug in relax_integrality (#2666),2021-08-20 12:05:22 +1200,0.21.9,JuMP,676,237,105,33,176,32,89,2,2,0,2
-c66b5b20,[breaking] remove PrintMode instead of explicit MIME types (#2874),2022-02-23 11:13:21 +1300,1.0.0-DEV,JuMP,673,252,113,37,162,11,93,2,3,0,-1
-cbf6ffdf,Add support for get/set of attributes in optimizer_with_attributes (#3129),2022-11-24 10:32:25 +1300,1.4.0,JuMP,725,263,136,35,167,11,106,3,4,0,-1
-b9cf868d,"Add remove_bridge, print_active_bridges, and document (#3259)",2023-03-03 10:14:36 +1300,1.8.2,JuMP,756,278,141,37,177,16,102,3,2,0,2

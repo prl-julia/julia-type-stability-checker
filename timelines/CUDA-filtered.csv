@@ -1,2 +1,0 @@
-"Module","Methods","Stable","Partial","Unstable","Any","Vararg","Generic","TcFail","NoFuel","Version","Commit","Message","Date","DeltaMethods","DeltaUnstable"
-"CUDA",1504,340,68,5,934,54,101,0,2,"CUDA@3.4.0","b934949a1","Return the device from device!.","2021-07-22 08:23:42 +0200",0,-2

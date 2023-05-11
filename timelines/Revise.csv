@@ -1,6 +1,0 @@
-Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
-Revise,201,73,14,9,96,8,1,0,0,"Revise@3.3.0","e8d8dae","Update to JuliaInterpreter@0.9, drop old Julia support (#661)","2021-12-25 20:58:28 +0900"
-Revise,202,74,14,9,96,8,1,0,0,"Revise@3.3.3","db80499","fix `parentfile` (#698)","2022-07-24 09:03:08 +0200"
-Revise,205,70,11,9,106,8,1,0,0,"Revise@3.3.4","2de4173","Tracking non-.jl source files (#680)","2022-07-30 18:59:31 -0400"
-Revise,204,69,11,9,106,8,1,0,0,"Revise@3.4.0","3b2275c","Remove dependency on `Libc.TimeVal` by directly calling `time()` instead. (#679)","2022-09-14 22:05:13 +0200"
-Revise,205,70,12,9,105,8,1,0,0,"Revise@3.5.0","e28a2bc","Merge pull request #723 from timholy/teh/codeedges","2023-01-05 06:46:42 -0600"

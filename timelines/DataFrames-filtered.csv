@@ -1,7 +1,0 @@
-"Module","Methods","Stable","Partial","Unstable","Any","Vararg","Generic","TcFail","NoFuel","Version","Commit","Message","Date","DeltaMethods","DeltaUnstable"
-"DataFrames",1763,658,404,19,304,46,316,2,14,"DataFrames@0.18.2","0b998c82","Fix map(f, ::GroupedDataFrame) when there are no groups (#1826)","2019-05-26 17:07:04 +0200",0,-1
-"DataFrames",2113,742,523,23,363,69,378,1,14,"DataFrames@0.19.3","0596bac3","Use nonmissingtype instead of Missings.T (#1941)","2019-09-06 15:59:55 +0200",0,-5
-"DataFrames",2864,890,902,41,471,126,403,3,28,"DataFrames@0.20.0","8bfa59e5","fix eltype in stack with view=true","2020-03-08 22:49:55 +0100",0,-3
-"DataFrames",3180,961,1182,43,398,145,419,2,30,"DataFrames@0.21.2","e607175e","Fix various bugs in split/apply/combine in 0.21 release","2020-06-23 19:07:42 +0200",0,1
-"DataFrames",594,227,121,11,120,60,45,0,10,"DataFrames@0.21.7","f4db95f4","Remove type parameters in DataFrameJoiner (#2503)","2020-10-29 23:03:16 +0100",0,6
-"DataFrames",893,363,207,19,162,84,45,1,12,"DataFrames@1.5.0","fdd9193d","Improve performance of dropmissing (#3256)","2023-01-27 09:21:35 +0000",0,-1

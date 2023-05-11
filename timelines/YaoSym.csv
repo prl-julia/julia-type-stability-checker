@@ -1,3 +1,0 @@
-Module,Methods,Stable,Partial,Unstable,Any,Vararg,Generic,TcFail,NoFuel,Version,Commit,Message,Date
-YaoSym,12,1,2,1,8,0,0,0,0,"YaoSym@0.4.8","6d965bb1","Merge branch 'master' of https://github.com/QuantumBFS/Yao.jl","2021-12-07 19:52:05 -0500"
-YaoSym,12,1,1,1,8,0,1,0,0,"YaoSym@0.5.0","9d89da7d","remove batch dimension (#334)","2022-02-13 18:30:21 -0500"
