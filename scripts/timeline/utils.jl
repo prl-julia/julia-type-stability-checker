@@ -14,11 +14,7 @@ macro info_extra(msg, rest...)
     esc(result)
 end
 
-function ensure_dir(dir::AbstractString)
-    if !isdir(dir)
-        mkpath(dir)
-    end
-end
+ensure_dir(dir::AbstractString) = ispath(dir) || mkpath(dir)
 
 function dump(file::AbstractString, what::AbstractString)
     @info_extra "Writing to `$file'"

@@ -64,7 +64,7 @@ end
 dump(joinpath(out_dir, repo_to_filename(repo) * "_pkgs.txt"), "Repository: $repo\n$(join([s == "" ? "  Package $p" : "  Package $p in $s" for (s, p) in subdirs], "\n"))\n")
 
 cloned = mktempdir()
-exec(`git clone $repo $cloned`)
+exec(`git clone --quiet $repo $cloned`)
 # Here we can change which commits are processed... E.g. now we only look at
 # the linear main branch, not merged feature branches (the merge commits
 # are still processed though)

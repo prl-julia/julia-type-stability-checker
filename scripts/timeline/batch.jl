@@ -38,8 +38,19 @@ N = Threads.nthreads()
 #       lives in `lib/packageX` but when we check out a previous commit, it lived elsewhere / didn't
 #       exist yet
 #
+
+# remember which packages are already processed so that we don't run them again next time
+finished_file = joinpath(scratch_dir, "finished.txt")
+finished = Set{String}()
+if isfile(finished_file)
+    for pkg in read_lines(finished_file)
+        push!(finished, pkg)
+    end
+end
+
 repos = Dict()
 for pkg in read_lines(pkg_file)
+    pkg in finished && continue
     info = pkg_info(pkg)
     if !haskey(repos, info.repo)
         repos[info.repo] = []
@@ -71,4 +82,10 @@ for (repo, pkgs) in repos
         end
     end
     @info_extra "=== Done with `$repo' in $(pretty_duration(t))"
+    open(finished_file, "a") do f
+        for (pkg, _) in pkgs
+            write(f, "$pkg\n")
+        end
+        flush(f)
+    end
 end
