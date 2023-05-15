@@ -20,6 +20,8 @@ AGGREGATE = joinpath(STS_PATH, "scripts/timeline/aggregate.jl")
 FILTER = joinpath(STS_PATH, "scripts/timeline/filter.jl")
 PLOT = joinpath(STS_PATH, "scripts/timeline/plot.jl")
 
+println("==============================\n| PACKAGE STABILITY TIMELINE |\n==============================\n")
+
 N = Threads.nthreads()
 @info_extra "== Using $N threads =="
 
@@ -59,6 +61,7 @@ for pkg in read_lines(pkg_file)
     end
     push!(repos[info.repo], (pkg, info.subdir))
 end
+@info_extra "== Checking $(length(repos)) repositories with $(sum(length(pkgs) for pkgs in values(repos))) packages =="
 
 for (repo, pkgs) in repos
     @info_extra "=== Checking `$repo' ==="

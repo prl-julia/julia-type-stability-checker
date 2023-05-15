@@ -88,7 +88,7 @@ using Pkg; Pkg.add(["DataStructures", "CSV", "DataFrames", "Plots"])
 
 ### Results
 
-The pipeline produces several ouputs (in addition to the regular output of the stability checker):
+The pipeline produces several outputs (in addition to the regular output of the stability checker):
 
 - `<PKG_NAME>/<IDX>-<COMMIT_HASH>/timeline_info.csv`: stores some metadata that is used during aggregation
 - `<PKG_NAME>.csv`: contains information about individual commits (from `<PKG>-agg.txt`), filtering duplicate lines (i.e., only commits that cause changes)
