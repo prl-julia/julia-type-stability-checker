@@ -13,6 +13,8 @@ out_dir = length(ARGS) > 2 ? ARGS[3] : error("Requires argument: output director
 
 include("utils.jl")
 
+using DataStructures
+
 HISTORY = joinpath(STS_PATH, "scripts/timeline/history.jl")
 AGGREGATE = joinpath(STS_PATH, "scripts/timeline/aggregate.jl")
 FILTER = joinpath(STS_PATH, "scripts/timeline/filter.jl")
@@ -48,7 +50,7 @@ if isfile(finished_file)
     end
 end
 
-repos = Dict()
+repos = OrderedDict()
 for pkg in read_lines(pkg_file)
     pkg in finished && continue
     info = pkg_info(pkg)

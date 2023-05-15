@@ -80,7 +80,11 @@ These are located in `$JULIA_STS/scripts/timeline`:
 - `filter.jl`: Tries to filter the interesting stability cases with a heuristic.
 - `plot.jl`: Creates a pdf plot that shows for each commit the number of unstable methods, as well as the rate of stable and unstable methods to all methods.
 
-These scripts assume packages `CSV`, `DataFrames`, `Plots` (for filtering and plotting).
+These scripts assume packages `DataStructures` (for `OrderedDict`), `CSV`, `DataFrames`, `Plots` (for filtering and plotting). Please make sure they are installed:
+
+```julia
+using Pkg; Pkg.add(["DataStructures", "CSV", "DataFrames", "Plots"])
+```
 
 For example, to check the `Multisets` package using 8 threads, create a text file with the package name (in general, this file should contain one package name per line):
 
