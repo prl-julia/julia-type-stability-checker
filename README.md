@@ -86,6 +86,20 @@ These scripts assume packages `DataStructures` (for `OrderedDict`), `CSV`, `Data
 using Pkg; Pkg.add(["DataStructures", "CSV", "DataFrames", "Plots"])
 ```
 
+### Results
+
+The pipeline produces several ouputs (in addition to the regular output of the stability checker):
+
+- `<PKG_NAME>/<IDX>-<COMMIT_HASH>/timeline_info.csv`: stores some metadata that is used during aggregation
+- `<PKG_NAME>.csv`: contains information about individual commits (from `<PKG>-agg.txt`), filtering duplicate lines (i.e., only commits that cause changes)
+- `<PKG_NAME>-filtered.csv`: further filters the results to only commits that don't change the number of methods but introduce/remove unstable ones
+- `<PKG_NAME>.pdf`: shows three plots (if we have enough data) - the absolute number of unstable methods, the rate of stable methods to all methods, and the rate of unstable methods to all methods (the `x` axis for all of these is the number of a commit as it appears in `<PKG_NAME>.csv` - i.e., two consecutive points are not necessarily consecutive commits as there can be commits in between that don't change stability)
+- `https___github_com_<PKG_REPO>_git_pkgs.txt`: records the repository url, as well as a list of all packages in that repository and their respective subdirectories
+- `timeline_error_log.txt`: records stdout and strerr for failed runs, common for all packages (the normal log contains line numbers within this file for easier navigation)
+- `finished.txt`: lists completed packages, these are skipped when the pipeline is restarted
+
+### Example
+
 For example, to check the `Multisets` package using 8 threads, create a text file with the package name (in general, this file should contain one package name per line):
 
 ```
