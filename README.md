@@ -1,5 +1,8 @@
 # Type Stability in Julia — Statically
 
+[![Build Status](https://github.com/ulysses4ever/julia-sts/actions/workflows/ci.yml/badge.svg)](https://github.com/ulysses4ever/julia-sts/actions/workflows/ci.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/ulysses4ever/julia-sts/branch/main/graph/badge.svg?label=codecov)](https://codecov.io/gh/ulysses4ever/julia-sts)
+
 This project explores how far we can get with simple enumeration of all possible
 instantions of method signature to determine its _[type stability][st-def]_.
 
