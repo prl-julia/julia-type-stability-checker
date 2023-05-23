@@ -18,6 +18,7 @@ struct MethStCheckCsv
     check :: String
     steps :: Union{Int, Missing}
     extra :: String
+    name  :: String
     sig   :: String
     mod   :: String
     file  :: String
@@ -54,6 +55,7 @@ prepCsvCheck(mc::MethStCheck) :: MethStCheckCsv =
         stCheckToCsv(mc.check),
         steps(mc.check),
         stCheckToExtraCsv(mc.check),
+        "$(mc.method.name)",
         "$(mc.method.sig)",
         "$(mc.method.module)",
         "$(mc.method.file)",
