@@ -16,7 +16,7 @@ end
 
 ensure_dir(dir::AbstractString) = ispath(dir) || mkpath(dir)
 
-function dump(file::AbstractString, what::AbstractString)
+dump(file::AbstractString, what::AbstractString) = begin
     @info_extra "Writing to `$file'"
     ensure_dir(dirname(file))
     open(file, "w") do f
@@ -27,22 +27,17 @@ end
 csv_quote(str::AbstractString) = "\"$(replace(str, '"' => "\"\"", '\n' => " "))\""
 repo_to_filename(url::AbstractString) = "$(replace(url, ':' => "_", '/' => "_", '.' => "_"))"
 
-function read_strip(file::AbstractString)
-    strip(read(file, String))
-end
+read_strip(file::AbstractString) = strip(read(file, String))
+read_lines(file::AbstractString) = split(read_strip(file), "\n")
 
-function read_lines(file::AbstractString)
-    split(read_strip(file), "\n")
-end
-
-function pkg_info(pkg::AbstractString)
+pkg_info(pkg::AbstractString) = begin
     # NOT PRETTY but normally should Just Work™
     general = Pkg.Registry.reachable_registries()[1]
     uuid = findfirst(p -> p.name == pkg, general.pkgs)
     Pkg.Registry.registry_info(general[uuid])
 end
 
-function pretty_duration(t)
+pretty_duration(t) = begin
     if isnan(t) || isinf(t)
         return "??"
     end
@@ -58,7 +53,7 @@ end
 
 # Run cmd (runs in a new process) and capture stdout and stderr.
 # On errors, reformats the exception and rethrows. Otherwise returns the concatenation of stdout and stderr
-function exec(cmd::Cmd)
+exec(cmd::Cmd) = begin
     out = IOBuffer()
     err = IOBuffer()
     try
