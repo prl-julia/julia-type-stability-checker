@@ -90,6 +90,10 @@ Base.@kwdef struct SearchCfg
 
     max_instantiations :: Int = 1000 #typemax(Int)
 #   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
+
+    sample_types_db :: Bool = false
+#   ^ -- for cases where we can't enumerate exhaustively (unbounded UnionAlls),
+#        whether to sample from types database;
 end
 
 default_scfg = SearchCfg()

@@ -156,7 +156,9 @@ is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: StCheckResu
     res
 end
 
+#
 # is_stable_method : Method, SearchCfg -> StCheck
+#
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature.
 # If signature has Any at any place, yeild AnyParam immediately.
