@@ -1,11 +1,11 @@
 #
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
 # E.g.:
-#   ❯ JULIA_PROJECT=~/s/sts/repo/scripts JULIA_DEPOT_PATH=. julia ~/s/sts/repo/scripts/resurrect-types.jl
+#   ❯ JULIA_PROJECT=~/s/sts/repo/scripts JULIA_DEPOT_PATH=. julia -L ~/s/sts/repo/scripts/resurrect-types.jl -e 'print(typesdb())'
 #
 # Input:
 #   - intypesCsvFile with info about Julia types as dumped by
-#       github.com/prl-julia/julia-type-stability/blob/main/Stability/scripts/julia/merge-intypes.jl
+#       https://github.com/prl-julia/julia-type-stability/blob/main/Stability/scripts/julia/merge-intypes.jl
 #
 # Effects:
 #   Load all the types from the file into the current Julia session.
@@ -16,7 +16,7 @@
 
 intypesCsvFile = "merged-intypes.csv"
 
-@info "Starting resurrect.jl. Using packages..."
+@info "Starting resurrect-types.jl. Using packages..."
 
 using CSV, Pkg, DataFrames #, Query
 
@@ -85,7 +85,9 @@ end
 #
 # Entry point
 #
-main() = begin
+
+typesdb() = begin
+    types=[]
     @info "Reading in data..."
     intypesCsv = CSV.read(intypesCsvFile, DataFrame)
     @info "... done."
@@ -133,6 +135,7 @@ main() = begin
                     @info "Builtin module. Evaluating the type in global scope"
                     ty = eval(unqualified_type(tyRow.tyname))
                 end
+                push!(types, ty)
             catch err
                 ei += 1
                 @error "Unexpected failure when using the module or type"
@@ -145,7 +148,6 @@ main() = begin
             ei += 1
         end
     end
-    @show (i,fi,mi,ei,failed)
+    @info (i,fi,mi,ei,failed)
+    types
 end
-
-main()
