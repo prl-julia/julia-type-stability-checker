@@ -6,15 +6,22 @@
 JlType = Any
 JlSignature = Vector{JlType}
 
-# UnionAll's require care. Below is a hierarchy of cases that we support today.
+#
+# Hierarchy of reasons for skipping UnionAlls
+#
 abstract type SkippedUnionAlls end
 struct UnboundedUnionAlls <: SkippedUnionAlls
+    # Unbounded UnionAll basically gives an occurence of Any,
+    # which can't be handled by enumeration.
     ts :: Tuple
 end
 struct SkipMandatory      <: SkippedUnionAlls
+    # see SearchCfg.skip_unionalls: we turn off instantiation
+    # of unionalls if we're currently processing one.
     ts :: Tuple
 end
 struct TooManyInst      <: SkippedUnionAlls
+    # see SearchCfg.max_instantiations and subtype_unionall
     ts :: Tuple
 end
 

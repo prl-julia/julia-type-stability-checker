@@ -36,70 +36,20 @@ include("types.jl")
 include("report.jl")
 include("utils.jl")
 include("enumeration.jl")
+include("annotations.jl")
 
 
 #
 #       Main interface utilities
 #
 
-
-# @stable!: method definition AST -> IO same definition
-# Side effects: Prints warning if finds unstable signature instantiation.
-#               Relies on is_stable_method.
-macro stable!(def)
-    (fname, argtypes) = split_def(def)
-    quote
-	    $(esc(def))
-        m = which($(esc(fname)), $argtypes)
-        mst = is_stable_method(m)
-
-        print_uns(m, mst)
-        (f,_) = split_method(m)
-        f
-    end
-end
-
-# Interface for delayed stability checks; useful for define-after-use cases (cf. Issue #3)
-# @stable delays the check until `check_all_stable` is called. The list of checks to perform
-# is stored in a global list that needs cleenup once in a while with `clean_checklist`.
-checklist=[]
-macro stable(def)
-    push!(checklist, def)
-    def
-end
-check_all_stable() = begin
-    @debug "start check_all_stable"
-    for def in checklist
-        (fname, argtypes) = split_def(def)
-        @debug "Process method $fname with signature: $argtypes"
-        m = which(eval(fname), eval(argtypes))
-        mst = is_stable_method(m)
-
-        print_uns(m, mst)
-    end
-end
-clean_checklist() = begin
-    global checklist = [];
-end
-
-# Variant of @stable! that doesn't splice the provided function definition
-# into the global namespace. Mostly for testing purposes. Relies on Julia's
-# hygiene support.
-macro stable!_nop(def)
-    (fname, argtypes) = split_def(def)
-    quote
-	    $(def)
-        m = which($(fname), $argtypes)
-        mst = is_stable_method(m)
-
-        print_uns(m, mst)
-    end
-end
-
+#
 # is_stable_module : Module, SearchCfg -> IO StCheckResults
+#
 # Check all(*) function definitions in the module for stability.
 # Relies on `is_stable_function`.
 # (*) "all" can mean all or exported; cf. `SearchCfg`'s  `exported_names_only`.
+#
 is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_module: $mod"
     res = []
@@ -134,10 +84,13 @@ end
 is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
     convert(Bool, is_stable_module(mod, scfg))
 
+#
 # is_stable_function : Function, SearchCfg -> IO StCheckResults
+#
 # Convenience tool to iterate over all known methods of a function.
 # Usually, direct use of `is_stable_method` is preferrable, but, for instance,
 # `is_stable_module` has to rely on this one.
+#
 is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_function: $f"
     res = []
@@ -163,6 +116,7 @@ end
 # all possible instantiations of its signature.
 # If signature has Any at any place, yeild AnyParam immediately.
 # If signature has Vararg at any place, yeild VarargParam immediately.
+#
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
     sm = split_method(m)

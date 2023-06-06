@@ -104,6 +104,7 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     res
 end
 
+#
 # instantiations: UnionAll, SearchCfg -> Channel{JlType}
 #
 # all possible instantiations of the top variable of a UnionAll,
@@ -111,6 +112,7 @@ end
 # NOTE: don't forget to unwrap the contents of the results (tup -> tup[1]);
 #       the reason this is needed: we expect insantiations to be a JlType,
 #       but `all_subtypes` works with JlSignatures
+#
 instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
     scfg1 = @set scfg.concrete_only = scfg.abstract_args
     scfg1 = @set scfg1.skip_unionalls = true # don't recurse
@@ -122,6 +124,7 @@ instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
                     ch))
 end
 
+#
 # subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]
 #
 # For a non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
