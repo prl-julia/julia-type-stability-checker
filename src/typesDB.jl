@@ -1,7 +1,7 @@
 #
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
 # E.g.:
-#   ❯ JULIA_PROJECT=~/s/sts/repo/scripts JULIA_DEPOT_PATH=. julia -L ~/s/sts/repo/scripts/resurrect-types.jl -e 'print(typesdb())'
+#   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -L ~/s/sts/repo/typesDB.jl/typesDB.jl -e 'print(typesDB())'
 #
 # Input:
 #   - intypesCsvFile with info about Julia types as dumped by
@@ -18,7 +18,7 @@ intypesCsvFile = "merged-intypes.csv"
 
 @info "Starting resurrect-types.jl. Using packages..."
 
-using CSV, Pkg, DataFrames #, Query
+using CSV, Pkg, DataFrames
 
 @info "... done."
 
@@ -86,7 +86,7 @@ end
 # Entry point
 #
 
-typesdb() = begin
+typesDB() = begin
     types=[]
     @info "Reading in data..."
     intypesCsv = CSV.read(intypesCsvFile, DataFrame)
