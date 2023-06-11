@@ -81,9 +81,13 @@ split_def(def::Expr) = begin
     (fname, argtypes)
 end
 
+#
 # split_method :: Method -> Union{ (Function, [JlType]), GenericMethod }
+#
 # Split method object into the corresponding function object and type signature
-# of the method
+# of the method, if possible. May fail if unionalls involved in a funny way
+# but there doesn't seem to be such cases as of 2023.
+#
 split_method(m::Method) = begin
     m.sig isa UnionAll && return GenericMethod()
     msig = Base.unwrap_unionall(m.sig) # unwrap is critical for generic methods
