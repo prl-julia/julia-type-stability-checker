@@ -109,6 +109,11 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
         @debug "is_stable_module($mod): check symbol $sym"
         try
             evsym = getproperty(mod, sym)
+            # recurse into submodules
+            if evsym isa Module && evsym != mod
+                append!(res, is_stable_module(evsym, scfg))
+                continue
+            end
             isa(evsym, Function) || continue # not interested in non-functional symbols
             (sym == :include || sym == :eval) && continue # not interested in special functions
             res = vcat(res, is_stable_function(evsym, scfg))
