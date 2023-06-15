@@ -43,6 +43,7 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         if isconc
             @debug "[ all_subtypes ] concrete"
             put!(result, tv)
+        # otherwise, get some subtypes, add to worklist, loop
         else
             @debug "[ all_subtypes ] abstract"
 
@@ -67,6 +68,8 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             dss = direct_subtypes(tv, scfg)
             union!(sigtypes, dss)
         end
+
+        # check "fuel" (subtype lattice allowed depth)
         steps += 1
         if steps == scfg.max_lattice_steps
             put!(result, OutOfFuel())

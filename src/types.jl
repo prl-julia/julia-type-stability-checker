@@ -98,13 +98,25 @@ Base.@kwdef struct SearchCfg
     max_instantiations :: Int = 1000 #typemax(Int)
 #   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
 
-    sample_types_db :: Bool = false
+    use_types_db :: Bool = false
 #   ^ -- for cases where we can't enumerate exhaustively (unbounded UnionAlls),
 #        whether to sample from types database;
+
+    types_db :: Union{ Nothing, Vector{Any} } = nothing
+#   ^ -- the actual db we sample from if use_types_db is true
 end
 
+#
+# Several sample search configs
+#
 default_scfg = SearchCfg()
 fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100, max_instantiations=100)
+build_typesdb_scfg(inFile = intypesCsvFileDefault) = begin
+    scfg1 = @set default_scfg.use_types_db = true
+    scfg2 = @set scfg1.types_db = typesDB(inFile)
+    scfg3 = @set scfg2.fuel = length(scfg2.types_db)
+    scfg3
+end
 
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5

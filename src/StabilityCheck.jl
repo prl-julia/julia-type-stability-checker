@@ -8,6 +8,7 @@ export @stable, @stable!, @stable!_nop,
     is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
     check_all_stable,
     convert,
+    typesDB,
 
     # Stats
     AgStats,
@@ -19,7 +20,7 @@ export @stable, @stable!, @stable!_nop,
     MethStCheck,
     SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory, TooManyInst,
     Stb, Par, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
-    SearchCfg
+    SearchCfg, build_typesdb_scfg, default_scfg
 
 # Debug print:
 # ENV["JULIA_DEBUG"] = StabilityCheck  # turn on
@@ -32,6 +33,7 @@ using MacroTools
 using CSV
 using Setfield
 
+include("typesDB.jl")
 include("types.jl")
 include("report.jl")
 include("utils.jl")
@@ -114,24 +116,36 @@ end
 #
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature.
-# If signature has Any at any place, yeild AnyParam immediately.
+#
+# If signature has Any at any place and (! scfg.use_types_db), i.e. we don't want
+# to sample types, yeild AnyParam immediately.
 # If signature has Vararg at any place, yeild VarargParam immediately.
 #
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
+
+    if scfg.use_types_db
+        scfg.types_db === Nothing &&
+            (scfg.types_db = typesDB())
+    end
+
+    # Slpit method into signature and the corresponding function object
     sm = split_method(m)
     sm isa GenericMethod && return sm
     (func, sig_types) = sm
 
-    # corner cases where we give up
-    Any ∈ sig_types && return AnyParam(sig_types)
+    # Corner cases where we give up
+    Any ∈ sig_types && ! scfg.use_types_db && return AnyParam(sig_types)
     any(t -> is_vararg(t), sig_types) && return VarargParam(sig_types)
 
-    # loop over all instantiations of the signature
+    # Loop over all instantiations of the signature
     unst = Vector{Any}([])
     steps = 0
     skipexists = Set{SkippedUnionAlls}([])
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
+        @debug "[ is_stable_method ] loop" steps "$ts"
+
+        # case over special cases
         if ts == "done"
             break
         end
@@ -142,6 +156,8 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
             push!(skipexists, ts)
             continue
         end
+
+        # the actual stability check
         try
             if ! is_stable_call(func, ts)
                 push!(unst, ts)
@@ -149,6 +165,8 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         catch e
             return TcFail(ts, e)
         end
+
+        # increment the counter, check fuel
         steps += 1
         if steps > scfg.fuel
             return OutOfFuel()
