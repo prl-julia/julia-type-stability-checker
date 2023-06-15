@@ -24,13 +24,13 @@
 #   - subtypes of the input type (1st arg) are sent to the channel (3rd arg)
 #
 all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
-    @debug "all_subtypes: $ts"
+    @debug "[ all_subtypes ] $ts"
     sigtypes = Set{Any}([ts]) # worklist
     steps = 0
     while !isempty(sigtypes)
 
         tv = pop!(sigtypes)
-        @debug "all_subtypes loop: $tv"
+        @debug "[ all_subtypes ] loop: $tv"
 
         # Pass on markers for skipped unionalls
         if tv isa SkippedUnionAlls
@@ -41,10 +41,10 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         # If all types in tv are concrete, push it to the caller
         isconc = all(is_concrete_type, tv)
         if isconc
-            @debug "all_subtypes: concrete"
+            @debug "[ all_subtypes ] concrete"
             put!(result, tv)
         else
-            @debug "all_subtypes: abstract"
+            @debug "[ all_subtypes ] abstract"
 
             # Special cases for unionalls.
             # Skip and push a marker describing the case to the caller.
