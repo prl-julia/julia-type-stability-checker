@@ -1,7 +1,15 @@
+
+#
+#    Load types database from a CSV File
+#
+
 #
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
 # E.g.:
-#   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -L ~/s/sts/repo/typesDB.jl/typesDB.jl -e 'print(typesDB())'
+#   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -L ~/s/sts/repo/src/typesDB.jl -e 'print(typesDB())'
+# Note:
+#   Using this approach, you usually need to instantiate the environment first
+#   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -e 'using Pkg; Pkg.instantiate()'
 #
 # Input:
 #   - intypesCsvFile with info about Julia types as dumped by
@@ -14,19 +22,26 @@
 # The idea is that when we can't enumerate everything, we sample from these types.
 #
 
-intypesCsvFile = "merged-intypes.csv"
+intypesCsvFileDefault = "merged-intypes.csv"
 
-@info "Starting resurrect-types.jl. Using packages..."
+
+# @info "Starting typesDB.jl. Using packages..."
 
 using CSV, Pkg, DataFrames
 
-@info "... done."
+# @info "... done."
 
 #
 # Aux utils
 #
-evalp(s::AbstractString) = eval(Meta.parse(s))
+evalp(s::AbstractString) = Core.eval(Main, Meta.parse(s))
 is_builtin_module(mod::AbstractString) = mod in ["Core", "Base"]
+
+tag = "[ STS-TYPESDB ]"
+macro mydebug(msg)
+    :( @debug (tag * " " * $msg))
+end
+
 
 # Parsing namepaths (things of a form Mod.Submod.Type)
 parts(ty) = split(ty,".")
@@ -64,13 +79,13 @@ addpackage(pkg::AbstractString) = begin
     is_builtin_module(pkg) && return true # stdlib-modules don't need anything
 
     try
-        @info "Activate a separate environment to add a package"
+        @mydebug "Activate a separate environment to add a package"
         Pkg.activate("envs/$pkg";io=devnull)
-        @info "Try to Pkg.add package '$(pkg)' (may take some time)... "
+        @mydebug "Try to Pkg.add package '$(pkg)' (may take some time)... "
         Pkg.add(pkg;io=devnull)
-        @info "... done"
+        @mydebug "... done"
     catch err
-        @warn "Couldn't add package for type $(pkg.tyname) (module: $(pkg.modl))"
+        @warn "$tag Couldn't add package for type $(pkg.tyname) (module: $(pkg.modl))"
         errio=stderr
         showerror(errio, err)
         println(errio)
@@ -86,11 +101,11 @@ end
 # Entry point
 #
 
-typesDB() = begin
+typesDB(inFile = intypesCsvFileDefault) = begin
     types=[]
-    @info "Reading in data..."
-    intypesCsv = CSV.read(intypesCsvFile, DataFrame)
-    @info "... done."
+    @mydebug "Reading in typesDB data..."
+    intypesCsv = CSV.read(inFile, DataFrame)
+    @mydebug "... done."
 
     failed=[]
     i=0  # count types processed
@@ -101,23 +116,23 @@ typesDB() = begin
 
     for tyRow in eachrow(intypesCsv)
         i+=1
-        @info "[$i] Processing: $(tyRow.tyname) from $(tyRow.modl)..."
+        @mydebug "[$i] Processing: $(tyRow.tyname) from $(tyRow.modl)..."
 
         # Special case: function types. Skip for now:
-        startswith(tyRow.tyname, "typeof") && (fi += 1; (@info "Special case: function type. Skip."); continue)
+        startswith(tyRow.tyname, "typeof") && (fi += 1; (@mydebug "Special case: function type. Skip."); continue)
 
         # Special case: sometimes our own methods (Stability) get in the way. Skip.
         tyRow.modl == "Stability" && continue;
 
         pkg=guess_package(tyRow)
-        @info "Guessed package: $pkg"
+        @mydebug "Guessed package: $pkg"
 
         # Special case: 'Main' module.
         # Some tests define types, and usually they end up in the 'Main' module.
         # We don't try to resurrect those because it's not easy to eval a test
         # module in the current environment (tests run in a sandbox).
         if pkg == "Main"
-            @info "A type defined within test suite found (module 'Main'). Skip."
+            @mydebug "A type defined within test suite found (module 'Main'). Skip."
             mi+=1
             continue
         end
@@ -125,29 +140,29 @@ typesDB() = begin
         if addpackage(pkg)
             try
                 if ! is_builtin_module(pkg)
-                    @info "Using the module $pkg"
+                    @mydebug "Using the module $pkg"
                     evalp("using $pkg")
-                    @info "Evaluating the module..."
+                    @mydebug "Evaluating the module..."
                     m = evalp(pkg)
-                    @info "... and the type"
+                    @mydebug "... and the type"
                     ty = Core.eval(m, unqualified_type(tyRow.tyname))
                 else
-                    @info "Builtin module. Evaluating the type in global scope"
+                    @mydebug "Builtin module. Evaluating the type in global scope"
                     ty = eval(unqualified_type(tyRow.tyname))
                 end
                 push!(types, ty)
             catch err
                 ei += 1
-                @error "Unexpected failure when using the module or type"
+                @error "$tag Unexpected failure when using the module ($pkg) or type ($(tyRow.tyname))"
                 showerror(stderr, err, stacktrace(catch_backtrace()))
                 println(stderr)
-                exit(1)
+                return []; #exit(1)
             end
         else
             push!(failed, (tyRow.tyname, tyRow.modl))
             ei += 1
         end
     end
-    @info (i,fi,mi,ei,failed)
+    @mydebug (i,fi,mi,ei,failed)
     types
 end
