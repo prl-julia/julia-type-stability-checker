@@ -142,6 +142,7 @@ end
 end
 
 # (Un)Stable Modules
+
 module M
 export a, b, c;
 a()=1; b()=2
@@ -168,3 +169,62 @@ end
     @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 0, 1, 1, 1, 0, 0, 0)
 end
 
+# Recursing into submodules
+
+# only exports stable
+module Nested
+    export NestedA, stable
+
+    # exported, only exports stable
+    module NestedA
+        export NestedA1, stableA
+
+        # exported, only exports stable
+        module NestedA1
+            export stableA1
+            stableA1() = 1
+            unstableA1() = if rand()>0.5; 1; else ""; end
+        end
+        # not exported, exports everything
+        module NestedA2
+            export stableA2, unstableA2
+            stableA2() = 1
+            unstableA2() = if rand()>0.5; 1; else ""; end
+        end
+        # deeply nested
+        module NestedA3
+            module NestedA3a
+                module NestedA3b
+                    module NestedA3c
+                        module NestedA3d
+                            module NestedA3e
+                                unstableA3abcde() = if rand()>0.5; 1; else ""; end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        stableA() = 1
+        unstableA() = if rand()>0.5; 1; else ""; end
+    end
+
+    # not exported, exports everything
+    module NestedB
+        export NestedB1, stableB, unstableB
+        module NestedB1
+            export stableB1, unstableB1
+            stableB1() = 1
+            unstableB1() = if rand()>0.5; 1; else ""; end
+        end
+        stableB() = 1
+        unstableB() = if rand()>0.5; 1; else ""; end
+    end
+    stable() = 1
+    unstable() = if rand()>0.5; 1; else ""; end
+end
+
+@testset "is_stable_module recursive     " begin
+    @test is_stable_moduleb(Nested, SearchCfg(exported_names_only=true))
+    @test aggregateStats(is_stable_module(Nested)) == AgStats(13, 6, 0, 7, 0, 0, 0, 0, 0)
+end
