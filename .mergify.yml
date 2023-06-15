@@ -23,7 +23,7 @@ pull_request_rules:
         # so we use the most reliable
         update_method: merge
     conditions:
-      - label=squash+merge me
+      - label=squash+merge
       - '#approved-reviews-by>=1'
 
 queue_rules:
