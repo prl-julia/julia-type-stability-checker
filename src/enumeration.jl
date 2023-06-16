@@ -65,7 +65,7 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
 
             # Normal case
             !scfg.concrete_only && put!(result, tv)
-            dss = direct_subtypes(tv, scfg)
+            dss = generate_subtypes(tv, scfg)
             union!(sigtypes, dss)
         end
 
@@ -83,14 +83,14 @@ blocklist = [Function]
 is_vararg(t) = isa(t, Core.TypeofVararg)
 
 #
-# direct_subtypes: JlSignature, SearchCfg -> [Union{JlSignature, SkippedUnionAlls}]
+# generate_subtypes: JlSignature, SearchCfg -> [Union{JlSignature, SkippedUnionAlls}]
 #
 # Auxilliary function: immediate subtypes of a tuple of types `ts1`
 #
 # Precondition: no unbound existentials in ts1
 #
-direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
-    @debug "direct_subtypes: $ts1"
+generate_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
+    @debug "generate_subtypes: $ts1"
     isempty(ts1) && return [[]]
 
     ts = copy(ts1)
@@ -102,7 +102,7 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
         else subtypes(t)
     end
 
-    @debug "direct_subtypes of head: $(ss_first)"
+    @debug "generate_subtypes of head: $(ss_first)"
     # no subtypes may mean it's a UnionAll requiring special handling
     if isempty(ss_first)
         if typeof(t) == UnionAll
@@ -111,7 +111,7 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     end
 
     res = []
-    ss_rest = direct_subtypes(ts, scfg)
+    ss_rest = generate_subtypes(ts, scfg)
     for s_first in ss_first
         if s_first isa SkippedUnionAlls
             push!(res, s_first)
