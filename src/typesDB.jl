@@ -39,7 +39,7 @@ is_builtin_module(mod::AbstractString) = mod in ["Core", "Base"]
 
 tag = "[ STS-TYPESDB ]"
 macro mydebug(msg)
-    :( @debug (tag * " " * $msg))
+    :( @debug (tag * " " * esc($msg)))
 end
 
 
@@ -139,16 +139,17 @@ typesDB(inFile = intypesCsvFileDefault) = begin
 
         if addpackage(pkg)
             try
+                tyname = Symbol(unqualified_type(tyRow.tyname))
                 if ! is_builtin_module(pkg)
                     @mydebug "Using the module $pkg"
                     evalp("using $pkg")
                     @mydebug "Evaluating the module..."
                     m = evalp(pkg)
                     @mydebug "... and the type"
-                    ty = Core.eval(m, unqualified_type(tyRow.tyname))
+                    ty = Core.eval(m, tyname)
                 else
                     @mydebug "Builtin module. Evaluating the type in global scope"
-                    ty = eval(unqualified_type(tyRow.tyname))
+                    ty = eval(tyname)
                 end
                 push!(types, ty)
             catch err
@@ -156,7 +157,7 @@ typesDB(inFile = intypesCsvFileDefault) = begin
                 @error "$tag Unexpected failure when using the module ($pkg) or type ($(tyRow.tyname))"
                 showerror(stderr, err, stacktrace(catch_backtrace()))
                 println(stderr)
-                return []; #exit(1)
+                return []
             end
         else
             push!(failed, (tyRow.tyname, tyRow.modl))
