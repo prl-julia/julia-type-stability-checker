@@ -117,16 +117,16 @@ end
 # Main interface utility: check if method is stable by enumerating
 # all possible instantiations of its signature.
 #
-# If signature has Any at any place and (! scfg.use_types_db), i.e. we don't want
+# If signature has Any at any place and (! scfg.types_db.use_types_db), i.e. we don't want
 # to sample types, yeild AnyParam immediately.
 # If signature has Vararg at any place, yeild VarargParam immediately.
 #
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
 
-    if scfg.use_types_db
-        scfg.types_db === Nothing &&
-            (scfg.types_db = typesDB())
+    if scfg.typesDBcfg.use_types_db
+        scfg.typesDBcfg.types_db === Nothing &&
+            (scfg.typesDBcfg.types_db = typesDB())
     end
 
     # Slpit method into signature and the corresponding function object
@@ -135,7 +135,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     (func, sig_types) = sm
 
     # Corner cases where we give up
-    Any ∈ sig_types && ! scfg.use_types_db && return AnyParam(sig_types)
+    Any ∈ sig_types && ! scfg.typesDBcfg.use_types_db && return AnyParam(sig_types)
     any(t -> is_vararg(t), sig_types) && return VarargParam(sig_types)
 
     # Loop over all instantiations of the signature

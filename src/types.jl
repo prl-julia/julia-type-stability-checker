@@ -68,6 +68,20 @@ end
 # Result of many checks (convinience alias)
 StCheckResults = Vector{MethStCheck}
 
+# Types Database Config
+Base.@kwdef struct TypesDBCfg
+    use_types_db :: Bool = false
+#   ^ -- for cases where we can't enumerate exhaustively (unbounded UnionAlls),
+#        whether to sample from types database;
+
+    types_db :: Union{ Nothing, Vector{Any} } = nothing
+#   ^ -- the actual db we sample from if use_types_db is true
+
+    sample_count :: Int = 0
+#   ^ -- How many types to sample from the DB.
+#        Invariant: less then or equal to length(types_db)
+end
+
 # Subtype enumeration procedure parameters
 Base.@kwdef struct SearchCfg
     concrete_only  :: Bool = true
@@ -98,24 +112,23 @@ Base.@kwdef struct SearchCfg
     max_instantiations :: Int = 1000 #typemax(Int)
 #   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
 
-    use_types_db :: Bool = false
-#   ^ -- for cases where we can't enumerate exhaustively (unbounded UnionAlls),
-#        whether to sample from types database;
-
-    types_db :: Union{ Nothing, Vector{Any} } = nothing
-#   ^ -- the actual db we sample from if use_types_db is true
+    typesDBcfg :: TypesDBCfg = TypesDBCfg()
+#   ^ -- Parameters of the types DB.
 end
 
 #
 # Several sample search configs
 #
 default_scfg = SearchCfg()
+
 fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100, max_instantiations=100)
-build_typesdb_scfg(inFile = intypesCsvFileDefault) = begin
-    scfg1 = @set default_scfg.use_types_db = true
-    scfg2 = @set scfg1.types_db = typesDB(inFile)
-    scfg3 = @set scfg2.fuel = length(scfg2.types_db)
-    scfg3
+
+build_typesdb_scfg(inFile = intypesCsvFileDefault, sample_count :: Int = 10) = begin
+    scfg = @set default_scfg.typesDBcfg.use_types_db = true
+    scfg = @set scfg.typesDBcfg.types_db            = typesDB(inFile)[1:min(end,sample_count)]
+    scfg = @set scfg.typesDBcfg.sample_count        = sample_count
+    scfg = @set scfg.fuel                           = length(scfg.typesDBcfg.types_db)
+    scfg
 end
 
 # How many counterexamples to print by default

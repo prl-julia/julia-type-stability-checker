@@ -97,10 +97,14 @@ generate_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     t = pop!(ts)
 
     # subtypes of t -- first component in ts
-    ss_first = if is_vararg(t) || any(b -> t <: b, blocklist)
-        []
-        else subtypes(t)
-    end
+    ss_first =
+        if is_vararg(t) || any(b -> t <: b, blocklist)
+            []
+        elseif t == Any # if Any got here, we're asked to sample
+            scfg.typesDBcfg.types_db
+        else
+            subtypes(t)
+        end
 
     @debug "generate_subtypes of head: $(ss_first)"
     # no subtypes may mean it's a UnionAll requiring special handling
