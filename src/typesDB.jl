@@ -39,7 +39,7 @@ is_builtin_module(mod::AbstractString) = mod in ["Core", "Base"]
 
 tag = "[ STS-TYPESDB ]"
 macro mydebug(msg)
-    :( @info (tag * " " * $(esc(msg))))
+    :( @info (tag * " " * string($(esc(msg)))))
 end
 
 
