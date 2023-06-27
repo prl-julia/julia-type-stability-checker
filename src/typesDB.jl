@@ -4,6 +4,7 @@
 #
 
 #
+using Core: TypeofBottom
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
 # E.g.:
 #   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -L ~/s/sts/repo/src/typesDB.jl -e 'print(typesDB())'
@@ -39,7 +40,7 @@ is_builtin_module(mod::AbstractString) = mod in ["Core", "Base"]
 
 tag = "[ STS-TYPESDB ]"
 macro mydebug(msg)
-    :( @info (tag * " " * string($(esc(msg)))))
+    :( @debug (tag * " " * string($(esc(msg)))))
 end
 
 
@@ -138,8 +139,8 @@ typesDB(inFile = intypesCsvFileDefault) = begin
         end
 
         if addpackage(pkg)
+            tyname = tyRow.tyname
             try
-                tyname = tyRow.tyname
                 if ! is_builtin_module(pkg)
                     @mydebug "Using the module $pkg"
                     evalp("using $pkg")
@@ -153,17 +154,22 @@ typesDB(inFile = intypesCsvFileDefault) = begin
                 end
                 push!(types, ty)
             catch err
+                # Record error
                 ei += 1
-                @error "$tag Unexpected failure when using the module ($pkg) or type ($(tyRow.tyname))"
-                showerror(stderr, err, stacktrace(catch_backtrace()))
+                push!(failed, (tyname, tyRow.modl, err))
+
+                # Report error
+                @warn "$tag Failed when using the module ($pkg) or type ($(tyRow.tyname))"
+                showerror(stderr, err) #, stacktrace(catch_backtrace()))
                 println(stderr)
-                return []
             end
         else
-            push!(failed, (tyRow.tyname, tyRow.modl))
+            push!(failed, (tyRow.tyname, tyRow.modl, "Can't add package"))
             ei += 1
         end
     end
-    @mydebug (i,fi,mi,ei,failed)
+    report = TypesDBErrorReport(failed, TypesDBErrorMetrics(i,fi,mi,ei))
+    @info "Report on loading types DB"
+    dump(report)
     types
 end

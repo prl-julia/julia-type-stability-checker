@@ -139,3 +139,17 @@ MAX_PRINT_UNSTABLE = 5
 struct CantSplitMethod
     m :: Method
 end
+
+Base.@kwdef struct TypesDBErrorMetrics
+    types_count :: Int = 0 # count types processed
+
+    # Special case counters
+    function_types    :: Int = 0 # count function types
+    main_module_types :: Int = 0 # count types defined in the "Main" module
+    error_count       :: Int = 0 # count failure to eval types
+end
+
+struct TypesDBErrorReport
+    error_messages :: Vector
+    metrics        :: TypesDBErrorMetrics
+end
