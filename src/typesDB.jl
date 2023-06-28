@@ -4,13 +4,15 @@
 #
 
 #
-using Core: TypeofBottom
 # WARNING: This file does Pkg.add. Run it in a private depot to not pollute the default one.
 # E.g.:
 #   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -L ~/s/sts/repo/src/typesDB.jl -e 'print(typesDB())'
 # Note:
 #   Using this approach, you usually need to instantiate the environment first
 #   ❯ JULIA_PROJECT=~/s/sts/repo JULIA_DEPOT_PATH=./depot julia -e 'using Pkg; Pkg.instantiate()'
+#
+# Entry Point:
+#   typesDB
 #
 # Input:
 #   - intypesCsvFile with info about Julia types as dumped by
@@ -19,8 +21,8 @@ using Core: TypeofBottom
 # Effects:
 #   Load all the types from the file into the current Julia session.
 #
-# So far, it's a testing poligon for something that can become a part of StabilityCheck.
-# The idea is that when we can't enumerate everything, we sample from these types.
+# Relevance to StabilityCheck:
+#   The idea is that when we can't enumerate everything, we sample from these types.
 #
 
 intypesCsvFileDefault = "merged-intypes.csv"
@@ -102,6 +104,15 @@ end
 # Entry point
 #
 
+#
+# Returns a vector of Julia type objects created based on info
+# from the given CSV file
+#
+# Side effects:
+#
+#   - Pkg.add packages that may store the types requested
+#   - if any errors are noticed, create types-db-load-errors.csv
+#
 typesDB(inFile = intypesCsvFileDefault) = begin
     types=[]
     @mydebug "Reading in typesDB data..."
@@ -156,7 +167,7 @@ typesDB(inFile = intypesCsvFileDefault) = begin
             catch err
                 # Record error
                 ei += 1
-                push!(failed, (tyname, tyRow.modl, err))
+                push!(failed, (tyname=tyname, modl=tyRow.modl, error=err))
 
                 # Report error
                 @warn "$tag Failed when using the module ($pkg) or type ($(tyRow.tyname))"
@@ -164,12 +175,17 @@ typesDB(inFile = intypesCsvFileDefault) = begin
                 println(stderr)
             end
         else
-            push!(failed, (tyRow.tyname, tyRow.modl, "Can't add package"))
+            push!(failed, (tyname=tyRow.tyname,
+                           modl=tyRow.modl,
+                           error=ArgumentError("Can't add package")))
             ei += 1
         end
     end
-    report = TypesDBErrorReport(failed, TypesDBErrorMetrics(i,fi,mi,ei))
-    @info "Report on loading types DB"
-    dump(report)
+    if ei > 0
+        report = TypesDBErrorReport(failed, TypesDBErrorMetrics(i,fi,mi,ei))
+        CSV.write("types-db-load-errors.csv", failed)
+        @info "Report on loading types DB"
+        dump(report)
+    end
     types
 end
