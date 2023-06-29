@@ -89,6 +89,11 @@ juila> is_stable_method((@which f(1)), typesdb_cfg)
 Stb(2)
 ```
 
+The testing database in `"merged-small.csv"` is really small.
+For a realistic example of a database with 10K types collected from
+tracing test suites of popular Julia packages, refer to the `types-database`
+directory in the [`julia-sts-data`][julia-sts-data] repository.
+
 ## Package History Checking
 
 There is a suite of scripts to examine the git history of packages 
@@ -204,4 +209,7 @@ tail -n +2795580 /tmp/scratch/timeline_error_log.txt | less
 
 ## Sharing Results
 
-The results of the scripts should preferably be added to the [julia-sts-data](https://github.com/ulysses4ever/julia-sts-data) repository instead of this one.
+The results of the scripts are stored in the [`julia-sts-data`][julia-sts-data]
+repository instead of this one.
+
+[julia-sts-data]: https://github.com/ulysses4ever/julia-sts-data
