@@ -228,3 +228,14 @@ end
     @test is_stable_moduleb(Nested, SearchCfg(exported_names_only=true))
     @test aggregateStats(is_stable_module(Nested)) == AgStats(13, 6, 0, 7, 0, 0, 0, 0, 0)
 end
+
+@testset "Types Database                 " begin
+    f(x)=1
+    # Normally, we don't process Any-arg methods
+    # (there's no way to enumerate subtypes of Any),
+    # see "Special (Any, Varargs, Generic)" testset above.
+    # But we can load a types database and try only types
+    # from there.
+    typesdb_cfg = build_typesdb_scfg("merged-small.csv")
+    @test Stb(2) == is_stable_method((@which f(1)), typesdb_cfg)
+end

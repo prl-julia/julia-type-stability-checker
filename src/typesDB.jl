@@ -111,6 +111,7 @@ end
 # Side effects:
 #
 #   - Pkg.add packages that may store the types requested
+#   - your environment switches to something else of form ./envs/<package-name>
 #   - if any errors are noticed, create types-db-load-errors.csv
 #
 typesDB(inFile = intypesCsvFileDefault) = begin
