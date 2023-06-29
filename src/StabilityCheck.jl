@@ -61,14 +61,21 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
         @debug "is_stable_module($mod): check symbol $sym"
         try
             evsym = getproperty(mod, sym)
+
             # recurse into submodules
             if evsym isa Module && evsym != mod
                 append!(res, is_stable_module(evsym, scfg))
                 continue
             end
-            isa(evsym, Function) || continue # not interested in non-functional symbols
-            (sym == :include || sym == :eval) && continue # not interested in special functions
-            res = vcat(res, is_stable_function(evsym, scfg))
+
+            # not interested in non-functional symbols
+            isa(evsym, Function) || continue
+
+            # not interested in special functions
+            special_syms = [ :include, :eval ]
+            (sym in special_syms) && continue
+
+            append!(res, is_stable_function(evsym, scfg))
         catch e
             if e isa UndefVarError
                 @warn "Module $mod exports symbol $sym but it's undefined"
