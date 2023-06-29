@@ -6,15 +6,22 @@
 JlType = Any
 JlSignature = Vector{JlType}
 
-# UnionAll's require care. Below is a hierarchy of cases that we support today.
+#
+# Hierarchy of reasons for skipping UnionAlls
+#
 abstract type SkippedUnionAlls end
 struct UnboundedUnionAlls <: SkippedUnionAlls
+    # Unbounded UnionAll basically gives an occurence of Any,
+    # which can't be handled by enumeration.
     ts :: Tuple
 end
 struct SkipMandatory      <: SkippedUnionAlls
+    # see SearchCfg.skip_unionalls: we turn off instantiation
+    # of unionalls if we're currently processing one.
     ts :: Tuple
 end
 struct TooManyInst      <: SkippedUnionAlls
+    # see SearchCfg.max_instantiations and subtype_unionall
     ts :: Tuple
 end
 
@@ -61,6 +68,20 @@ end
 # Result of many checks (convinience alias)
 StCheckResults = Vector{MethStCheck}
 
+# Types Database Config
+Base.@kwdef struct TypesDBCfg
+    use_types_db :: Bool = false
+#   ^ -- for cases where we can't enumerate exhaustively (unbounded UnionAlls),
+#        whether to sample from types database;
+
+    types_db :: Union{ Nothing, Vector{Any} } = nothing
+#   ^ -- the actual db we sample from if use_types_db is true
+
+    sample_count :: Int = 0
+#   ^ -- How many types to sample from the DB.
+#        Invariant: less then or equal to length(types_db)
+end
+
 # Subtype enumeration procedure parameters
 Base.@kwdef struct SearchCfg
     concrete_only  :: Bool = true
@@ -90,10 +111,25 @@ Base.@kwdef struct SearchCfg
 
     max_instantiations :: Int = 1000 #typemax(Int)
 #   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
+
+    typesDBcfg :: TypesDBCfg = TypesDBCfg()
+#   ^ -- Parameters of the types DB.
 end
 
+#
+# Several sample search configs
+#
 default_scfg = SearchCfg()
+
 fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100, max_instantiations=100)
+
+build_typesdb_scfg(inFile = intypesCsvFileDefault, sample_count :: Int = 10) = begin
+    scfg = @set default_scfg.typesDBcfg.use_types_db = true
+    scfg = @set scfg.typesDBcfg.types_db            = typesDB(inFile)[1:min(end,sample_count)]
+    scfg = @set scfg.typesDBcfg.sample_count        = sample_count
+    scfg = @set scfg.fuel                           = length(scfg.typesDBcfg.types_db)
+    scfg
+end
 
 # How many counterexamples to print by default
 MAX_PRINT_UNSTABLE = 5
@@ -102,4 +138,18 @@ MAX_PRINT_UNSTABLE = 5
 
 struct CantSplitMethod
     m :: Method
+end
+
+Base.@kwdef struct TypesDBErrorMetrics
+    types_count :: Int = 0 # count types processed
+
+    # Special case counters
+    function_types    :: Int = 0 # count function types
+    main_module_types :: Int = 0 # count types defined in the "Main" module
+    error_count       :: Int = 0 # count failure to eval types
+end
+
+struct TypesDBErrorReport
+    error_messages :: Vector
+    metrics        :: TypesDBErrorMetrics
 end

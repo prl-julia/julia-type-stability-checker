@@ -70,6 +70,25 @@ is written in `aggregate.csv`.
 
 See examples in the `tests` directory.
 
+## Types Database
+
+Normally, we don't check methods with `Any` in the parameters types
+because there is no sensible way to enumerate subtypes of `Any` without
+any additional knowledge. One way we can get around it is to collect
+a set of types and test only enumerate that set every time we see
+an `Any`-parameter. That's what the “types database” idea about.
+
+The implementation with further comments in the source code lives in
+[src/typesDB.jl](src/typesDB.jl) (you may be interested in the format of the
+database). A simple example of how to use it is shown in the test suite:
+
+```
+juila> f(x)=1
+juila> typesdb_cfg = build_typesdb_scfg("merged-small.csv")
+juila> is_stable_method((@which f(1)), typesdb_cfg)
+Stb(2)
+```
+
 ## Package History Checking
 
 There is a suite of scripts to examine the git history of packages 
