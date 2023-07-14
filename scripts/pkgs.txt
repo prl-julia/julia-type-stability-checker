@@ -1,0 +1,9 @@
+Gen
+Flux
+Gadfly
+Genie
+IJulia
+JuMP
+Knet
+Plots
+Pluto

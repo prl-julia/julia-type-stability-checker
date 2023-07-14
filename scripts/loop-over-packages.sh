@@ -1,21 +1,16 @@
 #!/usr/bin/env bash
 
-# IJulia, JuMP -- LOOP need to limit fuel?..
-#
-pkgs='Gen
-Flux
-Gadfly
-Genie
-IJulia
-JuMP
-Knet
-Plots
-Pluto'
-
-#echo "$pkgs"
-
 MYDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+PKGS=${1:-"$MYDIR/pkgs.txt"}
+
+echo "[INFO] Processing package list in $PKGS"
+echo "       (pass an alternative localtion as the script argument next time if desired)"
+
 while IFS= read -r pkg; do
+    echo "Processing package $pkg"
+    mkdir -p "$pkg"
+    pushd "$pkg"
     julia "$MYDIR/process-package.jl" "$pkg"
-done <<< "$pkgs"
+    popd
+done < $PKGS
