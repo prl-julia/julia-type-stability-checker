@@ -105,3 +105,11 @@ split_method(m::Method) = begin
         end
     end
 end
+
+# Given a function and a module, finds all methods defined in the module
+# for the function. Convenience method to be used in conjuction with
+# `names(m,; imported=true)`.
+our_methods_of_function(f :: Function, mod :: Module) :: Vector{Method} = begin
+    ms=methods(f).ms
+    filter(meth -> meth.module == mod, ms)
+end
