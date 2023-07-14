@@ -84,6 +84,9 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
                 @warn "Module $mod exports symbol $sym but it's undefined"
                 # showerror(stdout, e)
                 # not our problem, so proceed as usual
+            elseif e isa CantSplitMethod
+                @warn "Can't process method with no canonical instance:\n$m"
+                # cf. comment in `split_method`
             else
                 throw(e)
             end
@@ -95,31 +98,6 @@ end
 # bool-returning version of the above
 is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
     convert(Bool, is_stable_module(mod, scfg))
-
-#
-# is_stable_function : Function, SearchCfg -> IO StCheckResults
-#
-# Convenience tool to iterate over all known methods of a function.
-# Usually, direct use of `is_stable_method` is preferrable, but, for instance,
-# `is_stable_module` has to rely on this one.
-#
-is_stable_function(f::Function, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
-    @debug "is_stable_function: $f"
-    res = []
-    for m in methods(f).ms
-        try
-            push!(res, MethStCheck(m, is_stable_method(m, scfg)))
-        catch err
-            if err isa CantSplitMethod
-                @warn "Can't process method with no canonical instance:\n$m"
-                # cf. comment in `split_method`
-            else
-                throw(err)
-            end
-        end
-    end
-    res
-end
 
 #
 # is_stable_method : Method, SearchCfg -> StCheck
