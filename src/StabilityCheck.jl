@@ -55,8 +55,8 @@ include("annotations.jl")
 is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
     @debug "is_stable_module: $mod"
     res = []
-    ns = names(mod; all=!scfg.exported_names_only)
-    @debug "number of methods in $mod: $(length(ns))"
+    ns = names(mod; all=!scfg.exported_names_only, imported = true)
+    @debug "number of members in $mod: $(length(ns))"
     for sym in ns
         @debug "is_stable_module($mod): check symbol $sym"
         try
@@ -64,6 +64,7 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
 
             # recurse into submodules
             if evsym isa Module && evsym != mod
+                @debug "is_stable_module($mod): found module $sym"
                 append!(res, is_stable_module(evsym, scfg))
                 continue
             end
@@ -75,7 +76,9 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
             special_syms = [ :include, :eval ]
             (sym in special_syms) && continue
 
-            append!(res, is_stable_function(evsym, scfg))
+            append!(res,
+                    map(m -> MethStCheck(m, is_stable_method(m, scfg)),
+                        our_methods_of_function(evsym, mod)))
         catch e
             if e isa UndefVarError
                 @warn "Module $mod exports symbol $sym but it's undefined"

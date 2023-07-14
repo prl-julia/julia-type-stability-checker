@@ -239,3 +239,10 @@ end
     typesdb_cfg = build_typesdb_scfg("merged-small.csv")
     @test Stb(2) == is_stable_method((@which f(1)), typesdb_cfg)
 end
+
+module ImportBase; import Base.push!; push!(::Int)=1; end
+@testset "Method discovery completeness   " begin
+    chks = is_stable_module(ImportBase)
+    @test length(chks) == 1
+    @test chks[1].check == Stb(1)
+end
