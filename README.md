@@ -8,15 +8,17 @@ instantions of method signature to determine its _[type stability][st-def]_.
 
 [st-def]: https://docs.julialang.org/en/v1/manual/faq/#man-type-stability
 
-## Batch-Package Checking
+## Batch Package Checking
 
-Main script: `$JULIA_STS/scripts/loop-over-packages.sh`. The list of packages is
-hardcoded as of now (TODO: should be a parameter).
+Main script: `$JULIA_STS/scripts/loop-over-packages.sh`. The list of packages
+for processing is taken from a text file (every line holds a package name) that
+can be supplied as the script argument. By default (no argument), the script
+reads `scripts/pkgs.txt`with the names of several popular Julia packages.
 
 No assumptions other than Julia and internet connectivity (to download
-packages) available.
+packages) are made.
 
-Preferably in a fresh directory, run this:
+Preferably in a fresh directory, run is as follows:
 
 ``` shellsession
 ❯ $JULIA_STS/scripts/loop-over-packages.sh
@@ -25,8 +27,9 @@ Preferably in a fresh directory, run this:
 ...
 ```
 
-This should create one `csv` and one `txt` file per package on the list, and the
-aggregate script collects data from the `txt`'s to an `aggregate.csv` file.
+This should create one subdirectory per package on the list each with the
+following contents: several`csv` and one `txt`. The aggregate script collects
+data from the `txt`'s in an `aggregate.csv` file.
 
 ## Whole-Package Checking
 
