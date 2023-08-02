@@ -52,10 +52,21 @@ include("annotations.jl")
 # Relies on `is_stable_function`.
 # (*) "all" can mean all or exported; cf. `SearchCfg`'s  `exported_names_only`.
 #
-is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults = begin
-    @debug "is_stable_module: $mod"
+is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults =
+    is_stable_module_aux(mod, mod, Set{Module}(), scfg)
+
+# bool-returning version of the above
+is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
+    convert(Bool, is_stable_module(mod, scfg))
+
+# Auxiliary recursive implementation of `is_stable_module`. It gets two extra arguments:
+# - root is the toplevel module that we process; we only recurse into modules that are enclosed in root
+# - seen is a cache of modules we already processed; this prevents processing modules multiple times
+is_stable_module_aux(mod::Module, root::Module, seen::Set{Module}, scfg::SearchCfg) :: StCheckResults = begin
+    @debug "is_stable_module($mod)"
+    push!(seen, mod)
     res = []
-    ns = names(mod; all=!scfg.exported_names_only, imported = true)
+    ns = names(mod; all=!scfg.exported_names_only, imported=true)
     @debug "number of members in $mod: $(length(ns))"
     for sym in ns
         @debug "is_stable_module($mod): check symbol $sym"
@@ -63,9 +74,9 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
             evsym = getproperty(mod, sym)
 
             # recurse into submodules
-            if evsym isa Module && evsym != mod
+            if evsym isa Module && !(evsym in seen) && is_module_nested(evsym, root)
                 @debug "is_stable_module($mod): found module $sym"
-                append!(res, is_stable_module(evsym, scfg))
+                append!(res, is_stable_module_aux(evsym, root, seen, scfg))
                 continue
             end
 
@@ -94,10 +105,6 @@ is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResult
     end
     return res
 end
-
-# bool-returning version of the above
-is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
-    convert(Bool, is_stable_module(mod, scfg))
 
 #
 # is_stable_method : Method, SearchCfg -> StCheck
