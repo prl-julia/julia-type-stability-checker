@@ -171,9 +171,17 @@ end
 
 # Recursing into submodules
 
+# should not be included in the result
+module TestExternalModule
+export ext
+ext(x::Int64) = 2x
+end
+
 # only exports stable
-module Nested
-    export NestedA, stable
+module TestNestedModule
+    export NestedA, stable, ext
+
+    import ..TestExternalModule: ext, TestExternalModule
 
     # exported, only exports stable
     module NestedA
@@ -224,9 +232,10 @@ module Nested
     unstable() = if rand()>0.5; 1; else ""; end
 end
 
-@testset "is_stable_module recursive     " begin
-    @test is_stable_moduleb(Nested, SearchCfg(exported_names_only=true))
-    @test aggregateStats(is_stable_module(Nested)) == AgStats(13, 6, 0, 7, 0, 0, 0, 0, 0)
+@testset "is_stable_module nesting       " begin
+    @test is_stable_moduleb(TestNestedModule, SearchCfg(exported_names_only=true))
+    @test aggregateStats(is_stable_module(TestNestedModule)) == AgStats(13, 6, 0, 7, 0, 0, 0, 0, 0)
+    @test !any(mc -> mc.method.module === TestExternalModule, is_stable_module(TestNestedModule))
 end
 
 @testset "Types Database                 " begin

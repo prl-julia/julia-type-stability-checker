@@ -110,6 +110,18 @@ end
 # for the function. Convenience method to be used in conjuction with
 # `names(m,; imported=true)`.
 our_methods_of_function(f :: Function, mod :: Module) :: Vector{Method} = begin
-    ms=methods(f).ms
-    filter(meth -> meth.module == mod, ms)
+    ms = methods(f).ms
+    filter(meth -> meth.module === mod, ms)
+end
+
+# For a given module `m`, determine if it is nested in module `outer`,
+# i.e., if `outer`` is reachable by following the chain of parent modules
+# from `m`
+is_module_nested(m::Module, outer::Module) :: Bool = begin
+    sentinel = Base.moduleroot(m)
+    while true
+        m === outer && return true
+        m === sentinel && return false
+        m = parentmodule(m)
+    end
 end
