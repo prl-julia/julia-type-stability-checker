@@ -26,7 +26,7 @@ struct TooManyInst      <: SkippedUnionAlls
 end
 
 #
-#       Core Hierarchy: possible answers to a stability check querry
+#       Core Hierarchy: possible answers to a stability check query
 #
 abstract type StCheck end
 struct Stb <: StCheck         # hooary, we're stable

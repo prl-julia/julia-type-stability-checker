@@ -5,7 +5,7 @@ module StabilityCheck
 #
 
 export @stable, @stable!, @stable!_nop,
-    is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
+    is_stable_method, is_stable_module, is_stable_moduleb,
     check_all_stable,
     convert,
     typesDB,
@@ -46,65 +46,61 @@ include("annotations.jl")
 #
 
 #
-# is_stable_module : Module, SearchCfg -> IO StCheckResults
+# is_stable_module : Module, SearchCfg; Vector{Module} -> IO StCheckResults
 #
-# Check all(*) function definitions in the module for stability.
-# Relies on `is_stable_function`.
-# (*) "all" can mean all or exported; cf. `SearchCfg`'s  `exported_names_only`.
+# Check all method definitions in the module for stability.
+# "All" can mean all we can find or exported only; this is controlled by `SearchCfg`'s  `exported_names_only`.
 #
-is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg) :: StCheckResults =
-    is_stable_module_aux(mod, mod, Set{Module}(), scfg)
+# By default, we don't handle methods extending functions defined elsewhere if these functions
+# were not also imported. See explanation of `extra_modules` below.
+#
+# The `extra_modules` parameter can be used to include functions that are introduced
+# in these modules. The reason for it is that a module can add methods to external
+# functions without also importing them into its scope. For example, when a
+# module `m` contains `Base.push!(x::MyVec, e) = ...` without importing `push!`,
+# then `names(m)` does not include `push!`. However, `names(Base)` does, and we
+# can then filter only the methods that originate in `m`.
+#
+# To make sure we find all methods from `m`, `extra_modules` has to contain all
+# the transitive dependencies of `m`, as well as `Base` and `Core` (which are
+# always imported by default). One simple over-approximation is to use
+# `Base.loaded_modules_array()`.
+#
+# Notes: constructors and function-like(*) objects are currently ignored
+#
+# (*) https://docs.julialang.org/en/v1/manual/methods/#Function-like-objects
+#
+is_stable_module(mod::Module, scfg :: SearchCfg = default_scfg; extra_modules :: Vector{Module} = Module[]) :: StCheckResults = begin
+    @debug "is_stable_module($mod)" extra_modules
 
-# bool-returning version of the above
-is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg) :: Bool =
-    convert(Bool, is_stable_module(mod, scfg))
-
-# Auxiliary recursive implementation of `is_stable_module`. It gets two extra arguments:
-# - root is the toplevel module that we process; we only recurse into modules that are enclosed in root
-# - seen is a cache of modules we already processed; this prevents processing modules multiple times
-is_stable_module_aux(mod::Module, root::Module, seen::Set{Module}, scfg::SearchCfg) :: StCheckResults = begin
-    @debug "is_stable_module($mod)"
-    push!(seen, mod)
-    res = []
-    ns = names(mod; all=!scfg.exported_names_only, imported=true)
-    @debug "number of members in $mod: $(length(ns))"
-    for sym in ns
-        @debug "is_stable_module($mod): check symbol $sym"
-        try
-            evsym = getproperty(mod, sym)
-
-            # recurse into submodules
-            if evsym isa Module && !(evsym in seen) && is_module_nested(evsym, root)
-                @debug "is_stable_module($mod): found module $sym"
-                append!(res, is_stable_module_aux(evsym, root, seen, scfg))
-                continue
+    functions_found = Dict{Module,Set{OpaqueFunction}}()
+    modules_visited = Set{Module}([Main])
+    for m in Iterators.flatten(([mod], extra_modules))
+        discover_functions(m, m, scfg, modules_visited, get!(functions_found, m, Set{OpaqueFunction}()))
             end
 
-            # not interested in non-functional symbols
-            isa(evsym, Function) || continue
-
-            # not interested in special functions
-            special_syms = [ :include, :eval ]
-            (sym in special_syms) && continue
-
-            append!(res,
-                    map(m -> MethStCheck(m, is_stable_method(m, scfg)),
-                        our_methods_of_function(evsym, mod)))
+    result = StCheckResults()
+    for f in Set(Iterators.flatten(values(functions_found)))
+        for m in methods(f)
+            try
+                is_module_nested(m.module, mod) &&
+                    push!(result, MethStCheck(m, is_stable_method(m, scfg)))
         catch e
-            if e isa UndefVarError
-                @warn "Module $mod exports symbol $sym but it's undefined"
-                # showerror(stdout, e)
-                # not our problem, so proceed as usual
-            elseif e isa CantSplitMethod
-                @warn "Can't process method with no canonical instance:\n$m"
+                if e isa CantSplitMethod
+                    @warn "Can't process method with no canonical instance: $(e.m)."
                 # cf. comment in `split_method`
             else
                 throw(e)
             end
         end
     end
-    return res
+    end
+    return result
 end
+
+# bool-returning version of the above
+is_stable_moduleb(mod::Module, scfg :: SearchCfg = default_scfg; extra_modules :: Vector{Module} = Module[]) :: Bool =
+    convert(Bool, is_stable_module(mod, scfg; extra_modules))
 
 #
 # is_stable_method : Method, SearchCfg -> StCheck
@@ -124,7 +120,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
             (scfg.typesDBcfg.types_db = typesDB())
     end
 
-    # Slpit method into signature and the corresponding function object
+    # Split method into signature and the corresponding function object
     sm = split_method(m)
     sm isa GenericMethod && return sm
     (func, sig_types) = sm

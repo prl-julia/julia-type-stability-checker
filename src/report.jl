@@ -120,13 +120,17 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 #
 # ----------------------------------------
 
-# checkModule :: Module, Path -> IO ()
+# checkModule :: Module, Path; String, Vector{Module} -> IO ()
 # Check stability in the given module, store results under the given path
+#
+# For the explanation of `extra_modules` refer to is_stable_module API docs.
+#
 # Effects:
 #   1. Module.csv with detailed, user-friendly results
 #   2. Module-agg.txt with aggregate results
-checkModule(m::Module, out::String="."; pkg::String="$m")= begin
-    checkRes = is_stable_module(m)
+#
+checkModule(m::Module, out::String="."; pkg::String="$m", extra_modules::Vector{Module}=Module[]) = begin
+    checkRes = is_stable_module(m; extra_modules)
 
     # raw, to allow load it back up for debugging purposes
     # CSV.write(joinpath(out, "$m-raw.csv"), checkRes)

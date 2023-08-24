@@ -57,13 +57,31 @@ aggregate.csv  Multisets.csv
 Process a module (check stability of all of its methods) in a Julia session:
 
 ``` julia
-checkModule(MyModule)
+checkModule(MyModule; extra_modules = Module[])
 ```
 
 - Assumes: `MyModule` is loaded.
 - Effects: in the current directory creates:
   - `MyModule.csv` with raw results of analysis;
   - `MyModule-agg.txt` with aggregate stats (possibly, for further analysis).
+
+The `extra_modules` parameter can be used to detect “external” method
+definitions, that is methods extending functions first appeared in unrelated modules.
+By default, it is an empty array, in which case we look for functions just in
+`MyModule`. If non-empty, we also process functions from each of the extra
+modules and filter their methods to only those defined in `MyModule`. This
+approach catches cases when methods are added to external functions, e.g.
+`Base.hash(x::MyType, h::Uint) = ...`.
+
+To discover all methods from a module, we need to check the module itself and
+also all of its transitive dependencies. However, it's not trivial to get this
+list of modules, so a good over-approximation is to pass
+`Base.loaded_modules_array()` as the `extra_modules` argument. This will return
+all the modules loaded currently in the Julia session (including `Base`, `Core`,
+`MyModule`, and all of `MyModule`'s transitive dependencies); any other modules
+that also happen to be loaded are included as well. This has some impact on
+performance, but it will be vastly outweighted by the main work (checking type
+stability) for any realistic module.
 
 A (possibly empty) set of `agg`-files can be turned into a single CSV via calling
 `scripts/aggregate.sh`. For just one file, it only adds the heading. The result
