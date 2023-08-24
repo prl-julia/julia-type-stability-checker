@@ -3,7 +3,7 @@
 #      Aux utilities
 #
 
-import Base.convert
+import Base: convert, methods
 
 
 # is_expected_union: Union -> Bool
@@ -123,5 +123,41 @@ is_module_nested(m::Module, outer::Module) :: Bool = begin
         m === outer && return true
         m === sentinel && return false
         m = parentmodule(m)
+    end
+end
+
+# Helper struct that erases the type of a function. Can be stored in Sets and Dicts
+# to avoid excessive compilation as it is a concrete type
+struct OpaqueFunction
+    f::Function
+end
+methods(of::OpaqueFunction) = methods(of.f)
+
+discover_functions(mod::Module, root::Module, scfg::SearchCfg, seen::Set{Module}, out::Set{OpaqueFunction}) = begin
+    mod ∈ seen && return
+    push!(seen, mod)
+
+    @debug "discover_functions($mod)"
+
+    for sym in names(mod; all=!scfg.exported_names_only, imported=true)
+        try
+            val = getproperty(mod, sym)
+            val isa Module && is_module_nested(val, root) &&
+                discover_functions(val, root, scfg, seen, out)
+            val isa Function && !(val isa Core.Builtin) && !(val isa Core.IntrinsicFunction) && sym ∉ [:include, :eval] &&
+                push!(out, OpaqueFunction(val))
+        catch e
+            if e isa UndefVarError
+                # Not our problem, so proceed as usual
+                # Avoid some warnings from Julia.
+                # See https://github.com/JuliaLang/julia/blob/v1.8.5/test/ambiguous.jl#L104-L119
+                GlobalRef(mod, sym) ∉ [GlobalRef(Base, :active_repl), GlobalRef(Base, :active_repl_backend),
+                                       GlobalRef(Base.Filesystem, :JL_O_TEMPORARY), GlobalRef(Base.Filesystem, :JL_O_SHORT_LIVED),
+                                       GlobalRef(Base.Filesystem, :JL_O_SEQUENTIAL), GlobalRef(Base.Filesystem, :JL_O_RANDOM)] &&
+                    @warn "Module $mod exports symbol $sym but it's undefined."
+            else
+                throw(e)
+            end
+        end
     end
 end

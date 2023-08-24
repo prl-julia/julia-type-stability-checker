@@ -250,8 +250,32 @@ end
 end
 
 module ImportBase; import Base.push!; push!(::Int)=1; end
+
+module NonImportBase; Base.push!(::String)="1"; end
+
+module RandomMod; f() = nothing; end
+
+module AddMethodsAllOverThePlace
+    struct MyStruct end
+    Core.println(::MyStruct) = 1
+    Base.push!(::MyStruct) = 1
+    my(::MyStruct) = 1
+    using ..RandomMod
+    RandomMod.f(::MyStruct) = 1
+    using Test
+    Test.finish(::MyStruct) = 1
+    using StabilityCheck
+    StabilityCheck.checkModule(::MyStruct) = 1
+end
+
 @testset "Method discovery completeness   " begin
     chks = is_stable_module(ImportBase)
     @test length(chks) == 1
     @test chks[1].check == Stb(1)
+    chks = is_stable_module(NonImportBase; extra_modules=[Base])
+    @test length(chks) == 1
+    @test chks[1].check == Stb(1)
+    using .AddMethodsAllOverThePlace
+    chks = is_stable_module(AddMethodsAllOverThePlace; extra_modules=[Core, Base, RandomMod, Test, StabilityCheck])
+    @test aggregateStats(chks) == AgStats(6, 6, 0, 0, 0, 0, 0, 0, 0)
 end
