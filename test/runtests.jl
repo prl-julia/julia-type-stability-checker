@@ -58,6 +58,10 @@ add1n(x :: Number) = x + one(x)
 add1r(x :: Complex{T} where T <: AbstractFloat) = x + one(x)
 
 trivial_unstable(x::Int) = x > 0 ? 0 : "0"
+abstract type TwoSubtypes end
+struct SubtypeA <: TwoSubtypes end
+struct SubtypeB <: TwoSubtypes end
+trivial_unstable2(x::Bool, y::TwoSubtypes) = x ? y : ""
 
 plus2i(x :: Integer, y :: Integer) = x + y
 plus2n(x :: Number, y :: Number) = x + y
@@ -105,8 +109,14 @@ end
 end
 
 @testset "Simple unstable                " begin
-    @test isa(is_stable_method(@which add1n(1)),      Uns)
-    @test isa(is_stable_method(@which plus2n(1,1)),   Uns)
+    @test isa(is_stable_method(@which add1n(1)),                   Uns)
+    @test isa(is_stable_method(@which plus2n(1,1)),                Uns)
+    @test isa(is_stable_method(@which trivial_unstable(1)),        Uns)
+    res = is_stable_method(@which trivial_unstable2(true, SubtypeA()))
+    @test res isa Uns &&
+        length(res.fails) == 2 &&
+        [Bool, SubtypeA] in res.fails &&
+        [Bool, SubtypeB] in res.fails
 
     # cf. Note: generic methods
     # Alos, this used to fail when abstract instantiations are ON
