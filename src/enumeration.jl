@@ -38,6 +38,19 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             continue
         end
 
+        # Special case for Unions
+        # Since Unions are nested (`Union{A, B, C} === Union{A, Union{B, C}}`)
+        # we can peel the first case, substitute it for the Union, and add the
+        # rest of the Union to the worklist
+        i = findfirst(t -> t isa Union, tv)
+        if !isnothing(i)
+            u = tv[i]
+            tv_cp = copy(tv)
+            tv_cp[i] = u.b
+            union!(sigtypes, [tv_cp])
+            tv[i] = u.a
+        end
+
         # If all types in tv are concrete, push it to the caller
         isconc = all(is_concrete_type, tv)
         if isconc
@@ -51,7 +64,7 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             # Skip and push a marker describing the case to the caller.
             #
             #   - skip unionalls due to search config
-            unionalls = filter(t -> typeof(t) == UnionAll, tv)
+            unionalls = filter(t -> t isa UnionAll, tv)
             if scfg.skip_unionalls && !isempty(unionalls)
                 put!(result, SkipMandatory(Tuple(unionalls)))
                 continue
@@ -111,7 +124,7 @@ generate_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     @debug "generate_subtypes of head: $(ss_first)"
     # no subtypes may mean it's a UnionAll requiring special handling
     if isempty(ss_first)
-        if typeof(t) == UnionAll
+        if t isa UnionAll
             ss_first = subtype_unionall(t, scfg)
         end
     end

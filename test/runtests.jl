@@ -74,6 +74,9 @@ sum_top(v, t) = begin
     res
 end
 
+stable_funion(x::Bool, y::Union{TwoSubtypes, Bool}) = !x
+unstable_funion(x::Bool, y::Union{TwoSubtypes, Bool}) = if x 1 else "" end
+
 # Note: generic methods
 # We don't handle generic methods yet (#9)
 # rational_plusi(a::Rational{T}, b::Rational{T}) where T <: Integer = a + b
@@ -124,6 +127,17 @@ end
     #@test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
 
     @test isa(is_stable_method((@which add1r(1.0 + 1.0im)), SearchCfg(abstract_args=true)) , Stb)
+end
+
+@testset "Unions                         " begin
+    res = is_stable_method(@which stable_funion(true, true))
+    @test res isa Stb
+    res = is_stable_method(@which unstable_funion(true, true))
+    @test res isa Uns &&
+        length(res.fails) == 3 &&
+        [Bool, SubtypeA] in res.fails &&
+        [Bool, SubtypeB] in res.fails &&
+        [Bool, Bool] in res.fails
 end
 
 @testset "Special (Any, Varargs, Generic)" begin
