@@ -64,7 +64,7 @@ struct SubtypeB <: TwoSubtypes end
 trivial_unstable2(x::Bool, y::TwoSubtypes) = x ? y : ""
 
 plus2i(x :: Integer, y :: Integer) = x + y
-plus2n(x :: Number, y :: Number) = x + y
+plus2n(x :: Real, y :: Real) = x + y
 
 sum_top(v, t) = begin
     res = 0 # zero(eltype(v))
