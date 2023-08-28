@@ -102,6 +102,8 @@ generate_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
             []
         elseif t == Any # if Any got here, we're asked to sample
             scfg.typesDBcfg.types_db
+        elseif is_concrete_type(t)
+            [t]
         else
             subtypes(t)
         end
