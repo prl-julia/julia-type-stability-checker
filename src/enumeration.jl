@@ -51,7 +51,7 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             # Skip and push a marker describing the case to the caller.
             #
             #   - skip unionalls due to search config
-            unionalls = filter(t -> typeof(t) == UnionAll, tv)
+            unionalls = filter(t -> t isa UnionAll, tv)
             if scfg.skip_unionalls && !isempty(unionalls)
                 put!(result, SkipMandatory(Tuple(unionalls)))
                 continue
@@ -109,10 +109,12 @@ generate_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
         end
 
     @debug "generate_subtypes of head: $(ss_first)"
-    # no subtypes may mean it's a UnionAll requiring special handling
+    # no subtypes may mean it's a UnionAll or a Union requiring special handling
     if isempty(ss_first)
-        if typeof(t) == UnionAll
+        if t isa UnionAll
             ss_first = subtype_unionall(t, scfg)
+        elseif t isa Union
+            ss_first = subtype_union(t)
         end
     end
 
@@ -188,5 +190,23 @@ subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
             end
         end
     end
+    res
+end
+
+#
+# subtype_union: Union -> [JlType]
+#
+# This flattens the nested union to an array of its types since the `subtypes` builtin
+# function only returns declared subtypes. However, for a Union, we want to process
+# each of the contained types as its subtypes.
+#
+subtype_union(t::Union) = begin
+    @debug "subtype_union of $t"
+    res = []
+    while t isa Union
+        push!(res, t.a)
+        t = t.b
+    end
+    push!(res, t)
     res
 end
