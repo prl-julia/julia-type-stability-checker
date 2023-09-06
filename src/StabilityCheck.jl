@@ -19,7 +19,8 @@ export @stable, @stable!, @stable!_nop,
     # Types
     MethStCheck,
     SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory, TooManyInst,
-    Stb, Par, Uns, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
+    Stb, Uns,
+    UConstr, UConstrExist, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
     SearchCfg, build_typesdb_scfg, default_scfg
 
 # Debug print:
@@ -119,24 +120,36 @@ end
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
 
-    if scfg.typesDBcfg.use_types_db
-        scfg.typesDBcfg.types_db === Nothing &&
-            (scfg.typesDBcfg.types_db = typesDB())
-    end
-
+    # Step 2: Extract the input type
     # Slpit method into signature and the corresponding function object
     sm = split_method(m)
     sm isa GenericMethod && return sm
     (func, sig_types) = sm
 
-    # Corner cases where we give up
-    Any ∈ sig_types && ! scfg.typesDBcfg.use_types_db && return AnyParam(sig_types)
-    any(t -> is_vararg(t), sig_types) && return VarargParam(sig_types)
+    # Step 2a: run type inference with the input type even if abstract
+    #          and party if we're concrete
+    try
+        if is_stable_call(func, sig_types)
+            return Stb(1)
+        end
+    catch e
+        return TcFail(sig_types, e)
+    end
 
-    # Loop over all instantiations of the signature
+    # Shortcut:
+    # Well-known underconstrained types that we give up on right away
+    # are Any and Varargs and an unbounded existential
+    Any ∈ sig_types && ! scfg.typesDBcfg.use_types_db &&
+        return AnyParam()
+    any(t -> is_vararg(t), sig_types) &&
+        return VarargParam()
+    # TODO:
+
+    # Loop over concrete subtypes of the signature
     unst = Vector{Any}([])
     steps = 0
     skipexists = Set{SkippedUnionAlls}([])
+    result = Nothing
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         @debug "[ is_stable_method ] loop" steps "$ts"
 
@@ -145,17 +158,25 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
             break
         end
         if ts isa OutOfFuel
-            return ts
+            result = OutOfFuel()
+            break
         end
         if ts isa SkippedUnionAlls
             push!(skipexists, ts)
-            continue
+            if scfg.failfast
+                break
+            else
+                continue
+            end
         end
 
         # the actual stability check
         try
             if ! is_stable_call(func, ts)
                 push!(unst, ts)
+                if scfg.failfast
+                    break
+                end
             end
         catch e
             return TcFail(ts, e)
@@ -164,15 +185,37 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         # increment the counter, check fuel
         steps += 1
         if steps > scfg.fuel
-            return OutOfFuel()
+            result = OutOfFuel()
         end
     end
 
+    # sampling from types DB
+    if result isa OutOfFuel && scfg.typesDBcfg.use_types_db
+        scfg.typesDBcfg.types_db === Nothing &&
+            (scfg.typesDBcfg.types_db = typesDB())
+        for ts in scfg.types_db
+
+        # stability check against ts
+        try
+            if ! is_stable_call(func, ts)
+                push!(unst, ts)
+                if scfg.failfast
+                    break
+                end
+            end
+        catch e
+            return TcFail(ts, e)
+        end
+        end
+    end
+
+    result isa OutOfFuel &&
+        return result
     return if isempty(unst)
         if isempty(skipexists)
             Stb(steps)
         else
-            Par(steps, skipexists)
+            UConstrExist(steps, skipexists)
         end
     else
         Uns(steps, unst)
