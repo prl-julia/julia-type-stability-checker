@@ -4,7 +4,7 @@
 #
 
 JlType = Any
-JlSignature = Vector{JlType}
+JlSignature = Vector{T} where T
 
 #
 # Hierarchy of reasons for skipping UnionAlls
@@ -13,7 +13,7 @@ abstract type SkippedUnionAlls end
 struct UnboundedUnionAlls <: SkippedUnionAlls
     # Unbounded UnionAll basically gives an occurence of Any,
     # which can't be handled by enumeration.
-    ts :: Tuple
+    ts :: Vector{Any}
 end
 struct SkipMandatory      <: SkippedUnionAlls
     # see SearchCfg.skip_unionalls: we turn off instantiation
@@ -25,36 +25,53 @@ struct TooManyInst      <: SkippedUnionAlls
     ts :: Tuple
 end
 
+#######################################################################
 #
-#       Core Hierarchy: possible answers to a stability check querry
+#       Core Hierarchy: possible answers to a stability check query
 #
+
 abstract type StCheck end
+
+#
+# Two basic answers: yes or no
+#
 struct Stb <: StCheck         # hooary, we're stable
     steps :: Int64
 end
-struct Par <: StCheck         # Partial -- we're stable modulo some UnionAlls
+struct Uns <: StCheck         # no luck; holds types that violate type stability
+    steps :: Int64
+    fails :: Vector{JlSignature}
+end
+
+#
+# The third option is "not sure" -- underconstrained input type
+#
+abstract type UConstr <: StCheck   # Input type is underconstrained
+end
+struct OutOfFuel  <: UConstr       # Fuel exhausted or should be, no additional info
+                                   # the rest of options bear some
+end
+struct UConstrExist <: UConstr     # Some existential unhapiness
     steps :: Int64
     skipexist :: Set{SkippedUnionAlls}
 end
-struct Uns <: StCheck         # no luck; holds types that break stability
-    steps :: Int64
-    fails :: Vector{Vector{Any}}
+struct AnyParam    <: UConstr      # Give up on Any-params in methods; can't tell if it's stable
 end
-struct AnyParam    <: StCheck # give up on Any-params in methods; can't tell if it's stable
-    sig :: Vector{Any}
+struct VarargParam <: UConstr      # Give up on VA-params  in methods; can't tell if it's stable
 end
-struct VarargParam <: StCheck # give up on VA-params  in methods; can't tell if it's stable
-    sig :: Vector{Any}
+struct GenericMethod <: StCheck    # TODO: we could handle them analogous to existentials in types
+                                   #       so it doesn't have to be a special case, but for now it's
 end
+
+#
+# Failure of Juila's Type Checker -- technically, 4th answer, happens rarely
+#
 struct TcFail <: StCheck      # Julia typechecker sometimes fails for unclear reason
-    sig :: Vector{Any}
+    sig :: JlSignature
     err :: Any
 end
-struct OutOfFuel  <: StCheck  # fuel exhausted
-end
-struct GenericMethod <: StCheck # TODO: we could handle them analogous to existentials in types
-                                #       so it doesn't have to be a special case, but for now it's
-end
+
+#####################################################
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
 Base.:(==)(x::TooManyInst, y::TooManyInst) = structEqual(x,y)
@@ -104,6 +121,8 @@ Base.@kwdef struct SearchCfg
 
     fuel :: Int = 1000 #typemax(Int)
 #   ^ -- search fuel, i.e. how many types we want to enumerate before give up
+
+    failfast :: Bool = true # exit when find the first counterexample
 
     max_lattice_steps :: Int = 1000 #typemax(Int)
 #   ^ -- how many steps to perform max to get from the signature to a concrete type;

@@ -7,11 +7,11 @@
 #
 # all_subtypes: JlSignature, SearchCfg, Channel -> ()
 #
-# Enumerate "all" subtypes of the given tuple-type (first argument).
-# It's usually employed to instantiate method signature with concrete argument types.
-# But during recursive calls to instantiate type variables may also be required
-# to produce abstract types too. This is controlled by the search configuration
-# (second parameter).
+# Enumerate "all" subtypes of the given tuple-type (first argument) by iterating
+# applications of the auxiliary `direct_subtypes` function.
+# Usually emplyed to produce concrete subtypes but when instantiating existentials
+# may need to produce abstract types as well -- the search configuration (second parameter)
+# controls which mode we are in.
 #
 # Input:
 #   - "tuple" of types from a function signature (in the form of Vector, not Tuple);
@@ -47,25 +47,22 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         else
             @debug "[ all_subtypes ] abstract"
 
-            # Special cases for unionalls.
-            # Skip and push a marker describing the case to the caller.
-            #
-            #   - skip unionalls due to search config
-            unionalls = filter(t -> t isa UnionAll, tv)
-            if scfg.skip_unionalls && !isempty(unionalls)
-                put!(result, SkipMandatory(Tuple(unionalls)))
-                continue
-            end
-            #   - unbounded unionall -- bail out
-            unb = filter(u -> u.var.ub == Any, unionalls)
-            if !isempty(unb)
-                put!(result, UnboundedUnionAlls(Tuple(unb)))
+            # Special case for unbounded unionalls
+            if has_unboundeded_exist(tv)
+                put!(result, UnboundedUnionAlls(tv))
+                scfg.failfast &&
+                    break
                 continue
             end
 
             # Normal case
             !scfg.concrete_only && put!(result, tv)
-            dss = generate_subtypes(tv, scfg)
+            dss = direct_subtypes(tv, scfg)
+            if dss === nothing
+                put!(result, OutOfFuel())
+                scfg.failfast &&
+                    break
+            end
             union!(sigtypes, dss)
         end
 
@@ -79,47 +76,49 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
     put!(result, "done")
 end
 
+has_unboundeded_exist(tv :: JlSignature) = begin
+    unionalls = filter(t -> t isa UnionAll, tv)
+    unb = filter(u -> u.var.ub == Any, unionalls)
+    !isempty(unb)
+end
+
+# Shortcut: well-known underconstrained types that we want to avoid
+#           for which we will return NoFuel eventually
 blocklist = [Function]
 is_vararg(t) = isa(t, Core.TypeofVararg)
+to_avoid(t) = is_vararg(t) || any(b -> t <: b, blocklist)
 
 #
-# generate_subtypes: JlSignature, SearchCfg -> [Union{JlSignature, SkippedUnionAlls}]
+# direct_subtypes: JlSignature, SearchCfg -> [Union{JlSignature, SkippedUnionAlls}]
 #
 # Auxilliary function: immediate subtypes of a tuple of types `ts1`
 #
 # Precondition: no unbound existentials in ts1
 #
-generate_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
-    @debug "generate_subtypes: $ts1"
+direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
+    @debug "direct_subtypes: $ts1"
     isempty(ts1) && return [[]]
 
     ts = copy(ts1)
     t = pop!(ts)
 
     # subtypes of t -- first component in ts
+    to_avoid(t) &&
+        (return Nothing)
     ss_first =
-        if is_vararg(t) || any(b -> t <: b, blocklist)
-            []
-        elseif t == Any # if Any got here, we're asked to sample
-            scfg.typesDBcfg.types_db
+        if t isa UnionAll
+            ss_first = subtype_unionall(t, scfg)
+        elseif t isa Union
+            ss_first = subtype_union(t)
         elseif is_concrete_type(t)
             [t]
         else
             subtypes(t)
         end
-
-    @debug "generate_subtypes of head: $(ss_first)"
-    # no subtypes may mean it's a UnionAll or a Union requiring special handling
-    if isempty(ss_first)
-        if t isa UnionAll
-            ss_first = subtype_unionall(t, scfg)
-        elseif t isa Union
-            ss_first = subtype_union(t)
-        end
-    end
+    @debug "direct_subtypes of head: $(ss_first)"
 
     res = []
-    ss_rest = generate_subtypes(ts, scfg)
+    ss_rest = direct_subtypes(ts, scfg)
     for s_first in ss_first
         if s_first isa SkippedUnionAlls
             push!(res, s_first)
@@ -162,9 +161,6 @@ end
 # For a non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
 #
 # Note: ignore lower bounds for simplicity.
-#
-# Note (history): for unbounded (Any-bounded) unionalls we used to instantiate the variable
-# with Any and Int. This felt too arbitrary.
 #
 # TODO: make result Channel-based
 #
