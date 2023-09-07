@@ -87,9 +87,9 @@ prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 # Note: If you change it, you probably need to update scripts/aggregate.sh
 struct AgStats
     methCnt :: Int64
-    stbCnt :: Int64
-    parCnt :: Int64
+    stbCnt  :: Int64
     unsCnt  :: Int64
+    parCnt  :: Int64
     anyCnt  :: Int64
     vaCnt   :: Int64
     gen     :: Int64
@@ -98,15 +98,15 @@ struct AgStats
 end
 
 showAgStats(pkg::String, ags::AgStats) :: String =
-    "$pkg,$(ags.methCnt),$(ags.stbCnt),$(ags.parCnt),$(ags.unsCnt),$(ags.anyCnt)," *
+    "$pkg,$(ags.methCnt),$(ags.stbCnt),$(ags.unsCnt),$(ags.parCnt),$(ags.anyCnt)," *
         "$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     # TODO: this is a lot of passes over mcs; should rewrite into one loop
     length(mcs),
     count(mc -> isa(mc.check, Stb), mcs),
-    count(mc -> isa(mc.check, UConstrExist), mcs),
     count(mc -> isa(mc.check, Uns), mcs),
+    count(mc -> isa(mc.check, UConstrExist), mcs),
     count(mc -> isa(mc.check, AnyParam), mcs),
     count(mc -> isa(mc.check, VarargParam), mcs),
     count(mc -> isa(mc.check, GenericMethod), mcs),
@@ -126,7 +126,8 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 #   1. Module.csv with detailed, user-friendly results
 #   2. Module-agg.txt with aggregate results
 checkModule(m::Module, out::String="."; pkg::String="$m")= begin
-    checkRes = is_stable_module(m)
+    scfg = build_typesdb_scfg(sample_count=10)
+    checkRes = is_stable_module(m, scfg)
 
     # raw, to allow load it back up for debugging purposes
     # CSV.write(joinpath(out, "$m-raw.csv"), checkRes)

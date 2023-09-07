@@ -102,37 +102,38 @@ end
 # Subtype enumeration procedure parameters
 Base.@kwdef struct SearchCfg
     concrete_only  :: Bool = true
-#   ^ -- enumerate concrete types ONLY;
+#   ^--- enumerate concrete types ONLY;
 #        Usually start in `true` mode, but can switch if we see a UnionAll and decide
 #        to try abstract instantiations (whether we decide to do that or not, see
 #        `abstract_args` below)
 
     skip_unionalls :: Bool = false
-#   ^ -- don't try to instantiate UnionAll's / existential types, just forget about them
+#   ^--- don't try to instantiate UnionAll's / existential types, just forget about them
 #        -- be default we do instantiate, but can loop if don't turn off on recursive call;
 
     abstract_args  :: Bool = true
-#   ^ -- instantiate type variables with only concrete arguments (`false`) or
+#   ^--- instantiate type variables with only concrete arguments (`false`) or
 #        abstract arguments too (`true`);
 
     exported_names_only :: Bool = false
-#   ^ -- when doing stability check on the whole module at once: whether to check only
+#   ^--- when doing stability check on the whole module at once: whether to check only
 #        only exported functions
 
-    fuel :: Int = 1000 #typemax(Int)
-#   ^ -- search fuel, i.e. how many types we want to enumerate before give up
+    failfast :: Bool = true
+#   ^--- exit when find the first counterexample
 
-    failfast :: Bool = true # exit when find the first counterexample
+    fuel :: Int = 100 #typemax(Int)
+#   ^--- search fuel, i.e. how many types we want to enumerate before give up
 
-    max_lattice_steps :: Int = 1000 #typemax(Int)
-#   ^ -- how many steps to perform max to get from the signature to a concrete type;
+    max_lattice_steps :: Int = 100 #typemax(Int)
+#   ^--- how many steps to perform max to get from the signature to a concrete type;
 #        for some signatures we struggle to get to a leaf type
 
-    max_instantiations :: Int = 1000 #typemax(Int)
-#   ^ -- how many instantiations of a type variable to examine (sometimes it's too much)
+    max_instantiations :: Int = 100 #typemax(Int)
+#   ^--- how many instantiations of a type variable to examine (sometimes it's too much)
 
     typesDBcfg :: TypesDBCfg = TypesDBCfg()
-#   ^ -- Parameters of the types DB.
+#   ^--- Parameters of the types DB.
 end
 
 #
@@ -140,9 +141,9 @@ end
 #
 default_scfg = SearchCfg()
 
-fast_scfg = SearchCfg(fuel=100, max_lattice_steps=100, max_instantiations=100)
+fast_scfg = SearchCfg(fuel=30, max_lattice_steps=10, max_instantiations=10)
 
-build_typesdb_scfg(inFile = intypesCsvFileDefault, sample_count :: Int = 10) = begin
+build_typesdb_scfg(inFile = intypesCsvFileDefault; sample_count :: Int = 100000) = begin
     scfg = @set default_scfg.typesDBcfg.use_types_db = true
     scfg = @set scfg.typesDBcfg.types_db            = typesDB(inFile)[1:min(end,sample_count)]
     scfg = @set scfg.typesDBcfg.sample_count        = sample_count

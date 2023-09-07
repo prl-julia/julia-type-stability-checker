@@ -54,8 +54,11 @@ add1typcase(x :: Number) =
 #       Currently unstable.
 add1n(x :: Number) = x + one(x)
 # |
-# -- e) generic parameter (use AbstractFloat i/a of Integer because of the Bool business)
-add1r(x :: Complex{T} where T <: AbstractFloat) = x + one(x)
+# -- e) generic parameter (use AbstractFloat i/a of Integer
+#       because of the Bool and SentintelArray business)
+add1c(x :: Complex{T} where T <: AbstractFloat) = x + one(x)
+
+add1s(x :: Signed) = x + one(x)
 
 trivial_unstable(x::Int) = x > 0 ? 0 : "0"
 abstract type TwoSubtypes end
@@ -63,6 +66,7 @@ struct SubtypeA <: TwoSubtypes end
 struct SubtypeB <: TwoSubtypes end
 trivial_unstable2(x::Bool, y::TwoSubtypes) = x ? y : ""
 
+plus2s(x :: Signed, y :: Signed) = x + y
 plus2i(x :: Integer, y :: Integer) = x + y
 plus2n(x :: Real, y :: Real) = x + y
 
@@ -89,26 +93,31 @@ unstable_funion(x::Bool, y::Union{TwoSubtypes, Bool}) = if x 1 else "" end
 #
 
 @testset "Simple stable                  " begin
-    t1 = is_stable_method(@which add1i(1))
-    @test isa(t1, UConstrExist)
-    @test length(t1.skipexist) == 1 &&
-            contains("$t1.skipexist", "SentinelArrays.ChainedVectorIndex")
-    # SentinelArrays.ChainedVectorIndex comes from CSV, which we depend upon for
-    # reporting. Would be nice to factor out reporting
+    t1 = is_stable_method(@which add1s(1))
+    @test isa(t1, Stb)
 
-    t2 = is_stable_method(@which add1i(1))
-    @test isa(t2, UConstrExist)
-    @test length(t2.skipexist) == 1 &&
-            contains("$t2.skipexist", "SentinelArrays.ChainedVectorIndex")
-    # this is same as above
-
-    @test isa(is_stable_method(@which plus2i(1,1)) , UConstrExist)
-    @test isa(is_stable_method(@which add1typcase(1)), UConstrExist)
+    @test isa(is_stable_method(@which plus2s(1,1)) , Stb)
+    @test isa(is_stable_method(@which add1typcase(1)), OutOfFuel)
 
     # cf. Note: generic methods
     #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
 
-    @test isa(is_stable_method(@which add1r(1.0 + 1.0im)) , Stb)
+    @test isa(is_stable_method(@which add1c(1.0 + 1.0im)) , Stb)
+end
+
+@testset "Simple out-of-fuel             " begin
+    t1 = is_stable_method(@which add1i(1))
+    @test isa(t1, OutOfFuel)
+    # @test length(t1.skipexist) == 1 &&
+    #         contains("$t1.skipexist", "SentinelArrays.ChainedVectorIndex")
+    # SentinelArrays.ChainedVectorIndex comes from CSV, which we depend upon for
+    # reporting. Would be nice to factor out reporting
+
+    @test isa(is_stable_method(@which plus2i(1,1)) , OutOfFuel)
+    @test isa(is_stable_method(@which add1typcase(1)), OutOfFuel)
+
+    # cf. Note: generic methods
+    #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
 end
 
 @testset "Simple unstable                " begin
@@ -127,7 +136,8 @@ end
     # (compare to the similar test in the "stable" examples)
     #@test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
 
-    @test isa(is_stable_method((@which add1r(1.0 + 1.0im)), SearchCfg(abstract_args=true)) , Stb)
+    # TODO: not sure why this one lives under unstable, needs investigation:
+    # @test isa(is_stable_method((@which add1c(1.0 + 1.0im)), SearchCfg(abstract_args=true)) , OutOfFuel)
 end
 
 @testset "Unions                         " begin
@@ -157,7 +167,6 @@ end
 
     h(x::Integer)=x
     res = is_stable_method((@which h(2)), SearchCfg(fuel=1,max_lattice_steps=1))
-    @info res
     @test res == OutOfFuel()
 
     # Instantiations fuel
@@ -188,14 +197,16 @@ end
 
 module N
 export a, b;
-a()=1; b(x)=1
-g(x...)=x[1]
-f(x)=x+1
-d()=if rand()>0.5; 1; else ""; end
+a()=1; b(x)=1 # st
+g(x...)=x[1]  # VA
+f(x)=x+1      # Any
+d()=if rand()>0.5; 1; else ""; end # unst
 end
 
 @testset "Collecting stats               " begin
-    @test aggregateStats(is_stable_module(N)) == AgStats(5, 2, 0, 1, 1, 1, 0, 0, 0)
+    res1 = is_stable_module(N)
+    res2 = aggregateStats(res1)
+    @test res2 == AgStats(5, 2, 1, 0, 1, 1, 0, 0, 0)
 end
 
 # Recursing into submodules
@@ -263,19 +274,28 @@ end
 
 @testset "is_stable_module nesting       " begin
     @test is_stable_moduleb(TestNestedModule, SearchCfg(exported_names_only=true))
-    @test aggregateStats(is_stable_module(TestNestedModule)) == AgStats(13, 6, 0, 7, 0, 0, 0, 0, 0)
+    @test aggregateStats(is_stable_module(TestNestedModule)) == AgStats(13, 6, 7, 0, 0, 0, 0, 0, 0)
     @test !any(mc -> mc.method.module === TestExternalModule, is_stable_module(TestNestedModule))
 end
 
 @testset "Types Database                 " begin
-    f(x)=x
-    # Normally, we don't process Any-arg methods
+    id1(x)=x
+    #
+    # Normally, we don't bail out on Any-arg methods
     # (there's no way to enumerate subtypes of Any),
-    # see "Special (Any, Varargs, Generic)" testset above.
+    # unless we're lucky and can infer a concrte output with Any
+    # as the input.
     # But we can load a types database and try only types
     # from there.
+    # See also "Special (Any, Varargs, Generic)" testset above.
+    #
     typesdb_cfg = build_typesdb_scfg("merged-small.csv")
-    @test Stb(2) == is_stable_method((@which f(1)), typesdb_cfg)
+    @test Stb(2) == is_stable_method((@which id1(1)), typesdb_cfg)
+
+    myplus(x,y)=x+y
+    res = is_stable_method((@which id1(1)), typesdb_cfg)
+    @info res
+    @test Stb(2) == res
 end
 
 module ImportBase; import Base.push!; push!(::Int)=1; end

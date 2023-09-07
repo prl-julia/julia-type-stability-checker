@@ -85,12 +85,11 @@ end
 # split_method :: Method -> Union{ (Function, [JlType]), GenericMethod }
 #
 # Split method object into the corresponding function object and type signature
-# of the method, if possible. May fail if unionalls involved in a funny way
-# but there doesn't seem to be such cases as of 2023.
+# of the method, if possible.
 #
 split_method(m::Method) = begin
-    m.sig isa UnionAll && return GenericMethod()
-    msig = Base.unwrap_unionall(m.sig) # unwrap is critical for generic methods
+    msig = m.sig
+    msig isa UnionAll && return GenericMethod() # see TODO on GenericMethod
     try
         func = msig.parameters[1].instance
         sig_types = Vector{Any}([msig.parameters[2:end]...])

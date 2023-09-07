@@ -120,6 +120,13 @@ end
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
 
+    # preemptively load types DB if available: we may need to sample
+    # unbounded exists any minute
+    if scfg.typesDBcfg.use_types_db
+        scfg.typesDBcfg.types_db === Nothing &&
+            (scfg.typesDBcfg.types_db = typesDB())
+    end
+
     # Step 2: Extract the input type
     # Slpit method into signature and the corresponding function object
     sm = split_method(m)
@@ -147,11 +154,11 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
 
     # Loop over concrete subtypes of the signature
     unst = Vector{Any}([])
-    steps = 0
+    stepCount = 0
     skipexists = Set{SkippedUnionAlls}([])
     result = Nothing
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
-        @debug "[ is_stable_method ] loop" steps "$ts"
+        @debug "[ is_stable_method ] loop" stepCount "$ts"
 
         # case over special cases
         if ts == "done"
@@ -183,29 +190,9 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         end
 
         # increment the counter, check fuel
-        steps += 1
-        if steps > scfg.fuel
+        stepCount += 1
+        if stepCount > scfg.fuel
             result = OutOfFuel()
-        end
-    end
-
-    # sampling from types DB
-    if result isa OutOfFuel && scfg.typesDBcfg.use_types_db
-        scfg.typesDBcfg.types_db === Nothing &&
-            (scfg.typesDBcfg.types_db = typesDB())
-        for ts in scfg.types_db
-
-        # stability check against ts
-        try
-            if ! is_stable_call(func, ts)
-                push!(unst, ts)
-                if scfg.failfast
-                    break
-                end
-            end
-        catch e
-            return TcFail(ts, e)
-        end
         end
     end
 
@@ -213,12 +200,12 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         return result
     return if isempty(unst)
         if isempty(skipexists)
-            Stb(steps)
+            Stb(stepCount)
         else
-            UConstrExist(steps, skipexists)
+            UConstrExist(stepCount, skipexists)
         end
     else
-        Uns(steps, unst)
+        Uns(stepCount, unst)
     end
 end
 

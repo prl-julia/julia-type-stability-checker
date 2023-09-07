@@ -47,15 +47,6 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         else
             @debug "[ all_subtypes ] abstract"
 
-            # Special case for unbounded unionalls
-            if has_unboundeded_exist(tv)
-                put!(result, UnboundedUnionAlls(tv))
-                scfg.failfast &&
-                    break
-                continue
-            end
-
-            # Normal case
             !scfg.concrete_only && put!(result, tv)
             dss = direct_subtypes(tv, scfg)
             if dss === nothing
@@ -76,9 +67,10 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
     put!(result, "done")
 end
 
+is_unbounded_exist(t) = t.var.ub == Any
 has_unboundeded_exist(tv :: JlSignature) = begin
     unionalls = filter(t -> t isa UnionAll, tv)
-    unb = filter(u -> u.var.ub == Any, unionalls)
+    unb = filter(is_unbounded_exist, unionalls)
     !isempty(unb)
 end
 
@@ -93,8 +85,6 @@ to_avoid(t) = is_vararg(t) || any(b -> t <: b, blocklist)
 #
 # Auxilliary function: immediate subtypes of a tuple of types `ts1`
 #
-# Precondition: no unbound existentials in ts1
-#
 direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     @debug "direct_subtypes: $ts1"
     isempty(ts1) && return [[]]
@@ -102,28 +92,20 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     ts = copy(ts1)
     t = pop!(ts)
 
-    # subtypes of t -- first component in ts
     to_avoid(t) &&
-        (return Nothing)
-    ss_first =
-        if t isa UnionAll
-            ss_first = subtype_unionall(t, scfg)
-        elseif t isa Union
-            ss_first = subtype_union(t)
-        elseif is_concrete_type(t)
-            [t]
-        else
-            subtypes(t)
-        end
-    @debug "direct_subtypes of head: $(ss_first)"
+        (return nothing)
 
+    ss_t = direct_subtypes1(t, scfg)
+    ss_t === nothing && return nothing # we really need to bring in Monads.jl...
+    @debug "direct_subtypes of head: $(ss_t)"
     res = []
-    ss_rest = direct_subtypes(ts, scfg)
-    for s_first in ss_first
+    ss_ts = direct_subtypes(ts, scfg)
+    ss_ts === nothing && return nothing
+    for s_first in ss_t
         if s_first isa SkippedUnionAlls
             push!(res, s_first)
         else
-            for s_rest in ss_rest
+            for s_rest in ss_ts
                 if s_rest isa SkippedUnionAlls
                     push!(res, s_rest)
                 else
@@ -133,6 +115,22 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
         end
     end
     res
+end
+
+# Single (Non-tuple) type input version of direct_subtypes
+direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
+    @debug "direct_subtypes1: $t"
+    if t isa UnionAll
+        ss_first = subtype_unionall(t, scfg)
+    elseif t isa Union
+        ss_first = subtype_union(t)
+    elseif is_concrete_type(t)
+        [t]
+    elseif t == Any # if Any got here, we're asked to sample
+        scfg.typesDBcfg.types_db
+    else
+        subtypes(t)
+    end
 end
 
 #
@@ -145,6 +143,7 @@ end
 #       but `all_subtypes` works with JlSignatures
 #
 instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
+    @debug "[ instantiations ] of $u"
     scfg1 = @set scfg.concrete_only = scfg.abstract_args
     scfg1 = @set scfg1.skip_unionalls = true # don't recurse
             # ^ TODO: approximation needs documenting
@@ -158,22 +157,26 @@ end
 #
 # subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]
 #
-# For a non-Any upper-bounded UnionAll, enumerate all instatiations following `instantiations`.
+# For a UnionAll, enumerate all instatiations following `instantiations`.
 #
 # Note: ignore lower bounds for simplicity.
 #
 # TODO: make result Channel-based
 #
 subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
-    @debug "subtype_unionall of $u"
+    @debug "[ subtype_unionall ] of $u"
 
-    @assert u.var.ub != Any
+    u.var.ub == Any && !scfg.typesDBcfg.use_types_db &&
+        return nothing
 
     res = []
     instcnt = 0
     for t in instantiations(u, scfg)
+        @debug "[ subtype_unionall ] loop over inst.: t = $t"
         if t isa SkippedUnionAlls
             push!(res, t)
+        elseif t == "done"
+            break
         else
             try # u{t} can fail due to unsond bounds (cf. #8)
                 push!(res, u{t[1]})

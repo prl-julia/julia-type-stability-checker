@@ -25,7 +25,7 @@
 #   The idea is that when we can't enumerate everything, we sample from these types.
 #
 
-intypesCsvFileDefault = "merged-intypes.csv"
+intypesCsvFileDefault = "/home/artem/research/julia-type-stability/sts/repo/test/merged-small.csv"
 
 
 # @info "Starting typesDB.jl. Using packages..."
@@ -164,7 +164,8 @@ typesDB(inFile = intypesCsvFileDefault) = begin
                     @mydebug "Builtin module. Evaluating the type in global scope"
                     ty = evalp(tyname)
                 end
-                push!(types, ty)
+                isconcretetype(ty) && push!(types, ty) # TODO: figure how abstract types can end up
+                # in the database; it shouldn't be the case!
             catch err
                 # Record error
                 ei += 1
