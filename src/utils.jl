@@ -82,18 +82,26 @@ split_def(def::Expr) = begin
 end
 
 #
-# split_method :: Method -> Union{ (Function, [JlType]), GenericMethod }
+# split_method :: Method -> (Function, [JlType])
 #
 # Split method object into the corresponding function object and type signature
-# of the method, if possible. May fail if unionalls involved in a funny way
-# but there doesn't seem to be such cases as of 2023.
+# of the method, if possible.
 #
-split_method(m::Method) = begin
-    m.sig isa UnionAll && return GenericMethod()
-    msig = Base.unwrap_unionall(m.sig) # unwrap is critical for generic methods
+# Can throw. Known exceptions:
+# - CantSplitMethod -- currently (2023) the only known reason is function-like objects
+#
+split_method(m) = begin
+    (f, t) = split_sig(m.sig)
+    # Vector{Any}([t.sig.parameters[2:end]...])
+end
+split_sig(msig::UnionAll) = begin
+    (f, t) = split_sig(msig.body)
+    (f, UnionAll(msig.var, Tuple{t...}))
+end
+split_sig(msig::DataType) = begin
     try
         func = msig.parameters[1].instance
-        sig_types = Vector{Any}([msig.parameters[2:end]...])
+        sig_types = Tuple([msig.parameters[2:end]])
         (func, sig_types)
     catch err
         if ! hasproperty(msig.parameters[1], :instance)

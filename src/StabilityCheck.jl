@@ -21,7 +21,9 @@ export @stable, @stable!, @stable!_nop,
     SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory, TooManyInst,
     Stb, Uns,
     UConstr, UConstrExist, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
-    SearchCfg, build_typesdb_scfg, default_scfg
+    SearchCfg, build_typesdb_scfg, default_scfg,
+
+    split_method # utils, for testing
 
 # Debug print:
 # ENV["JULIA_DEBUG"] = StabilityCheck  # turn on
