@@ -117,7 +117,7 @@ Base.@kwdef struct SearchCfg
     failfast :: Bool = true
 #   ^--- exit when find the first counterexample
 
-    fuel :: Int = 100 #typemax(Int)
+    fuel :: Int = 1000 #typemax(Int)
 #   ^--- search fuel, i.e. how many types we want to enumerate before give up
 
     typesDBcfg :: TypesDBCfg = TypesDBCfg()
@@ -132,10 +132,12 @@ default_scfg = SearchCfg()
 fast_scfg = SearchCfg(fuel=30)
 
 build_typesdb_scfg(inFile = intypesCsvFileDefault; sample_count :: Int = 100000) = begin
+    tdbFull = typesDB(inFile)
+    sampleCountActual = min(length(tdbFull),sample_count)
+    tdb = tdbFull[1:sampleCountActual]
     scfg = @set default_scfg.typesDBcfg.use_types_db = true
-    scfg = @set scfg.typesDBcfg.types_db            = typesDB(inFile)[1:min(end,sample_count)]
-    scfg = @set scfg.typesDBcfg.sample_count        = sample_count
-    scfg = @set scfg.fuel                           = length(scfg.typesDBcfg.types_db)
+    scfg = @set scfg.typesDBcfg.types_db            = tdb
+    scfg = @set scfg.typesDBcfg.sample_count        = length(tdb)
     scfg
 end
 

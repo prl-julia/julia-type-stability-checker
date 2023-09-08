@@ -290,14 +290,15 @@ end
     # See also "Special (Any, Varargs, Generic)" testset above.
     #
     typesdb_cfg = build_typesdb_scfg("merged-small.csv")
-    @test Stb(1) == is_stable_method((@which id1(1)), typesdb_cfg)
+    @test Stb(3) == is_stable_method((@which id1(1)), typesdb_cfg)
+    # We count fuel in a tricky way: it's
+    # number of calls to direct_subtypes1 + number of concrete
+    # tuple types (corresponding to signatures).
+    # The example DB has 2 types.
 
     myplus(x,y)=x+y
     res = is_stable_method((@which id1(1)), typesdb_cfg)
-    @info res
-    @test Stb(1) == res # 1 is weird but that's  how we count fuel:
-    # number of calls to direct_subtypes1, and that one returns
-    # the types DB in whole at once
+    @test Stb(3) == res
 end
 
 module ImportBase; import Base.push!; push!(::Int)=1; end

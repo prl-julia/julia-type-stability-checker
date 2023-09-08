@@ -49,7 +49,18 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
         isconc = all(is_concrete_type, tv)
         if isconc
             @debug "[ all_subtypes ] concrete"
-            put!(result, tv)
+
+            # Manage fuel w.r.t. reaching concrete types
+            global stepCount
+            stepCount += 1
+            @debug "[ all_subtypes ]" stepCount scfg.fuel
+            if stepCount > scfg.fuel
+                put!(result, OutOfFuel())
+                scfg.failfast &&
+                    break
+            else
+                put!(result, tv)
+            end
         # otherwise, get some subtypes, add to worklist, loop
         else
             @debug "[ all_subtypes ] abstract"
@@ -122,22 +133,33 @@ end
 direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
     @debug "direct_subtypes1: $t"
 
-    # it is hear where we decided to manage fuel
+    # It is here where we decided to manage fuel w.r.t. traversing lattice.
+    # There's another point, which has to do with reaching concrete types,
+    # inside all_subtypes
     global stepCount
     stepCount += 1
+    @debug "direct_subtypes1" stepCount scfg.fuel
     stepCount > scfg.fuel && return nothing
 
-    if t isa UnionAll
-        ss_first = subtype_unionall(t, scfg)
-    elseif t isa Union
-        ss_first = subtype_union(t)
-    elseif is_concrete_type(t)
-        [t]
-    elseif t == Any # if Any got here, we're asked to sample
-        scfg.typesDBcfg.types_db
-    else
-        subtypes(t)
-    end
+    ss = subtypes(t)
+
+    res =
+        # NOTE: the order of if-branches is important
+        if t == Any         # if Any got here, we're asked to sample
+            scfg.typesDBcfg.types_db
+        elseif !isempty(ss) # we try to crawl nominal hierarchy all the way first
+            ss
+        elseif t isa UnionAll
+            subtype_unionall(t, scfg)
+        elseif t isa Union
+            subtype_union(t)
+        elseif is_concrete_type(t)
+            [t]
+        else
+            @assert false "direct_subtypes1: can't subtype $t (should not happen)"
+        end
+    # @info "" res
+    return res
 end
 
 #

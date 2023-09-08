@@ -41,6 +41,7 @@ is_stable_call(@nospecialize(f :: Function), @nospecialize(ts :: Vector)) = begi
     end
     (_ #=code=#, res_type) = ct[1] # we ought to have just one method body, I think
     res = is_concrete_type(res_type)
+    # @info "[ is_stable_call ]" res_type
     #print_stable_check(f,ts,res_type,res)
     res
 end
