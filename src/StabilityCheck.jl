@@ -100,7 +100,7 @@ is_stable_module_aux(mod::Module, root::Module, seen::Set{Module}, scfg::SearchC
                 showerror(stdout, e)
                 # not our problem, so proceed as usual
             elseif e isa CantSplitMethod
-                @warn "Can't process method with no canonical instance:\n$m"
+                @warn "Can't process method with no canonical instance:\n"
                 # cf. comment in `split_method`
             else
                 throw(e)
