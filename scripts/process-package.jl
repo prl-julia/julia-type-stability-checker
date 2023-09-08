@@ -24,7 +24,7 @@ store_cur_version(pkg::String) = begin
     ver  = deps[i].version
     fname= "$pkg-version.txt"
     write(fname, "$ver")
-    @info "Write down $pkg version to $fname"
+    @info "     Wrote down $pkg version to $fname."
 end
 
 
@@ -55,7 +55,7 @@ wd = out_dir #mktempdir()
 cd(wd)
 Pkg.activate(".")
 
-@info "Start with package $(pkgver(pkg, ver))."
+@info "Start with package $(pkgver(pkg, ver)). Loading StabilityCheck..."
 
 ###
 #     Add StabilityCheck
@@ -69,11 +69,12 @@ using StabilityCheck
 #    Add the package of interest and make Julia `using` it
 ###
 
+@info "Adding the package to process..."
 Pkg.add(name=pkg, version=ver)
 store_cur_version(pkg)
 ev("using $pkg")
 
-@info "Finished `using` modules of interest, start processing..."
+@info "Finished `using` modules of interest. Start processing..."
 
 ###
 #     Run analysis on the packages

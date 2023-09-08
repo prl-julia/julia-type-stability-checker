@@ -87,16 +87,24 @@ end
 # Split method object into the corresponding function object and type signature
 # of the method, if possible.
 #
+# Limitations:
+#  - generic methods - see TODO on GenericMethod
+#  - "function-like objects" (aka "functors")
+#  - constructors
+#
+#
 split_method(m::Method) = begin
     msig = m.sig
-    msig isa UnionAll && return GenericMethod() # see TODO on GenericMethod
+    msig isa UnionAll && return GenericMethod()
     try
         func = msig.parameters[1].instance
         sig_types = Vector{Any}([msig.parameters[2:end]...])
         (func, sig_types)
     catch err
-        if ! hasproperty(msig.parameters[1], :instance)
-            throw(CantSplitMethod(m)) # this happens for overloaded `()`
+        if ! hasproperty(msig.parameters[1], :instance) || # functor
+              msig.parameters[1] <: Type                   # constructor
+            throw(CantSplitMethod(m))
+            # this happens for overloaded `()` and constructors
             # e.g. in https://github.com/JuliaLang/julia/blob/v1.7.2/base/operators.jl#L1085
             # (c::ComposedFunction)(x...; kw...) = ...
         else
