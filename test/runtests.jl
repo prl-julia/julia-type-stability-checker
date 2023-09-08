@@ -281,7 +281,7 @@ end
 @testset "Types Database                 " begin
     id1(x)=x
     #
-    # Normally, we don't bail out on Any-arg methods
+    # Normally, we bail out on Any-arg methods
     # (there's no way to enumerate subtypes of Any),
     # unless we're lucky and can infer a concrte output with Any
     # as the input.
@@ -293,12 +293,17 @@ end
     @test Stb(3) == is_stable_method((@which id1(1)), typesdb_cfg)
     # We count fuel in a tricky way: it's
     # number of calls to direct_subtypes1 + number of concrete
-    # tuple types (corresponding to signatures).
+    # tuple types (corresponding to signatures) checked.
     # The example DB has 2 types.
 
     myplus(x,y)=x+y
-    res = is_stable_method((@which id1(1)), typesdb_cfg)
-    @test Stb(3) == res
+    res = is_stable_method((@which myplus(1,2)), typesdb_cfg)
+    @test Stb(6) == res
+
+    uns(x)=if x>1; x+1; else x+1.0 end
+    resUns = is_stable_method((@which uns(1)), typesdb_cfg)
+    @info resUns
+    @test resUns isa Uns
 end
 
 module ImportBase; import Base.push!; push!(::Int)=1; end
