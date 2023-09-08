@@ -87,10 +87,13 @@ has_unboundeded_exist(tv :: JlSignature) = begin
 end
 
 # Shortcut: well-known underconstrained types that we want to avoid
-#           for which we will return NoFuel eventually
+#           for which we will return NoFuel eventually.
+#           Varargs, Tuple, Function, etc.
 blocklist = [Function]
-is_vararg(t) = isa(t, Core.TypeofVararg)
-to_avoid(t) = is_vararg(t) || any(b -> t <: b, blocklist)
+has_vararg(t) = occursin("Vararg", "$t") || # crude but works
+    t == Tuple # ~ Tuple{Vararg{Any}}
+to_avoid(t) = has_vararg(t) ||
+    any(b -> t <: b, blocklist)
 
 #
 # direct_subtypes: JlSignature, SearchCfg -> [Union{JlSignature, SkippedUnionAlls}]
@@ -155,6 +158,8 @@ direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
             subtype_union(t)
         elseif is_concrete_type(t)
             [t]
+        elseif t <: Tuple
+            direct_subtypes(Vector{Any}([t.parameters...]), scfg)
         else
             @assert false "direct_subtypes1: can't subtype $t (should not happen)"
         end

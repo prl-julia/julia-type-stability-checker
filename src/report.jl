@@ -83,8 +83,12 @@ prepCsv(mcs::StCheckResults) :: StCheckResultsCsv = map(prepCsvCheck, mcs)
 #
 
 
+#
 # Record of aggregated results. One Julia module turns into one instance of it.
-# Note: If you change it, you probably need to update scripts/aggregate.sh
+#
+# NOTE: If you change it, you probably need to update scripts/aggregate.sh and
+# the two functions right below.
+#
 struct AgStats
     methCnt :: Int64
     stbCnt  :: Int64
@@ -92,14 +96,34 @@ struct AgStats
     parCnt  :: Int64
     anyCnt  :: Int64
     vaCnt   :: Int64
-    gen     :: Int64
+    genCnt  :: Int64
     tcfCnt  :: Int64
     nofCnt  :: Int64
 end
 
-showAgStats(pkg::String, ags::AgStats) :: String =
-    "$pkg,$(ags.methCnt),$(ags.stbCnt),$(ags.unsCnt),$(ags.parCnt),$(ags.anyCnt)," *
-        "$(ags.vaCnt),$(ags.gen),$(ags.tcfCnt),$(ags.nofCnt)\n"
+showAgStatsDB(pkg::String, agsNoDb::AgStats, agsDb::AgStats) :: String = begin
+    @assert agsNoDb.parCnt == 0
+    @assert agsDb.parCnt == 0
+
+    # @info agsDb
+    methGood = agsNoDb.methCnt - agsNoDb.tcfCnt - agsNoDb.genCnt
+    noFuel = agsNoDb.vaCnt + agsNoDb.nofCnt + agsNoDb.anyCnt
+    noFuelDb = agsDb.vaCnt + agsDb.nofCnt + agsDb.anyCnt
+
+    # $(agsNoDb.methCnt), # should this be in? makes the table noisier...
+    "$pkg,$(methGood)," *
+        "$(agsNoDb.stbCnt),$(agsNoDb.unsCnt),$(noFuel)," *
+        "$(agsDb.stbCnt - agsNoDb.stbCnt),$(agsDb.unsCnt - agsNoDb.unsCnt),$(noFuelDb - noFuel)" *
+        "\n"
+end
+
+showAgStats(pkg::String, ags::AgStats) :: String = begin
+    @assert ags.parCnt == 0
+    methGood = ags.methCnt - ags.tcfCnt - ags.genCnt
+    noFuel = ags.vaCnt + ags.nofCnt + ags.anyCnt
+    "$pkg,$(ags.methCnt), $(methGood)," *
+        "$(ags.stbCnt),$(ags.unsCnt),$(noFuel)\n"
+end
 
 aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
     # TODO: this is a lot of passes over mcs; should rewrite into one loop
@@ -128,6 +152,7 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 checkModule(m::Module, out::String="."; pkg::String="$m")= begin
     scfg = build_typesdb_scfg(sample_count=10)
     checkRes = is_stable_module(m, scfg)
+    checkResNoDb = is_stable_module(m)
 
     # raw, to allow load it back up for debugging purposes
     # CSV.write(joinpath(out, "$m-raw.csv"), checkRes)
@@ -140,7 +165,8 @@ checkModule(m::Module, out::String="."; pkg::String="$m")= begin
     # aggregate
     aggrepname = joinpath(out, "$pkg-agg.txt")
     @info "Generating and writing out aggregated report to $aggrepname"
-    write(aggrepname, showAgStats(pkg, aggregateStats(checkRes)))
+    write(aggrepname,
+          showAgStatsDB(pkg, aggregateStats(checkResNoDb), aggregateStats(checkRes)))
     return ()
 end
 

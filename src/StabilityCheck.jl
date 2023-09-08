@@ -96,8 +96,8 @@ is_stable_module_aux(mod::Module, root::Module, seen::Set{Module}, scfg::SearchC
                         our_methods_of_function(evsym, mod)))
         catch e
             if e isa UndefVarError
-                @warn "Module $mod exports symbol $sym but it's undefined"
-                # showerror(stdout, e)
+                @warn "Module $mod contains symbol $sym but we can't evaluate it"
+                showerror(stdout, e)
                 # not our problem, so proceed as usual
             elseif e isa CantSplitMethod
                 @warn "Can't process method with no canonical instance:\n$m"
@@ -156,7 +156,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: any, vararg checks"
     Any ∈ sig_types && ! scfg.typesDBcfg.use_types_db &&
         return AnyParam()
-    any(t -> is_vararg(t), sig_types) &&
+    any(t -> has_vararg(t), sig_types) &&
         return VarargParam()
     # TODO:
 
@@ -201,7 +201,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     result isa OutOfFuel &&
         return result
     return if isempty(unst)
-        if isempty(skipexists)
+        if isempty(skipexists) # TODO: kill skipexist, we don't use it
             Stb(stepCount)
         else
             UConstrExist(stepCount, skipexists)
