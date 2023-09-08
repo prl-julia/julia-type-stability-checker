@@ -111,10 +111,27 @@ showAgStatsDB(pkg::String, agsNoDb::AgStats, agsDb::AgStats) :: String = begin
     noFuelDb = agsDb.vaCnt + agsDb.nofCnt + agsDb.anyCnt
 
     # $(agsNoDb.methCnt), # should this be in? makes the table noisier...
+
     "$pkg,$(methGood)," *
         "$(agsNoDb.stbCnt),$(agsNoDb.unsCnt),$(noFuel)," *
-        "$(agsDb.stbCnt - agsNoDb.stbCnt),$(agsDb.unsCnt - agsNoDb.unsCnt),$(noFuelDb - noFuel)" *
+        "$(agsDb.stbCnt),$(agsDb.unsCnt),$(noFuelDb)" *
         "\n"
+
+    # idea: diffs
+    # "$pkg,$(methGood)," *
+    #     "$(agsNoDb.stbCnt),$(agsNoDb.unsCnt),$(noFuel)," *
+    #     "$(agsDb.stbCnt - agsNoDb.stbCnt),$(agsDb.unsCnt - agsNoDb.unsCnt),$(noFuelDb - noFuel)" *
+    #     "\n"
+
+    # idea: percents:
+
+    # p(e, d) = round(Int, (e / d) * 100)
+
+    # # $(agsNoDb.methCnt), # should this be in? makes the table noisier...
+    # "$pkg,$(meth)," *
+    #     "$(p(agsNoDb.stbCnt,meth)),$(p(agsNoDb.unsCnt,meth)),$(p(noFuel,meth))," *
+    #     "$(p(agsDb.stbCnt - agsNoDb.stbCnt, meth)),$(p(agsDb.unsCnt - agsNoDb.unsCnt,meth)),$(p(noFuelDb - noFuel,meth))" *
+    #     "\n"
 end
 
 showAgStats(pkg::String, ags::AgStats) :: String = begin
