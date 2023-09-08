@@ -51,7 +51,7 @@ end
 # Note: Follows definition used in @code_warntype (cf. `warntype_type_printer` in:
 # julia/stdlib/InteractiveUtils/src/codeview.jl)
 is_concrete_type(@nospecialize(ty)) = begin
-    ty == DataType && return true
+    ty in [DataType, UnionAll, Union] && return true
     if ty isa Type && (!Base.isdispatchelem(ty) || ty == Core.Box)
         if ty isa Union && is_expected_union(ty)
             true # this is a "mild" problem, so we round up to "stable"

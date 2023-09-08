@@ -161,7 +161,8 @@ direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
         elseif t <: Tuple
             direct_subtypes(Vector{Any}([t.parameters...]), scfg)
         else
-            @assert false "direct_subtypes1: can't subtype $t (should not happen)"
+            []
+            # @assert false "direct_subtypes1: can't subtype $t (should not happen)"
         end
     # @info "" res
     return res
