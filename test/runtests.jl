@@ -166,13 +166,13 @@ end
     @test isa(is_stable_method((@which g(2)), SearchCfg(fuel=1)) , Stb)
 
     h(x::Integer)=x
-    res = is_stable_method((@which h(2)), SearchCfg(fuel=1,max_lattice_steps=1))
+    res = is_stable_method((@which h(2)), SearchCfg(fuel=1))
     @test res == OutOfFuel()
 
     # Instantiations fuel
     k(x::Complex{T} where T<:Integer)=x+1
-    t3 = is_stable_method((@which k(1+1im)), SearchCfg(max_instantiations=1))
-    @test t3 isa UConstrExist # &&
+    t3 = is_stable_method((@which k(1+1im)), SearchCfg(fuel=1))
+    @test t3 isa OutOfFuel # &&
         # TODO: decide if the rest is needed
         # length(t3.skipexist) == 2 && # one for TooManyInst and
         #                              # one for the dreaded SentinelArrays.ChainedVectorIndex <: Integer
@@ -290,12 +290,14 @@ end
     # See also "Special (Any, Varargs, Generic)" testset above.
     #
     typesdb_cfg = build_typesdb_scfg("merged-small.csv")
-    @test Stb(2) == is_stable_method((@which id1(1)), typesdb_cfg)
+    @test Stb(1) == is_stable_method((@which id1(1)), typesdb_cfg)
 
     myplus(x,y)=x+y
     res = is_stable_method((@which id1(1)), typesdb_cfg)
     @info res
-    @test Stb(2) == res
+    @test Stb(1) == res # 1 is weird but that's  how we count fuel:
+    # number of calls to direct_subtypes1, and that one returns
+    # the types DB in whole at once
 end
 
 module ImportBase; import Base.push!; push!(::Int)=1; end

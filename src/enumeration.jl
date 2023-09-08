@@ -4,6 +4,13 @@
 #
 
 
+# We are evil and we use a global var to measure fuel consumption.
+# It'd be a pain to thread but one day...
+# Currently it counts the number of calls to direct_subtypes1:
+# it was very tricky to figure what to count...
+# NOTE: it will reset on every call to is_stable_method
+stepCount = 0
+
 #
 # all_subtypes: JlSignature, SearchCfg, Channel -> ()
 #
@@ -57,12 +64,6 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
             union!(sigtypes, dss)
         end
 
-        # check "fuel" (subtype lattice allowed depth)
-        steps += 1
-        if steps == scfg.max_lattice_steps
-            put!(result, OutOfFuel())
-            return
-        end
     end
     put!(result, "done")
 end
@@ -120,6 +121,12 @@ end
 # Single (Non-tuple) type input version of direct_subtypes
 direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
     @debug "direct_subtypes1: $t"
+
+    # it is hear where we decided to manage fuel
+    global stepCount
+    stepCount += 1
+    stepCount > scfg.fuel && return nothing
+
     if t isa UnionAll
         ss_first = subtype_unionall(t, scfg)
     elseif t isa Union
@@ -155,9 +162,10 @@ instantiations(u :: UnionAll, scfg :: SearchCfg) = begin
 end
 
 #
-# subtype_unionall: UnionAll, SearchCfg -> [Union{JlType, SkippedUnionAll}]
+# subtype_unionall: UnionAll, SearchCfg -> Union{[JlType], Nothing}
 #
 # For a UnionAll, enumerate all instatiations following `instantiations`.
+# Return nothing if run out of fuel.
 #
 # Note: ignore lower bounds for simplicity.
 #
@@ -170,26 +178,20 @@ subtype_unionall(u :: UnionAll, scfg :: SearchCfg) = begin
         return nothing
 
     res = []
-    instcnt = 0
     for t in instantiations(u, scfg)
         @debug "[ subtype_unionall ] loop over inst.: t = $t"
-        if t isa SkippedUnionAlls
-            push!(res, t)
+        if t isa OutOfFuel
+            return nothing
         elseif t == "done"
-            break
+            return res
         else
-            try # u{t} can fail due to unsond bounds (cf. #8)
+            try # u{t} can fail due to unsound bounds (cf. #8)
                 push!(res, u{t[1]})
             catch
                 # skip failed instatiations
             end
-            instcnt += 1
-            if instcnt >= scfg.max_instantiations
-                push!(res, TooManyInst((u,)))
-            end
         end
     end
-    res
 end
 
 #

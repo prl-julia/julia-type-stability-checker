@@ -20,10 +20,6 @@ struct SkipMandatory      <: SkippedUnionAlls
     # of unionalls if we're currently processing one.
     ts :: Tuple
 end
-struct TooManyInst      <: SkippedUnionAlls
-    # see SearchCfg.max_instantiations and subtype_unionall
-    ts :: Tuple
-end
 
 #######################################################################
 #
@@ -74,7 +70,6 @@ end
 #####################################################
 
 Base.:(==)(x::StCheck, y::StCheck) = structEqual(x,y)
-Base.:(==)(x::TooManyInst, y::TooManyInst) = structEqual(x,y)
 
 # Result of a check along with the method under the check (for reporting purposes)
 struct MethStCheck
@@ -125,13 +120,6 @@ Base.@kwdef struct SearchCfg
     fuel :: Int = 100 #typemax(Int)
 #   ^--- search fuel, i.e. how many types we want to enumerate before give up
 
-    max_lattice_steps :: Int = 100 #typemax(Int)
-#   ^--- how many steps to perform max to get from the signature to a concrete type;
-#        for some signatures we struggle to get to a leaf type
-
-    max_instantiations :: Int = 100 #typemax(Int)
-#   ^--- how many instantiations of a type variable to examine (sometimes it's too much)
-
     typesDBcfg :: TypesDBCfg = TypesDBCfg()
 #   ^--- Parameters of the types DB.
 end
@@ -141,7 +129,7 @@ end
 #
 default_scfg = SearchCfg()
 
-fast_scfg = SearchCfg(fuel=30, max_lattice_steps=10, max_instantiations=10)
+fast_scfg = SearchCfg(fuel=30)
 
 build_typesdb_scfg(inFile = intypesCsvFileDefault; sample_count :: Int = 100000) = begin
     scfg = @set default_scfg.typesDBcfg.use_types_db = true

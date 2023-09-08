@@ -18,10 +18,13 @@ export @stable, @stable!, @stable!_nop,
 
     # Types
     MethStCheck,
-    SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory, TooManyInst,
+    SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory,
     Stb, Uns,
     UConstr, UConstrExist, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
-    SearchCfg, build_typesdb_scfg, default_scfg
+    SearchCfg, build_typesdb_scfg, default_scfg,
+
+    # Utils
+    split_method # mostly for testing
 
 # Debug print:
 # ENV["JULIA_DEBUG"] = StabilityCheck  # turn on
@@ -119,22 +122,26 @@ end
 #
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
+    global stepCount = 0
 
     # preemptively load types DB if available: we may need to sample
     # unbounded exists any minute
     if scfg.typesDBcfg.use_types_db
         scfg.typesDBcfg.types_db === Nothing &&
             (scfg.typesDBcfg.types_db = typesDB())
+        @debug "is_stable_method: types DB up"
     end
 
     # Step 2: Extract the input type
     # Slpit method into signature and the corresponding function object
+    @debug "is_stable_method: split method"
     sm = split_method(m)
     sm isa GenericMethod && return sm
     (func, sig_types) = sm
 
     # Step 2a: run type inference with the input type even if abstract
     #          and party if we're concrete
+    @debug "is_stable_method: check against signature (2a)"
     try
         if is_stable_call(func, sig_types)
             return Stb(1)
@@ -146,6 +153,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     # Shortcut:
     # Well-known underconstrained types that we give up on right away
     # are Any and Varargs and an unbounded existential
+    @debug "is_stable_method: any, vararg checks"
     Any ∈ sig_types && ! scfg.typesDBcfg.use_types_db &&
         return AnyParam()
     any(t -> is_vararg(t), sig_types) &&
@@ -154,9 +162,9 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
 
     # Loop over concrete subtypes of the signature
     unst = Vector{Any}([])
-    stepCount = 0
     skipexists = Set{SkippedUnionAlls}([])
     result = Nothing
+    @debug "[ is_stable_method ] about to loop"
     for ts in Channel(ch -> all_subtypes(sig_types, scfg, ch))
         @debug "[ is_stable_method ] loop" stepCount "$ts"
 
@@ -187,12 +195,6 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
             end
         catch e
             return TcFail(ts, e)
-        end
-
-        # increment the counter, check fuel
-        stepCount += 1
-        if stepCount > scfg.fuel
-            result = OutOfFuel()
         end
     end
 
