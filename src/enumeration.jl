@@ -126,6 +126,18 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
                 else
                     push!(res, push!(Vector(s_rest), s_first))
                 end
+
+                # It is here where we decided to manage fuel w.r.t. traversing lattice.
+                # Used to be in direct_subtypes1, but we can exponentially blow
+                # in this quadratic loop even with linear amount of calls to
+                # direct_subtype1...
+                # There's another point, which has to do with reaching concrete types,
+                # inside all_subtypes.
+                global stepCount
+                stepCount += 1
+                @debug "direct_subtypes1" stepCount scfg.fuel
+                stepCount > scfg.fuel && return nothing
+
             end
         end
     end
@@ -135,14 +147,6 @@ end
 # Single (Non-tuple) type input version of direct_subtypes
 direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
     @debug "direct_subtypes1: $t"
-
-    # It is here where we decided to manage fuel w.r.t. traversing lattice.
-    # There's another point, which has to do with reaching concrete types,
-    # inside all_subtypes
-    global stepCount
-    stepCount += 1
-    @debug "direct_subtypes1" stepCount scfg.fuel
-    stepCount > scfg.fuel && return nothing
 
     ss = subtypes(t)
 
