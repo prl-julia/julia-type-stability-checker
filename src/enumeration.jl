@@ -164,9 +164,9 @@ direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
         elseif is_concrete_type(t)
             [t]
         elseif t <: Tuple
-            map(t -> Tuple{t...},
-                direct_subtypes(Vector{Any}([t.parameters...]), scfg)
-            )
+            ss = direct_subtypes(Vector{Any}([t.parameters...]), scfg)
+            ss === nothing && return nothing
+            map(t -> Tuple{t...}, ss)
         else
             []
             # @assert false "direct_subtypes1: can't subtype $t (should not happen)"
