@@ -92,7 +92,8 @@ end
 blocklist = [Function]
 has_vararg(t) = occursin("Vararg", "$t") || # crude but works
     t == Tuple # ~ Tuple{Vararg{Any}}
-to_avoid(t) = has_vararg(t) ||
+to_avoid(t) =
+    has_vararg(t) ||
     any(b -> t <: b, blocklist)
 
 #
@@ -163,7 +164,9 @@ direct_subtypes1(t::Any, scfg :: SearchCfg) = begin
         elseif is_concrete_type(t)
             [t]
         elseif t <: Tuple
-            direct_subtypes(Vector{Any}([t.parameters...]), scfg)
+            map(t -> Tuple{t...},
+                direct_subtypes(Vector{Any}([t.parameters...]), scfg)
+            )
         else
             []
             # @assert false "direct_subtypes1: can't subtype $t (should not happen)"
