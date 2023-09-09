@@ -19,6 +19,7 @@ stepCount = 0
 # Usually emplyed to produce concrete subtypes but when instantiating existentials
 # may need to produce abstract types as well -- the search configuration (second parameter)
 # controls which mode we are in.
+
 #
 # Input:
 #   - "tuple" of types from a function signature (in the form of Vector, not Tuple);
@@ -32,22 +33,18 @@ stepCount = 0
 #
 all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
     @debug "[ all_subtypes ] $ts"
-    sigtypes = Set{Any}([ts]) # worklist
+    sigtypes = Vector{Any}([ts]) # Set{Any}([ts]) # worklist
     steps = 0
-    while !isempty(sigtypes)
+    while true # !isempty(sigtypes)
 
-        tv = pop!(sigtypes)
+        next = nexttype(sigtypes)
+        next === nothing && break
+        (tv, sigtypes) = next
+
         @debug "[ all_subtypes ] loop: $tv"
 
-        # Pass on markers for skipped unionalls
-        if tv isa SkippedUnionAlls
-            push!(result, tv)
-            continue
-        end
-
         # If all types in tv are concrete, push it to the caller
-        isconc = all(is_concrete_type, tv)
-        if isconc
+        if all(is_concrete_type, tv)
             @debug "[ all_subtypes ] concrete"
 
             # Manage fuel w.r.t. reaching concrete types
@@ -72,11 +69,25 @@ all_subtypes(ts::Vector, scfg :: SearchCfg, result :: Channel) = begin
                 scfg.failfast &&
                     break
             end
-            union!(sigtypes, dss)
+            push!(sigtypes, dss)
         end
 
     end
     put!(result, "done")
+end
+
+nexttype(sigtypes :: Vector) = begin
+    isempty(sigtypes) && return nothing
+    tv = sigtypes[end]
+    # @info "nexttype" tv
+    tv isa Channel || (pop!(sigtypes); return (tv, sigtypes))
+    res = take!(tv)
+    if res == "done"
+        pop!(sigtypes)
+        nexttype(sigtypes)
+    else
+        (res, sigtypes)
+    end
 end
 
 is_unbounded_exist(t) = t.var.ub == Any
@@ -110,6 +121,7 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     to_avoid(t) &&
         (return nothing)
 
+    return Channel(ch -> begin
     ss_t = direct_subtypes1(t, scfg)
     ss_t === nothing && return nothing # we really need to bring in Monads.jl...
     @debug "direct_subtypes of head: $(ss_t)"
@@ -118,18 +130,19 @@ direct_subtypes(ts1::Vector, scfg :: SearchCfg) = begin
     ss_ts === nothing && return nothing
     for s_first in ss_t
         if s_first isa SkippedUnionAlls
-            push!(res, s_first)
+            put!(ch, s_first)
         else
             for s_rest in ss_ts
                 if s_rest isa SkippedUnionAlls
-                    push!(res, s_rest)
+                    put!(ch, s_rest)
                 else
-                    push!(res, push!(Vector(s_rest), s_first))
+                    put!(ch, push!(Vector(s_rest), s_first))
                 end
             end
         end
     end
-    res
+    put!(ch, "done")
+    end)
 end
 
 # Single (Non-tuple) type input version of direct_subtypes

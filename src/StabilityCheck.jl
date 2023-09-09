@@ -121,7 +121,7 @@ end
 # If signature has Vararg at any place, yeild VarargParam immediately.
 #
 is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
-    @debug "is_stable_method: $m"
+    @info "is_stable_method: $m"
     global stepCount = 0
 
     # preemptively load types DB if available: we may need to sample
