@@ -121,8 +121,15 @@ aggregateStats(mcs::StCheckResults) :: AgStats = AgStats(
 # ----------------------------------------
 
 # checkModule :: Module, Path; String, Vector{Module} -> IO ()
-# Check stability in the given module (and also look for functions
-# in the extra_modules), store results under the given path
+# Check stability in the given module, store results under the given path
+#
+# The `extra_modules` parameter can be used to include functions that are bound in these modules and is needed because a module can add methods to external functions without also
+# importing them into its scope. For example, when a module `m` contains `Base.push!(x::MyVec, e) = ...` without importing `push!`, then `names(m)` does not include `push!`.
+# However, `names(Base)` does, and we can then filter only the methods that originate in `m`.
+#
+# To make sure we find all methods from `m`, `extra_modules` has to contain all the transitive dependencies of `m`, as well as `Base` and `Core` (which are always imported by default).
+# One simple over-approximation is to use `Base.loaded_modules_array()`.
+#
 # Effects:
 #   1. Module.csv with detailed, user-friendly results
 #   2. Module-agg.txt with aggregate results
