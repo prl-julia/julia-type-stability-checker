@@ -5,7 +5,7 @@ module StabilityCheck
 #
 
 export @stable, @stable!, @stable!_nop,
-    is_stable_method, is_stable_function, is_stable_module, is_stable_moduleb,
+    is_stable_method, is_stable_module, is_stable_moduleb,
     check_all_stable,
     convert,
     typesDB,
