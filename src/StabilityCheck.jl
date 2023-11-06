@@ -44,6 +44,7 @@ include("utils.jl")
 include("enumeration.jl")
 include("annotations.jl")
 
+include("prototype.jl")
 
 #
 #       Main interface utilities
@@ -92,7 +93,9 @@ is_stable_module_aux(mod::Module, root::Module, seen::Set{Module}, scfg::SearchC
             (sym in special_syms) && continue
 
             append!(res,
-                    map(m -> MethStCheck(m, is_stable_method(m, scfg)),
+                    map(m -> MethStCheck(m, get(ENV, "STS_PROTOTYPE", "0") != "1" ?
+                                is_stable_method(m, scfg) :
+                                is_stable_method_prototype(evsym, m, scfg)),
                         our_methods_of_function(evsym, mod)))
         catch e
             if e isa UndefVarError
@@ -211,5 +214,54 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     end
 end
 
+is_stable_method_prototype(f::Function, m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
+    @debug "is_stable_method: $m"
+
+    @debug "is_stable_method: split method"
+    sm = split_method(m)
+    if !(sm isa GenericMethod)
+        (func, sig_types) = sm
+        @debug "is_stable_method: check against signature (2a)"
+        try
+            if is_stable_call(func, sig_types)
+                return Stb(1)
+            end
+        catch e
+            return TcFail(sig_types, e)
+        end
+    end
+
+    unst = Any[]
+    skipexists = Set{SkippedUnionAlls}()
+    @debug "[ is_stable_method ] about to loop"
+    for ts in Prototype.sample_subtypes(m)
+        @debug "[ is_stable_method ] loop" stepCount "$ts"
+
+        ts == "done" && break
+
+        ts = [ts.parameters[2:end]...]
+
+        try
+            if ! is_stable_call(f, ts)
+                push!(unst, ts)
+                if scfg.failfast
+                    break
+                end
+            end
+        catch e
+            return TcFail(ts, e)
+        end
+    end
+
+    if isempty(unst)
+        if isempty(skipexists)
+            Stb(stepCount)
+        else
+            UConstrExist(stepCount, skipexists)
+        end
+    else
+        Uns(stepCount, unst)
+    end
+end
 
 end # module
