@@ -212,4 +212,257 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
 end
 
 
+
+# --------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+struct OpaqueFunction
+    f::Function
+end
+struct OpaqueMethod
+    f::Function
+    m::Method
+end
+struct OpaqueType
+    s::Symbol
+    t::Type
+    m::Module
+end
+
+discover(mod::Module, root::Module, seen::Set{Module}, functions::Set{OpaqueFunction}, types::Set{OpaqueType}) = begin
+    mod ∈ seen && return
+    push!(seen, mod)
+
+    for sym in names(mod; all=true, imported=true)
+        try
+            evsym = getproperty(mod, sym)
+
+            if evsym isa Module && is_module_nested(evsym, root)
+                discover(evsym, root, seen, functions, types)
+                continue
+            end
+
+            if evsym isa Function && sym ∉ [:include, :eval] #  && !(val isa Core.Builtin) && !(val isa Core.IntrinsicFunction)
+                push!(functions, OpaqueFunction(evsym))
+                continue
+            end
+
+            if (evsym isa DataType && !(evsym <: Function)) || evsym isa UnionAll
+                push!(types, OpaqueType(sym, evsym, mod))
+                continue
+            end
+
+        catch e
+            if e isa UndefVarError
+                GlobalRef(mod, sym) ∉ [GlobalRef(Base, :active_repl), GlobalRef(Base, :active_repl_backend),
+                                       GlobalRef(Base.Filesystem, :JL_O_TEMPORARY), GlobalRef(Base.Filesystem, :JL_O_SHORT_LIVED),
+                                       GlobalRef(Base.Filesystem, :JL_O_SEQUENTIAL), GlobalRef(Base.Filesystem, :JL_O_RANDOM)] &&
+                    @warn "Module $mod exports symbol $sym but it's undefined."
+            else
+                throw(e)
+            end
+        end
+    end
+end
+
+declarationsAndSignatures(report::Function, modules::Vector{Module}) = begin
+    functions = Set{OpaqueFunction}()
+    types = Set{OpaqueType}()
+    visited = Set{Module}()
+
+    for m in modules
+        discover(m, m, visited, functions, types)
+    end
+
+    for f in functions
+        for m in methods(f.f)
+            any(mod -> is_module_nested(m.module, mod), modules) && report(OpaqueMethod(f.f, m))
+        end
+    end
+
+    for t in types
+        report(t)
+    end
+end
+
+module TestMod
+
+    import SentinelArrays
+    const SVec{T} = SentinelArrays.SentinelVector{T, T, Missing, Vector{T}}
+
+    # gener(captured) = [captured + i for i in 1:2]
+
+    # f(abc) = x -> abc + x
+
+    # const lambda = (x::Int32) -> x + 1
+        
+    # const MyVector{T} = Array{T,1}
+    # const MyVectorInt = Vector{Int}
+    # struct CrazyArray{A, B, C, D, E} end
+    # const MyCrazyArray{T, U} = CrazyArray{T, U, Int, Bool, 3}
+
+    # const my8by16 = NTuple{16, VecElement{UInt8}}
+    # const my8by3 = NTuple{3, VecElement{UInt8}}
+
+    # struct X{T}
+    #     x::T
+    # end
+
+    # function (x::X)(a)
+    #     return x.x + a
+    # end
+
+    # abstract type TestAbstract end
+
+    # struct TestStruct <: TestAbstract end
+
+    # kwargs(x::Int; kw1::String = "hi", kw2::Bool) = 1
+
+    # vargs(x::String, y::Int...) = 1
+
+    # defaultargs(x::Int, def1::String = "hey", def2::Bool = false) = 1
+
+    # testfunc(x, y::String) = 1
+
+    # import Base.Int8
+
+    # primitive type TestPrimitive 40 end
+
+    # abstract type Abs{T} end
+    # struct Conc{T, U <: Array{<:T}} <: Abs{T} end
+
+    # foo(::Vector{T}, ::T) where T <: Number = 1
+
+    # module Submod
+
+    #     struct Substruct
+    #         x::Int
+    #     end
+
+    #     subfunction(x::Int, y::Bool)::String = "$x, $y"
+    #     import ..testfunc
+    #     testfunc(::Bool) = 1
+
+    # end
+
+end
+
+report(io, o::OpaqueMethod) = begin
+    f, m = o.f, o.m
+
+    mt = typeof(f).name.mt
+    name = mt.name
+    hasname = isdefined(mt.module, name) &&
+              typeof(getfield(mt.module, name)) <: Function
+    sname = string(name)
+    kind = if hasname
+        (startswith(sname, '@') ?
+            "macro \"$sname\""
+        : mt.module === Core && m.sig === Tuple ?
+            "builtin function \"$sname\""
+        : # else
+            "generic function \"$sname\"")
+    elseif '#' in sname
+        "anonymous function \"$sname\""
+    elseif mt === Base._TYPE_NAME.mt
+        "type constructor"
+    else
+        "callable object"
+    end
+    println(io, "$m (method for $kind)")
+end
+
+
+#=
+
+- function aliases??
+- NTuple for n<=3 is unrolled
+- aliases - some use const and some don't
+
+const AdjOrTrans{T,S} = Union{Adjoint{T,S},Transpose{T,S}} where {T,S}
+const AdjointAbsVec{T} = Adjoint{T,<:AbstractVector}
+
+abstract type _ConfiguredMenu{C} <: AbstractMenu end
+const ConfiguredMenu = _ConfiguredMenu{<:AbstractConfig}
+
+const NestedTuple = Tuple{<:Broadcasted,Vararg{Any}}
+
+const ZlibDecompressorStream{S} = TranscodingStream{ZlibDecompressor,S} where S<:IO
+
+const SizedVector{S,T} = SizedArray{Tuple{S},T,1,1}
+
+const SVec{T} = SentinelVector{T, T, Missing, Vector{T}}
+
+const HermOrSym{T,        S} = Union{Hermitian{T,S}, Symmetric{T,S}}
+const RealHermSym{T<:Real,S} = Union{Hermitian{T,S}, Symmetric{T,S}}
+const RealHermSymComplexHerm{T<:Real,S} = Union{Hermitian{T,S}, Symmetric{T,S}, Hermitian{Complex{T},S}}
+const RealHermSymComplexSym{T<:Real,S} = Union{Hermitian{T,S}, Symmetric{T,S}, Symmetric{Complex{T},S}}
+
+const RealHermSymComplexHerm{T<:Real,S} = Union{Hermitian{T,S}, Symmetric{T,S}, Hermitian{Complex{T},S}}
+ERROR: Union{Hermitian{T, S}, Hermitian{Complex{T}, S}, Symmetric{T, S}} where {T<:Real, S}
+
+const AbstractStatMap{var"#s6599"<:RAICode.QueryOptimizer.Statistics.AbstractStat} = Dict{UInt64, var"#s6599"<:RAICode.QueryOptimizer.Statistics.AbstractStat} (from module RAICode.QueryOptimizer.Statistics)
+const Abstract
+
+=#
+
+report(io, o::OpaqueType) = begin
+    @assert (o.t isa DataType) || (o.t isa UnionAll)
+
+    typevars(t) = begin
+        res = TypeVar[]
+        while t isa UnionAll
+            push!(res, t.var)
+            t = t.body
+        end
+        res
+    end
+
+    sym, typ, mod = o.s, o.t, o.m
+    base = Base.unwrap_unionall(typ)
+
+    if base isa Union || typ !== base.name.wrapper || string(sym) != string(nameof(typ))
+        vars = typevars(typ)
+        name = "$(mod).$(sym)"
+        println(io, "const $(name)$(isempty(vars) ? "" : "{$(join(vars, ", "))}") = $(base) (from module $(mod))")
+    else
+        try
+            kind = if isabstracttype(typ)
+                "abstract type"
+            elseif isstructtype(typ)
+                ismutabletype(typ) ? "mutable struct" : "struct"
+            elseif isprimitivetype(typ)
+                "primitive type"
+            else
+                "???"
+            end
+            name = "$(base)"
+            super = supertype(typ) === Any ? "" : " <: $(Base.unwrap_unionall(supertype(typ)))"
+            size = isprimitivetype(typ) ? " $(8 * sizeof(typ))" : ""
+            closure = (typ <: Function && '#' in name) ? "(closure) " : ""
+
+            println(io, "$(closure)$(kind) $(name)$(super)$(size) end (from module $(mod))")
+        catch e
+            println(io, "ERROR: $o")
+        end
+    end
+end
+
+dumpDeclarationsAndSignatures(console::Bool, testing::Bool) = begin
+    mods = testing ? [TestMod] : Base.loaded_modules_array()
+    funio = console ? Base.stdout : open("functions.jlg", "w")
+    typio = console ? Base.stdout : open("types.jlg", "w")
+    try
+        declarationsAndSignatures(mods) do x
+            x isa OpaqueMethod && report(funio, x)
+            x isa OpaqueType && report(typio, x)
+        end
+    finally
+        console || close(funio)
+        console || close(typio)
+    end
+end
+
 end # module
