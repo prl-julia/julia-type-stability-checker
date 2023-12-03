@@ -122,6 +122,9 @@ Base.@kwdef struct SearchCfg
 
     typesDBcfg :: TypesDBCfg = TypesDBCfg()
 #   ^--- Parameters of the types DB.
+
+    trace_checks :: Bool = false
+#   ^-- create a file recording all type stability checks of a method
 end
 
 #
@@ -130,6 +133,8 @@ end
 default_scfg = SearchCfg()
 
 fast_scfg = SearchCfg(fuel=30)
+
+trace_scfg = SearchCfg(trace_checks=true)
 
 build_typesdb_scfg(inFile = intypesCsvFileDefault; sample_count :: Int = 100000) = begin
     tdbFull = typesDB(inFile)
