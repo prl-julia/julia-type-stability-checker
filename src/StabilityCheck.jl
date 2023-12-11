@@ -147,18 +147,14 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     # Step 2a: run type inference with the input type even if abstract
     #          and party if we're concrete
     @debug "is_stable_method: check against signature (2a)"
-    try
-        scfg.trace_checks &&
-            print_check(fchecks, m, sig_types)
-        if is_stable_call(func, sig_types)
-            scfg.trace_checks &&
-                close(fchecks)
-            return Stb(1)
+    if ! scfg.trace_checks # we don't want the shortcut if we're in the tracing mode
+        try
+            if is_stable_call(func, sig_types)
+                return Stb(1)
+            end
+        catch e
+            return TcFail(sig_types, e)
         end
-    catch e
-        scfg.trace_checks &&
-            close(fchecks)
-        return TcFail(sig_types, e)
     end
 
     # Shortcut:
