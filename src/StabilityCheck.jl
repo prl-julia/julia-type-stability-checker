@@ -126,8 +126,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
 
     # trace TS checks and store to a file
     if scfg.trace_checks
-        mkpath("checks")
-        fchecks = open("checks/$(m.name)", "w")
+        fchecks = open("checks", "a")
     end
 
     # preemptively load types DB if available: we may need to sample
@@ -150,7 +149,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: check against signature (2a)"
     try
         scfg.trace_checks &&
-            println(fchecks, sig_types)
+            print_check(fchecks, m, sig_types)
         if is_stable_call(func, sig_types)
             scfg.trace_checks &&
                 close(fchecks)
@@ -200,7 +199,7 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
         # the actual stability check
         try
             scfg.trace_checks &&
-                println(fchecks, ts)
+                print_check(fchecks, m, ts)
             if ! is_stable_call(func, ts)
                 push!(unst, ts)
                 if scfg.failfast

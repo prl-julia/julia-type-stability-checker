@@ -134,3 +134,12 @@ is_module_nested(m::Module, outer::Module) :: Bool = begin
         m = parentmodule(m)
     end
 end
+
+# Print type stability check in a form of pseudo-method declaration
+print_check(io, m::Method, @nospecialize(types)) = begin
+    print(io, "function $(m.name)(")
+    for t in types
+        print(io, "::$t")
+    end
+    println(io, ")")
+end
