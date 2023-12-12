@@ -21,7 +21,7 @@ export @stable, @stable!, @stable!_nop,
     SkippedUnionAlls, UnboundedUnionAlls, SkipMandatory,
     Stb, Uns,
     UConstr, UConstrExist, AnyParam, VarargParam, TcFail, OutOfFuel, GenericMethod,
-    SearchCfg, build_typesdb_scfg, default_scfg,
+    SearchCfg, build_typesdb_scfg, default_scfg, trace_scfg,
 
     # Utils
     split_method # mostly for testing
@@ -124,6 +124,11 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     @debug "is_stable_method: $m"
     global stepCount = 0
 
+    # trace TS checks and store to a file
+    if scfg.trace_checks
+        fchecks = open("checks", "a")
+    end
+
     # preemptively load types DB if available: we may need to sample
     # unbounded exists any minute
     if scfg.typesDBcfg.use_types_db
@@ -142,12 +147,14 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
     # Step 2a: run type inference with the input type even if abstract
     #          and party if we're concrete
     @debug "is_stable_method: check against signature (2a)"
-    try
-        if is_stable_call(func, sig_types)
-            return Stb(1)
+    if ! scfg.trace_checks # we don't want the shortcut if we're in the tracing mode
+        try
+            if is_stable_call(func, sig_types)
+                return Stb(1)
+            end
+        catch e
+            return TcFail(sig_types, e)
         end
-    catch e
-        return TcFail(sig_types, e)
     end
 
     # Shortcut:
@@ -187,6 +194,8 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
 
         # the actual stability check
         try
+            scfg.trace_checks &&
+                print_check(fchecks, m, ts)
             if ! is_stable_call(func, ts)
                 push!(unst, ts)
                 if scfg.failfast
@@ -194,10 +203,14 @@ is_stable_method(m::Method, scfg :: SearchCfg = default_scfg) :: StCheck = begin
                 end
             end
         catch e
+            scfg.trace_checks &&
+                close(fchecks)
             return TcFail(ts, e)
         end
     end
 
+    scfg.trace_checks &&
+        close(fchecks)
     result isa OutOfFuel &&
         return result
     return if isempty(unst)

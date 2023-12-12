@@ -92,39 +92,42 @@ unstable_funion(x::Bool, y::Union{TwoSubtypes, Bool}) = if x 1 else "" end
 # Tests
 #
 
+test_scfg = default_scfg
+
 @testset "Simple stable                  " begin
-    t1 = is_stable_method(@which add1s(1))
+    global test_scfg
+    t1 = is_stable_method((@which add1s(1)), test_scfg)
     @test isa(t1, Stb)
 
-    @test isa(is_stable_method(@which plus2s(1,1)) , Stb)
-    @test isa(is_stable_method(@which add1typcase(1)), OutOfFuel)
+    @test isa(is_stable_method((@which plus2s(1,1)), test_scfg) , Stb)
+    @test isa(is_stable_method((@which add1typcase(1)), test_scfg), OutOfFuel)
 
     # cf. Note: generic methods
-    #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
+    #@test isa(is_stable_method((@which rational_plusi(1//1,1//1)), test_scfg) , Stb)
 
-    @test isa(is_stable_method(@which add1c(1.0 + 1.0im)) , Stb)
+    @test isa(is_stable_method((@which add1c(1.0 + 1.0im)), test_scfg) , Stb)
 end
 
 @testset "Simple out-of-fuel             " begin
-    t1 = is_stable_method(@which add1i(1))
+    t1 = is_stable_method((@which add1i(1)), test_scfg)
     @test isa(t1, OutOfFuel)
     # @test length(t1.skipexist) == 1 &&
     #         contains("$t1.skipexist", "SentinelArrays.ChainedVectorIndex")
     # SentinelArrays.ChainedVectorIndex comes from CSV, which we depend upon for
     # reporting. Would be nice to factor out reporting
 
-    @test isa(is_stable_method(@which plus2i(1,1)) , OutOfFuel)
-    @test isa(is_stable_method(@which add1typcase(1)), OutOfFuel)
+    @test isa(is_stable_method((@which plus2i(1,1)), test_scfg) , OutOfFuel)
+    @test isa(is_stable_method((@which add1typcase(1)), test_scfg), OutOfFuel)
 
     # cf. Note: generic methods
-    #@test isa(is_stable_method(@which rational_plusi(1//1,1//1)) , Stb)
+    #@test isa(is_stable_method((@which rational_plusi(1//1,1//1)), test_scfg) , Stb)
 end
 
 @testset "Simple unstable                " begin
-    @test isa(is_stable_method(@which add1n(1)),                   UConstr)
-    @test isa(is_stable_method(@which plus2n(1,1)),                UConstr)
-    @test isa(is_stable_method(@which trivial_unstable(1)),        Uns)
-    res = is_stable_method(@which trivial_unstable2(true, SubtypeA()))
+    @test isa(is_stable_method((@which add1n(1)), test_scfg),                   UConstr)
+    @test isa(is_stable_method((@which plus2n(1,1)), test_scfg),                UConstr)
+    @test isa(is_stable_method((@which trivial_unstable(1)), test_scfg),        Uns)
+    res = is_stable_method((@which trivial_unstable2(true, SubtypeA())), test_scfg)
     @test res isa Uns # &&
         # TODO: fix the test by switching failfast off and uncomment
         # length(res.fails) == 2 &&
@@ -134,16 +137,16 @@ end
     # cf. Note: generic methods
     # Alos, this used to fail when abstract instantiations are ON
     # (compare to the similar test in the "stable" examples)
-    #@test isa(is_stable_method((@which rational_plusi(1//1,1//1)), SearchCfg(abstract_args=true)), Stb)
+    #@test isa(is_stable_method(((@which rational_plusi(1//1,1//1)), test_scfg), SearchCfg(abstract_args=true)), Stb)
 
     # TODO: not sure why this one lives under unstable, needs investigation:
-    # @test isa(is_stable_method((@which add1c(1.0 + 1.0im)), SearchCfg(abstract_args=true)) , OutOfFuel)
+    # @test isa(is_stable_method(((@which add1c(1.0 + 1.0im)), test_scfg), SearchCfg(abstract_args=true)) , OutOfFuel)
 end
 
 @testset "Unions                         " begin
-    res = is_stable_method(@which stable_funion(true, true))
+    res = is_stable_method((@which stable_funion(true, true)), test_scfg)
     @test res isa Stb
-    res = is_stable_method(@which unstable_funion(true, true))
+    res = is_stable_method((@which unstable_funion(true, true)), test_scfg)
     @test res isa Uns # &&
         # TODO: fix the test by switching failfast off and uncomment
         # length(res.fails) == 3 &&
@@ -154,24 +157,24 @@ end
 
 @testset "Special (Any, Varargs, Generic)" begin
     f(x)=x
-    @test is_stable_method(@which f(2)) == AnyParam()
+    @test is_stable_method((@which f(2)), test_scfg) == AnyParam()
     g(x...)=x[1]
-    @test is_stable_method(@which g(2)) == VarargParam()
+    @test is_stable_method((@which g(2)), test_scfg) == VarargParam()
     gen(x::T) where T = 1
-    @test is_stable_method(@which gen(1)) == GenericMethod()
+    @test is_stable_method((@which gen(1)), test_scfg) == GenericMethod()
 end
 
 @testset "Fuel                           " begin
     g(x::Int)=2
-    @test isa(is_stable_method((@which g(2)), SearchCfg(fuel=1)) , Stb)
+    @test isa(is_stable_method(((@which g(2))), SearchCfg(fuel=1)) , Stb)
 
     h(x::Integer)=x
-    res = is_stable_method((@which h(2)), SearchCfg(fuel=1))
+    res = is_stable_method(((@which h(2))), SearchCfg(fuel=1))
     @test res == OutOfFuel()
 
     # Instantiations fuel
     k(x::Complex{T} where T<:Integer)=x+1
-    t3 = is_stable_method((@which k(1+1im)), SearchCfg(fuel=1))
+    t3 = is_stable_method(((@which k(1+1im))), SearchCfg(fuel=1))
     @test t3 isa OutOfFuel # &&
         # TODO: decide if the rest is needed
         # length(t3.skipexist) == 2 && # one for TooManyInst and
@@ -290,15 +293,14 @@ end
     # See also "Special (Any, Varargs, Generic)" testset above.
     #
     typesdb_cfg = build_typesdb_scfg("merged-small.csv")
-    @test is_stable_method((@which id1(1)), typesdb_cfg) isa Stb
+    @test is_stable_method(((@which id1(1))), typesdb_cfg) isa Stb
 
     myplus(x,y)=x+y
-    res = is_stable_method((@which myplus(1,2)), typesdb_cfg)
+    res = is_stable_method(((@which myplus(1,2))), typesdb_cfg)
     @test res isa Stb
 
     uns(x)=if x>1; x+1; else x+1.0 end
-    resUns = is_stable_method((@which uns(1)), typesdb_cfg)
-    @info resUns
+    resUns = is_stable_method(((@which uns(1))), typesdb_cfg)
     @test resUns isa Uns
 end
 
